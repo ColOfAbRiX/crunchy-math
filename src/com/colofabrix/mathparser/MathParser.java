@@ -2,7 +2,6 @@ package com.colofabrix.mathparser;
 
 import java.util.*;
 import java.util.regex.*;
-import com.colofabrix.mathparser.operators.special.GroupingOperator;
 import com.colofabrix.mathparser.org.ConfigException;
 import com.colofabrix.mathparser.org.ExpressionException;
 
@@ -13,7 +12,7 @@ import com.colofabrix.mathparser.org.ExpressionException;
  * @version 0.3
  * @since 2014-01
  */
-public final class MathParser {
+public class MathParser {
 	
 	private Operators operators;
 	private Memory memory = new Memory();
@@ -58,60 +57,21 @@ public final class MathParser {
             
             // Add an operator
             if( this.operators.isOperator( word ) ) {
-                Operator cOpr = (Operator)this.operators.fromName( word ).clone();
+                Operator currentOp = (Operator)this.operators.fromName( word ).clone();
                 Operator lastOp = this.operators.fromName( lastWord );
 
                 // Checking for known unary operators or context unary operators
-            	if( cOpr.getOperandsMax() == 1 ||
-            		lastOp != null && !(lastOp.isGrouping() || cOpr.isGrouping()) ) {
-            		
-            		if(  cOpr.getOperandsMin() == 1 )
-            			cOpr.setCurrentOperands( 1 );
-            	
-            		// Checking for not allowed consecutive operators
-            		else if( cOpr.getOperandsMin() > 1 )
-            			throw new ExpressionException();
+            	if( currentOp.getOperandsMax() == 1 ||
+            		lastOp != null && !(lastOp.isGrouping() || currentOp.isGrouping()) ) {
+        			currentOp.setCurrentOperands( 1 );
             	}
-            	
-                // Opening and closing parenthesis
-            	if( cOpr.isGrouping() ) {
-            		
-	            	if( ((GroupingOperator)cOpr).isOpening() ) {
-	                	groupingMatching++;
-	                    opstack.push( cOpr );
-	                }
-	                else if( ((GroupingOperator)cOpr).isClosing() ) {
-	                    
-	                    // Pop all the previous operators from the stack and push them in the postfix string
-	                    while( opstack.size() >= 0 ) {
-	                        Operator tmp = opstack.pop();
-	                        
-	                        if( tmp.isGrouping() && ((GroupingOperator)tmp).isOpening() )
-	                            break;
-	                        
-	                        // Check parentheses match
-	                        if( opstack.size() == 0 )
-	                            throw new ExpressionException();
-	                        
-	                        postfix.push( tmp.getName() );
-	                    }
-	                    
-	                    groupingMatching--;
-	                }
-	            	
-	            	postfix.push( word );
-            	}
-                else {
-                	
-                    // Extract all the operators that precede the current one
-                    while( opstack.size() > 0 && opstack.lastElement().compareTo( cOpr ) >= 0  )
-                        postfix.push( opstack.pop().getName() );
-    
-                    opstack.push( cOpr );
-                }
+
+            	currentOp = currentOp.executeParsing( postfix, opstack, memory );
+                if( currentOp != null )
+                	opstack.push( currentOp );
             }
+            // Add an operand
             else
-                // Add an operand
                 postfix.push( word );
             
             // Remember the last word

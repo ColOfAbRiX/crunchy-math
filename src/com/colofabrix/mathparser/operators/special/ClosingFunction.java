@@ -25,7 +25,7 @@ public class ClosingFunction extends GroupingOperator {
     }
     
     @Override
-    public String executeParsing( Stack<String> postfix, Stack<Operator> opstack, Memory memory ) throws ExpressionException {
+    public Operator executeParsing( Stack<String> postfix, Stack<Operator> opstack, Memory memory ) throws ExpressionException {
 		@SuppressWarnings("unchecked")
 		Stack<String> stack = (Stack<String>)memory.getRaw(".function_stack");
     	if( stack == null )
@@ -37,7 +37,7 @@ public class ClosingFunction extends GroupingOperator {
     	// Transfer the working variable to another variable
 		memory.setRaw( ".function_stack", null );
 		memory.setRaw( ".function_argument", stack );
-		
-		return null;
+        
+        return this;
     }
 }

@@ -22,7 +22,7 @@ public class PushOperator extends Operator {
 	}
     
     @Override
-    public String executeParsing( Stack<String> postfix, Stack<Operator> opstack, Memory memory ) throws ExpressionException {
+    public Operator executeParsing( Stack<String> postfix, Stack<Operator> opstack, Memory memory ) throws ExpressionException {
 		@SuppressWarnings("unchecked")
 		Stack<String> stack = (Stack<String>)memory.getRaw(".function_stack");
     	if( stack == null )
@@ -33,7 +33,7 @@ public class PushOperator extends Operator {
     	
     	// Transfer the working variable to another variable
 		memory.setRaw( ".function_stack", stack );
-		
-		return null;
+        
+        return this;
     }	
 }

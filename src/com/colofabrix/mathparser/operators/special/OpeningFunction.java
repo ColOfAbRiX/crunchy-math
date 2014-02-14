@@ -25,8 +25,9 @@ public class OpeningFunction extends GroupingOperator {
     }
     
     @Override
-    public String executeParsing( Stack<String> postfix, Stack<Operator> opstack, Memory memory ) throws ExpressionException {
+    public Operator executeParsing( Stack<String> postfix, Stack<Operator> opstack, Memory memory ) throws ExpressionException {
 		memory.setRaw( ".function_stack", new Stack<String>() );
-		return this.getName();
+        
+        return this;
     }
 }

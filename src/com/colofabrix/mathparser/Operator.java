@@ -47,17 +47,27 @@ public abstract class Operator implements Comparable<Operator>, Cloneable {
     /**
      * Execute the parsing operation that the operator may require
      * 
-     * <p>The parsing operation is an operation that is performed before the operand is pushed to the
-     * postfix stack</p>
+     * <p>The parsing operation is an operation that is performed when the operator is fetched from
+     * the input string</br>
+     * The function is called and can fully operate on the output and operand stacks, as well as the
+     * parser memory. It must take care of the correct placing of operators and operands on the two
+     * stacks in relation to its behaviour.<br/>
+     * This default implementation pops out the operators stack all the operators with less priority
+     * that the current one and returns the current operator to be pushed on the operators stack;</p>
      * 
-     * @param postfix The full postfix stack as it is build before the call to this method
+     * @param postfix The full postfix stack, as it is build before the call to this method
+     * @param opstack The full operator stack, as it is constructed befor the call to this method
      * @param memory A reference to the main math memory
-     * @return A string containing the value to push into the calculating stack. By default this value is the full name of the operator
+     * @return An instance of the operator to be pushed at the end of the operators stack, 
      * @throws ExpressionException The exception is thrown when there is an evaluation problem
      */
-    public String executeParsing( Stack<String> postfix, Stack<Operator> opstack, Memory memory ) throws ExpressionException
+    public Operator executeParsing( Stack<String> postfix, Stack<Operator> opstack, Memory memory ) throws ExpressionException
     {
-    	return this.getName();
+        // Extract all the operators that precede the current one
+        while( opstack.size() > 0 && opstack.lastElement().compareTo( this ) >= 0  )
+            postfix.push( opstack.pop().getName() );
+        
+        return this;
     }
 
     /**
@@ -93,7 +103,8 @@ public abstract class Operator implements Comparable<Operator>, Cloneable {
      * Sets the limits of the number of operands allowed for the operator
      * 
      * <p>For example, the operator <b>minus</b> is a dual operator but, in some cases, can be put in
-     * front of a bracket and it becomes a unary operator. In this case the limits are 1 and 2</p>
+     * front of a bracket and it becomes a unary operator. In this case the limits are 1 and 2<br/>
+     * When the limits are changed the current operator count is set between these limits.</p>
      * 
      * @param min Minimum number of operand allowed
      * @param max Maximum number of operand allowed
@@ -141,13 +152,13 @@ public abstract class Operator implements Comparable<Operator>, Cloneable {
     public int getPriority() {
         int base = this.priority;
         
+        // Grouping operators have priority over unary operators
+        //if( this.isGrouping() )
+        //	return base -Short.MAX_VALUE;
+        
         // Unary operators have priority over math operators
         if( this.opCount == 1 )
-            base += Short.MAX_VALUE;
-        
-        // Grouping operators have priority over unary operators
-        if( this.isGrouping() )
-            base += -Short.MAX_VALUE;
+            return base + Short.MAX_VALUE;
         
         return base;
     }
