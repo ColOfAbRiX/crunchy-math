@@ -57,11 +57,12 @@ public abstract class Operator implements Comparable<Operator>, Cloneable {
      * 
      * @param postfix The full postfix stack, as it is build before the call to this method
      * @param opstack The full operator stack, as it is constructed befor the call to this method
+     * @param operators TODO
      * @param memory A reference to the main math memory
      * @return An instance of the operator to be pushed at the end of the operators stack, 
      * @throws ExpressionException The exception is thrown when there is an evaluation problem
      */
-    public Operator executeParsing( Stack<String> postfix, Stack<Operator> opstack, Memory memory ) throws ExpressionException
+    public Operator executeParsing( Stack<String> postfix, Stack<Operator> opstack, Operators operators, Memory memory ) throws ExpressionException
     {
         // Extract all the operators that precede the current one
         while( opstack.size() > 0 && opstack.lastElement().compareTo( this ) >= 0  )

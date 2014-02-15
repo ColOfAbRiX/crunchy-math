@@ -1,9 +1,7 @@
-package com.colofabrix.mathparser.operators.special;
+package com.colofabrix.mathparser;
 
 import java.util.Stack;
 
-import com.colofabrix.mathparser.Memory;
-import com.colofabrix.mathparser.Operator;
 import com.colofabrix.mathparser.org.ExpressionException;
 
 public abstract class GroupingOperator extends Operator {
@@ -85,7 +83,7 @@ public abstract class GroupingOperator extends Operator {
      * @throws ExpressionException The exception is thrown when there is an evaluation problem
      */
 	@Override
-	public Operator executeParsing( Stack<String> postfix, Stack<Operator> opstack, Memory memory ) throws ExpressionException {
+	public Operator executeParsing( Stack<String> postfix, Stack<Operator> opstack, Operators operators, Memory memory ) throws ExpressionException {
 		Operator result;
 		
 		// Executes different parsing between opening and closing grouping

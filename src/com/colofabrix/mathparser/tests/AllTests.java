@@ -1,4 +1,4 @@
-package com.colofabrix.mathparser.utests;
+package com.colofabrix.mathparser.tests;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;

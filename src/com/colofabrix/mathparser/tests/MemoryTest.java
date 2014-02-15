@@ -1,4 +1,4 @@
-package com.colofabrix.mathparser.utests;
+package com.colofabrix.mathparser.tests;
 
 import static org.junit.Assert.*;
 

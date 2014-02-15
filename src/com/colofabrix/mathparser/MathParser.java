@@ -61,12 +61,11 @@ public class MathParser {
                 Operator lastOp = this.operators.fromName( lastWord );
 
                 // Checking for known unary operators or context unary operators
-            	if( currentOp.getOperandsMax() == 1 ||
-            		lastOp != null && !(lastOp.isGrouping() || currentOp.isGrouping()) ) {
+            	if( lastOp != null && !(lastOp.isGrouping() || currentOp.isGrouping()) )
         			currentOp.setCurrentOperands( 1 );
-            	}
 
-            	currentOp = currentOp.executeParsing( postfix, opstack, memory );
+            	// Execution of the custom parsing performed by the operators themselves
+            	currentOp = currentOp.executeParsing( postfix, opstack, this.operators, this.memory );
                 if( currentOp != null )
                 	opstack.push( currentOp );
             }
@@ -108,7 +107,11 @@ public class MathParser {
 
             	// Counting the number of operands needed
             	int o = Operator.discoverOperandsCount( word );
-                	
+                
+            	// Check the operand count for the operator
+            	if( stack.size() != o )
+            		throw new ExpressionException();
+            	
             	// Operand feching
             	for( ; o > 0; o-- )
             		localOperands.push( stack.pop() );

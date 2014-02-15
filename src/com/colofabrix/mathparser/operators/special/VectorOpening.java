@@ -2,15 +2,19 @@ package com.colofabrix.mathparser.operators.special;
 
 import java.util.Stack;
 
+import com.colofabrix.mathparser.GroupingOperator;
 import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.Operator;
+import com.colofabrix.mathparser.Operators;
 import com.colofabrix.mathparser.org.ConfigException;
 import com.colofabrix.mathparser.org.ExpressionException;
 
 
-public class OpeningFunction extends GroupingOperator {
+public class VectorOpening extends GroupingOperator {
 	
-    public OpeningFunction() throws ConfigException {
+	public static final String STACK_NAME = ".stack";
+	
+    public VectorOpening() throws ConfigException {
 		super();
         this.setBaseName( "[" );
         this.setPriority( (short)0 );
@@ -25,9 +29,8 @@ public class OpeningFunction extends GroupingOperator {
     }
     
     @Override
-    public Operator executeParsing( Stack<String> postfix, Stack<Operator> opstack, Memory memory ) throws ExpressionException {
-		memory.setRaw( ".function_stack", new Stack<String>() );
-        
+    public Operator executeParsing( Stack<String> postfix, Stack<Operator> opstack, Operators operators, Memory memory ) throws ExpressionException {
+		memory.setRaw( VectorOpening.STACK_NAME, new Stack<String>() );
         return this;
     }
 }

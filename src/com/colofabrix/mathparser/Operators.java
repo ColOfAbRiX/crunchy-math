@@ -42,9 +42,9 @@ public class Operators extends Vector<Operator> {
 		this.add( new AssignmentOperator() );
         this.add( new OpeningBracket() );
         this.add( new ClosingBracket() );
-        this.add( new OpeningFunction() );
-        this.add( new PushOperator() );
-        this.add( new ClosingFunction() );
+        this.add( new VectorOpening() );
+        this.add( new VectorPush() );
+        this.add( new VectorClosing() );
 	}
 	
     /**

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.colofabrix.mathparser.utests;
+package com.colofabrix.mathparser.tests;
 
 import static org.junit.Assert.*;
 
@@ -83,12 +83,11 @@ public class MathParserTest {
 			
 			assertEquals( "Simple integration of a variable",
 					"[0, 1, x, x, 0.000001, 5#Int]",
-					mp.ConvertToPostfix("0 Int 1 x x 0.000001").toString() );
+					mp.ConvertToPostfix("Int[0, 1, x, x, 0.000001]").toString() );
 			
-			/*
 			assertEquals( "Integration over a function",
-					"",
-					mp.ConvertToPostfix("0 Int 1 Sin(x) x 0.000001").toString() );
+					"[0, 1, x #Sin, x, 0.000001, 5#Int]",
+					mp.ConvertToPostfix("Int[0, 1, Sin x, x, 0.000001]").toString() );
 			
 			assertEquals( "Integration over a function with decimal number",
 					"",
@@ -97,7 +96,6 @@ public class MathParserTest {
 			assertEquals( "Integration over a negative interval and simple function",
 					"",
 					mp.ConvertToPostfix("-1 Int 1 x x 0.000001").toString() );
-			*/
 		}
 		catch (ExpressionException | ConfigException e) {
 			e.printStackTrace();
@@ -114,7 +112,6 @@ public class MathParserTest {
 					9.0,
 					mp.ExecutePostfix(mp.ConvertToPostfix("3 * (2 + 1)")),
 					0);
-			
 			
 			assertEquals( "Assignment",
 					Math.PI,
@@ -158,13 +155,12 @@ public class MathParserTest {
 			
 			assertEquals( "Simple integration of a variable",
 					0.5,
-					mp.ExecutePostfix(mp.ConvertToPostfix("0 Int 1 x x 0.000001")),
+					mp.ExecutePostfix(mp.ConvertToPostfix("Int[0, 1, Sin x, x, 0.000001]")),
 					0.000001);
 			
-			/*
 			assertEquals( "Integration over a function",
 					0.5,
-					mp.ExecutePostfix(mp.ConvertToPostfix("0 Int 1 Sin(x) x 0.000001")),
+					mp.ExecutePostfix(mp.ConvertToPostfix("Int[0, 1, Sin x, x, 0.000001]")),
 					0.0000001);
 			
 			assertEquals( "Integration over a function with decimal number",
@@ -176,7 +172,6 @@ public class MathParserTest {
 					0.5,
 					mp.ExecutePostfix(mp.ConvertToPostfix("-1 Int 1 x x 0.000001")),
 					0.0000001);
-			*/
 		}
 		catch (ExpressionException | ConfigException e) {
 			e.printStackTrace();
