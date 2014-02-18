@@ -22,7 +22,7 @@ public abstract class Operator implements Comparable<Operator>, Cloneable {
 	/**
 	 * Regular expression to match the operand number field (<num>#<opname>)
 	 */
-	public static final String OPNUM_REGEX = "^([1-9][0-9]*)?(" + OPNUM_MARK + ").*";
+	public static final String OPNUM_REGEX = "^([1-9][0-9]*)?(" + OPNUM_MARK + ")(.*)";
 
 	private boolean grouping = false;
 	private int minOperands = 2;
@@ -377,11 +377,11 @@ public abstract class Operator implements Comparable<Operator>, Cloneable {
 	public static Double translateOperand( String operand, Memory memory ) throws ExpressionException {
 		
 		// Numeric operand
-    	if( operand.matches(Operators.NUMBER_REGEX) )
+    	if( operand.matches(MathParser.NUMBER_REGEX) )
     		return Double.valueOf( operand );
     	
     	// Variable from memory
-    	else if( operand.matches(Operators.VARIABLE_REGEX) )
+    	else if( operand.matches(MathParser.VARIABLE_REGEX) )
     		return memory.getValue( operand );
     	
     	throw new ExpressionException();

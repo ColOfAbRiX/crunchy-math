@@ -2,20 +2,16 @@ package com.colofabrix.mathparser.operators.special;
 
 import java.util.Stack;
 
-import com.colofabrix.mathparser.Memory;
-import com.colofabrix.mathparser.Operator;
-import com.colofabrix.mathparser.Operators;
+import com.colofabrix.mathparser.*;
 import com.colofabrix.mathparser.org.ConfigException;
 import com.colofabrix.mathparser.org.ExpressionException;
 
-public class VectorPush extends Operator {
+public class VectorPush extends GroupingOperator {
 
 	public VectorPush() throws ConfigException {
 		super();
 		this.setBaseName( "," );
 		this.setPriority( (short)2 );
-		this.setOperandsLimit( 1, 1 );
-		this.setCurrentOperands( 1 );
 	}
 	
 	public Double executeOperation( Stack<String> operands, Memory memory ) throws ExpressionException {
@@ -28,15 +24,31 @@ public class VectorPush extends Operator {
 		Stack<String> stack = (Stack<String>)memory.getRaw( VectorOpening.STACK_NAME );
     	if( postfix.size() < 1  || stack == null )
     		throw new ExpressionException();
-
+    	
+    	// Call basic constructor. It ensures that the postfix stack is filled with all the operands and operators
+    	super.executeParsingClosing( postfix, opstack, operators, memory );
+    	
     	// Move all the values until the previous OpeningFunction. OpeningFunction is the only operator
     	// in opstack, because PushOperator is never pushed
-    	while( postfix.size() > 0 && !(operators.fromName(postfix.firstElement()) instanceof VectorOpening) )
-    		stack.push( postfix.pop() );
+    	int i = postfix.size() - 1;
+    	while( postfix.size() > 0 && !(operators.fromName(postfix.get(i)) instanceof VectorOpening || operators.fromName(postfix.get(i)) instanceof VectorPush) )
+    		i--;
+    	
+    	i++;
+    	stack.addAll( postfix.subList(i, postfix.size()) );
+    	ExpressionEntry.createFromPostfix( postfix.subList(i, postfix.size()) );
 
+    	for( ; i <= postfix.size(); i++ )
+    		postfix.pop();
+    	
     	// Save the private stack
 		memory.setRaw( VectorOpening.STACK_NAME , stack );
         
-        return null;
-    }	
+        return this;
+    }
+
+	@Override
+	public boolean isOpening() {
+		return true;
+	}
 }

@@ -2,9 +2,9 @@ package com.colofabrix.mathparser.operators.special;
 
 import java.util.Stack;
 
+import com.colofabrix.mathparser.MathParser;
 import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.Operator;
-import com.colofabrix.mathparser.Operators;
 import com.colofabrix.mathparser.org.ConfigException;
 import com.colofabrix.mathparser.org.ExpressionException;
 
@@ -23,11 +23,11 @@ public class AssignmentOperator extends Operator {
 		String operand = operands.get(1);
 		
 		// Numeric operand
-    	if( operand.matches(Operators.NUMBER_REGEX) )
+    	if( operand.matches(MathParser.NUMBER_REGEX) )
     		return Double.valueOf( operand );
     	
     	// Variable from memory
-    	else if( operand.matches(Operators.VARIABLE_REGEX) )
+    	else if( operand.matches(MathParser.VARIABLE_REGEX) )
     		return memory.setValue( operand, Double.valueOf(operands.get(0)) );
     	
     	return null;

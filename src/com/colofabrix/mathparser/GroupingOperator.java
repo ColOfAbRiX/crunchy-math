@@ -4,6 +4,15 @@ import java.util.Stack;
 
 import com.colofabrix.mathparser.org.ExpressionException;
 
+/**
+ * Represent a grouping operators
+ * 
+ * <p>A grouping operator is an operator with a beginning and an end, within the infix expression, wich
+ * encloses an expression. Usually the eclosed expression has priority over the outer expression<br/>
+ * This is a default implementation that models the behaviour of the common brackets</p>
+ * 
+ * @author fcolonna
+ */
 public abstract class GroupingOperator extends Operator {
 	
 	/**
@@ -88,10 +97,10 @@ public abstract class GroupingOperator extends Operator {
 		
 		// Executes different parsing between opening and closing grouping
 		if( this.isOpening() )
-			result = this.executeParsingOpening( postfix, opstack, memory );
+			result = this.executeParsingOpening( postfix, opstack, operators, memory );
 		
 		else
-			result = this.executeParsingClosing( postfix, opstack, memory );
+			result = this.executeParsingClosing( postfix, opstack, operators, memory );
 		
 		return result;
 	};
@@ -104,11 +113,12 @@ public abstract class GroupingOperator extends Operator {
      * @see Operator.executeParsing
      * @param postfix The full postfix stack, as it is build before the call to this method
      * @param opstack The full operator stack, as it is constructed befor the call to this method
+     * @param operators TODO
      * @param memory A reference to the main math memory
      * @return An instance of the operator to be pushed at the end of the operators stack, 
      * @throws ExpressionException The exception is thrown when there is an evaluation problem
      */
-	protected Operator executeParsingOpening( Stack<String> postfix, Stack<Operator> opstack, Memory memory ) throws ExpressionException {
+	protected Operator executeParsingOpening( Stack<String> postfix, Stack<Operator> opstack, Operators operators, Memory memory ) throws ExpressionException {
         return this;
 	}
 	
@@ -120,22 +130,25 @@ public abstract class GroupingOperator extends Operator {
      * @see Operator.executeParsing
      * @param postfix The full postfix stack, as it is build before the call to this method
      * @param opstack The full operator stack, as it is constructed befor the call to this method
+     * @param operators TODO
      * @param memory A reference to the main math memory
      * @return An instance of the operator to be pushed at the end of the operators stack, 
      * @throws ExpressionException The exception is thrown when there is an evaluation problem
      */
-	protected Operator executeParsingClosing( Stack<String> postfix, Stack<Operator> opstack, Memory memory ) throws ExpressionException {
-        // Pop all the previous operators from the stack and push them in the postfix string
-        while( opstack.size() >= 0 ) {
+	protected Operator executeParsingClosing( Stack<String> postfix, Stack<Operator> opstack, Operators operators, Memory memory ) throws ExpressionException {
+        // Pop all the previous operators from the stack and push them in the postfix string until I find an opening grouping
+        while( opstack.size() > 0 ) {
             Operator tmp = opstack.pop();
             
             if( tmp.isGrouping() && ((GroupingOperator)tmp).isOpening() )
                 break;
             
+            /* NOTE: For normal brackets this is important, but for generic operators this could not
+             * be good and, in fact, it creates problems with the Vector type
             // Check parentheses match
             if( opstack.size() == 0 )
                 throw new ExpressionException();
-            
+            */
             postfix.push( tmp.getName() );
         }
         

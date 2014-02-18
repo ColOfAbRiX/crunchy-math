@@ -31,6 +31,7 @@ public class VectorOpening extends GroupingOperator {
     @Override
     public Operator executeParsing( Stack<String> postfix, Stack<Operator> opstack, Operators operators, Memory memory ) throws ExpressionException {
 		memory.setRaw( VectorOpening.STACK_NAME, new Stack<String>() );
+		postfix.push( this.getName() );
         return this;
     }
 }

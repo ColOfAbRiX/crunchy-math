@@ -2,6 +2,7 @@ package com.colofabrix.mathparser;
 
 import java.util.*;
 import java.util.regex.*;
+
 import com.colofabrix.mathparser.org.ConfigException;
 import com.colofabrix.mathparser.org.ExpressionException;
 
@@ -14,11 +15,23 @@ import com.colofabrix.mathparser.org.ExpressionException;
  */
 public class MathParser {
 	
+	/**
+	 * Regular expression to match a variable name
+	 */
+	public static final String VARIABLE_REGEX = "([a-zA-Z_]|\\.[a-zA-Z_])[a-zA-Z0-9_]*";
+	
+	/**
+	 * Regular espression to match allowed numbers
+	 */
+	public static final String NUMBER_REGEX = "-?[0-9]*\\.[0-9]+|[0-9]+";
+	
 	private Operators operators;
 	private Memory memory = new Memory();
 
 	/**
 	 * Creates and initialize the MathParser
+	 * 
+	 * <p>This constructor allow to specify a custom operators manager and memory manager</p>
 	 * 
 	 * @param manager The choosen Operators Manager, which contains a collection of supported operators.
 	 */
@@ -27,6 +40,11 @@ public class MathParser {
 		this.memory = memory;
 	}
 	
+	/**
+	 * Creates and initialize MathParser
+	 * 
+	 * @throws ConfigException
+	 */
 	public MathParser() throws ConfigException {
 		this.operators = new Operators();
 		this.memory = new Memory();
@@ -58,12 +76,11 @@ public class MathParser {
             // Add an operator
             if( this.operators.isOperator( word ) ) {
                 Operator currentOp = (Operator)this.operators.fromName( word ).clone();
-                Operator lastOp = this.operators.fromName( lastWord );
 
-                // Checking for known unary operators or context unary operators
-            	if( lastOp != null && !(lastOp.isGrouping() || currentOp.isGrouping()) )
-        			currentOp.setCurrentOperands( 1 );
-
+                // Two consecutive operators means the last one is unary
+            	if( lastWord.isEmpty() || this.operators.fromName(lastWord) != null )
+            		currentOp.setCurrentOperands( 1 );
+            	
             	// Execution of the custom parsing performed by the operators themselves
             	currentOp = currentOp.executeParsing( postfix, opstack, this.operators, this.memory );
                 if( currentOp != null )

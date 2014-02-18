@@ -42,18 +42,19 @@ public class VectorClosing extends GroupingOperator {
     		stack.push( postfix.pop() );
     	
     	// Check the presence of an opening bracket
-    	if( opstack.size() == 0 || !(opstack.lastElement() instanceof VectorOpening) )
+    	while( postfix.size() > 0 && !(operators.fromName(postfix.lastElement()) instanceof VectorOpening || operators.fromName(postfix.lastElement()) instanceof VectorPush) )
     		throw new ExpressionException();
-    	
-		// Remove the opening parenthesis from the operator stack
-    	opstack.pop();
-    	
+    	    	
     	// Transfer the working variable to another variable
 		memory.setRaw( VectorOpening.STACK_NAME, null );
 		memory.setRaw( VectorClosing.OUTPUT_NAME, stack );		
 		
-		// Add all the fetched operands in the postfix string
-		postfix.addAll( stack );
+		// Remove the opening parenthesis from the operator stack
+    	opstack.pop();
+    	// Add all the fetched operands in the postfix string
+		postfix.pop();
+		//postfix.addAll( stack )
+		postfix.add( stack.toString() );
 		
         return null;
     }

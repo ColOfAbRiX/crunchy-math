@@ -14,16 +14,6 @@ import com.colofabrix.mathparser.org.*;
  */
 public class Operators extends Vector<Operator> {
 	private static final long serialVersionUID = 9039898627558124444L;
-
-	/**
-	 * Regular espression to match allowed numbers
-	 */
-	public static final String NUMBER_REGEX = "-?[0-9]*\\.[0-9]+|[0-9]+";
-	
-	/**
-	 * Regular expression to match a variable name
-	 */
-	public static final String VARIABLE_REGEX = "([a-zA-Z_]|\\.[a-zA-Z_])[a-zA-Z0-9_]*";
 	
 	/**
 	 * The constructor initializes the operators that are recognized by the Math Parser
@@ -38,7 +28,6 @@ public class Operators extends Vector<Operator> {
         this.add( new SinOperator() );
         this.add( new CosOperator() );
         this.add( new IntegralOperator() );
-        
 		this.add( new AssignmentOperator() );
         this.add( new OpeningBracket() );
         this.add( new ClosingBracket() );
@@ -85,9 +74,17 @@ public class Operators extends Vector<Operator> {
 	 * @param name The name of the operator to fetch
 	 * @return An instance corresponding to the operator found or <code>null</code> if no operator is found
 	 */
-	public Operator fromName( String name ) {
+	public Operator fromName( String word ) {
+    	Matcher m = Pattern.compile( Operator.OPNUM_REGEX ).matcher( word );
+    	if( !m.matches() )
+    		return null;
+    	
+    	String opname = m.group( 3 );
+    	if( opname == null )
+    		return null;
+		
 		for( Operator op: this )
-			if( op.equals( name ) || op.getName().equals(name) )
+			if( op.equals(word) || op.getName().equals(word) )
 				return op;
 		
 		return null;
@@ -104,6 +101,6 @@ public class Operators extends Vector<Operator> {
 		for( Operator op: this )
             regex += Pattern.quote( op.getBaseName() ) + "|";
 
-        return Pattern.compile( "(" + regex + NUMBER_REGEX + "|" + VARIABLE_REGEX + ")" );
+        return Pattern.compile( "(" + regex + MathParser.NUMBER_REGEX + "|" + MathParser.VARIABLE_REGEX + ")" );
 	}
 }
