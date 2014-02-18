@@ -2,6 +2,7 @@ package com.colofabrix.mathparser;
 
 import java.util.*;
 
+import com.colofabrix.mathparser.expression.ExprEntry;
 import com.colofabrix.mathparser.org.*;
 
 public class Main {
@@ -18,7 +19,7 @@ public class Main {
 	        //expressions.add( "-1 Int 1 x x 0.000001" );					// Not working
 
 	        for( String expr: expressions ) {
-		        Stack<String> tmp = test.ConvertToPostfix( expr );
+		        Stack<ExprEntry> tmp = test.ConvertToPostfix( expr );
 		        System.out.println( expr + " -> " + tmp.toString() );
 		        System.out.println( "Result: " + test.ExecutePostfix(tmp) );
 	        }

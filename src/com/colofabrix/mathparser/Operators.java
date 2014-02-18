@@ -3,6 +3,7 @@ package com.colofabrix.mathparser;
 import java.util.*;
 import java.util.regex.*;
 
+import com.colofabrix.mathparser.expression.Operator;
 import com.colofabrix.mathparser.operators.*;
 import com.colofabrix.mathparser.operators.special.*;
 import com.colofabrix.mathparser.org.*;
@@ -75,7 +76,7 @@ public class Operators extends Vector<Operator> {
 	 * @return An instance corresponding to the operator found or <code>null</code> if no operator is found
 	 */
 	public Operator fromName( String word ) {
-    	Matcher m = Pattern.compile( Operator.OPNUM_REGEX ).matcher( word );
+    	Matcher m = Pattern.compile( Operator.OPNUM_REGEX ) .matcher( word );
     	if( !m.matches() )
     		return null;
     	

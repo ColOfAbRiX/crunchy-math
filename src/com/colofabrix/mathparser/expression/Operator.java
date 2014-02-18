@@ -1,9 +1,12 @@
-package com.colofabrix.mathparser;
+package com.colofabrix.mathparser.expression;
 
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.colofabrix.mathparser.MathParser;
+import com.colofabrix.mathparser.Memory;
+import com.colofabrix.mathparser.Operators;
 import com.colofabrix.mathparser.org.ConfigException;
 import com.colofabrix.mathparser.org.ExpressionException;
 
@@ -22,7 +25,8 @@ public abstract class Operator implements Comparable<Operator>, Cloneable {
 	/**
 	 * Regular expression to match the operand number field (<num>#<opname>)
 	 */
-	public static final String OPNUM_REGEX = "^([1-9][0-9]*)?(" + OPNUM_MARK + ")(.*)";
+	public static final String OPNUM_REGEX = "^([1-9][0-9]*)?(" + OPNUM_MARK + "?)([^" + OPNUM_MARK + "]+)";
+	public static final int NAME_GROUP = 3;
 
 	private boolean grouping = false;
 	private int minOperands = 2;
@@ -385,5 +389,10 @@ public abstract class Operator implements Comparable<Operator>, Cloneable {
     		return memory.getValue( operand );
     	
     	throw new ExpressionException();
+	}
+	
+	@Override
+	public String toString() {
+		return this.name;
 	}
 }

@@ -2,8 +2,8 @@ package com.colofabrix.mathparser.operators.special;
 
 import java.util.Stack;
 
-import com.colofabrix.mathparser.GroupingOperator;
 import com.colofabrix.mathparser.Memory;
+import com.colofabrix.mathparser.expression.GroupingOperator;
 import com.colofabrix.mathparser.org.ConfigException;
 
 

@@ -3,6 +3,8 @@ package com.colofabrix.mathparser.operators.special;
 import java.util.Stack;
 
 import com.colofabrix.mathparser.*;
+import com.colofabrix.mathparser.expression.GroupingOperator;
+import com.colofabrix.mathparser.expression.Operator;
 import com.colofabrix.mathparser.org.ConfigException;
 import com.colofabrix.mathparser.org.ExpressionException;
 
@@ -36,7 +38,6 @@ public class VectorPush extends GroupingOperator {
     	
     	i++;
     	stack.addAll( postfix.subList(i, postfix.size()) );
-    	ExpressionEntry.createFromPostfix( postfix.subList(i, postfix.size()) );
 
     	for( ; i <= postfix.size(); i++ )
     		postfix.pop();

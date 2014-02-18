@@ -3,7 +3,7 @@ package com.colofabrix.mathparser.operators;
 import java.util.Stack;
 
 import com.colofabrix.mathparser.Memory;
-import com.colofabrix.mathparser.Operator;
+import com.colofabrix.mathparser.expression.Operator;
 import com.colofabrix.mathparser.org.ConfigException;
 import com.colofabrix.mathparser.org.ExpressionException;
 

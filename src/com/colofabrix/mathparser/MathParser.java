@@ -3,6 +3,9 @@ package com.colofabrix.mathparser;
 import java.util.*;
 import java.util.regex.*;
 
+import com.colofabrix.mathparser.expression.ExprBuilder;
+import com.colofabrix.mathparser.expression.ExprEntry;
+import com.colofabrix.mathparser.expression.Operator;
 import com.colofabrix.mathparser.org.ConfigException;
 import com.colofabrix.mathparser.org.ExpressionException;
 
@@ -53,54 +56,44 @@ public class MathParser {
 	/**
 	 * Infix-to-postfix converter
 	 * 
-	 * @param infix The mathematica expression to convert
+	 * @param input The mathematica expression to convert
 	 * @return A Stack containing the converted string
 	 * @throws ExpressionException In case of bad input expression
 	 * @throws ConfigException In case of misconfiguration of MathParser
 	 */
-    public Stack<String> ConvertToPostfix( String infix ) throws ExpressionException, ConfigException {
-    	
-        // The working stacks and variables
-    	Stack<Operator> opstack = new Stack<>();
-        Stack<String> postfix = new Stack<>();
-        String lastWord = "";
-        int groupingMatching = 0;
+    public Stack<ExprEntry> ConvertToPostfix( String input ) throws ExpressionException, ConfigException {
 
-        // Splits
-        Matcher m = this.operators.getParsingRegex().matcher( infix );
+        Stack<ExprEntry> infix = new ExprBuilder(this.operators).buildExpression( input );
+        Stack<ExprEntry> postfix = new Stack<>();
+        Stack<ExprEntry> opstack = new Stack<>();
+        ExprEntry lastEntry = null;
 
-        // Scan all the words inside the string
-        while( m.find() ) {
-            String word = m.group();
-            
+        for( ExprEntry entry: infix ) {
+        	
             // Add an operator
-            if( this.operators.isOperator( word ) ) {
-                Operator currentOp = (Operator)this.operators.fromName( word ).clone();
-
+        	if( entry.isOperator() ) {
+        		Operator currentOp = entry.getOperator();
+        		
                 // Two consecutive operators means the last one is unary
-            	if( lastWord.isEmpty() || this.operators.fromName(lastWord) != null )
+            	if( lastEntry == null || lastEntry.isOperator() )
             		currentOp.setCurrentOperands( 1 );
             	
             	// Execution of the custom parsing performed by the operators themselves
-            	currentOp = currentOp.executeParsing( postfix, opstack, this.operators, this.memory );
-                if( currentOp != null )
-                	opstack.push( currentOp );
-            }
-            // Add an operand
-            else
-                postfix.push( word );
-            
-            // Remember the last word
-            lastWord = word;
+            	entry = ExprEntry.createExpression( currentOp.executeParsing(postfix, opstack, this.operators, this.memory) );
+                if( entry != null )
+                	opstack.push( entry );
+        	}
+            // Add anything else
+        	else
+        		postfix.push( entry );
+        	
+            // Remember the last entry
+        	lastEntry = entry;
         }
-
-        // Unmatched parenthesis
-        if( groupingMatching != 0 )
-        	throw new ExpressionException();
-
-        // Add the remaining operators
+        
+        // Transfer the remaining operators
         while( opstack.size() > 0 )
-            postfix.push( opstack.pop().getName() );
+        	postfix.push( opstack.pop() );
 
         return postfix;
     }
@@ -112,37 +105,39 @@ public class MathParser {
      * @return A number indicating the result of the expression
 	 * @throws ExpressionException In case of bad input expression
      */
-    public Double ExecutePostfix( Stack<String> input ) throws ExpressionException {
-        ArrayList<String> postfix = new ArrayList<String>( input );
-        Stack<String> stack = new Stack<>();
-
-        // Scan all the items in the postfix list
-        for( String word: postfix ) {
-            
-            if( this.operators.isOperator( word ) ) {
-            	Stack<String> localOperands = new Stack<String>();
+    public Double ExecutePostfix( Stack<ExprEntry> input ) throws ExpressionException {
+    	
+        Stack<ExprEntry> localStack = new Stack<>();
+        
+    	for( ExprEntry entry: input ) {
+    		if( entry.isOperator() ) {
+            	Stack<ExprEntry> localOperands = new Stack<>();
 
             	// Counting the number of operands needed
-            	int o = Operator.discoverOperandsCount( word );
+            	int o = entry.getOperator().getCurrentOperands();
                 
             	// Check the operand count for the operator
-            	if( stack.size() != o )
+            	if( localStack.size() != o )
             		throw new ExpressionException();
             	
             	// Operand feching
             	for( ; o > 0; o-- )
-            		localOperands.push( stack.pop() );
+            		localOperands.push( localStack.pop() );
             	
             	// Operator execution
-            	Double result = this.operators.executeExpression( word, localOperands, this.memory );
+            	ExprEntry result = this.operators.executeExpression( entry, localOperands, this.memory );
             	if( result != null )
-            		stack.push( result.toString() );
-                
-            }
-            else
-                stack.push( word );
-        }
+            		localStack.push( result );
+    		}
+    		else
+    			localStack.push( entry );
+    	}
         
-        return Operator.translateOperand( stack.pop(), memory );
+    	// Check for correct execution - the result must be 1 number
+    	if( localStack.size() != 1 || !localStack.lastElement().isNumber() || !localStack.lastElement().isVariable() )
+    		throw new ExpressionException();
+    	
+    	// TODO: Refactor this
+        return Operator.translateOperand( localStack.pop().toString(), memory );
     }
 }

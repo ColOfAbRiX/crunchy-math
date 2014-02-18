@@ -1,7 +1,9 @@
-package com.colofabrix.mathparser;
+package com.colofabrix.mathparser.expression;
 
 import java.util.Stack;
 
+import com.colofabrix.mathparser.Memory;
+import com.colofabrix.mathparser.Operators;
 import com.colofabrix.mathparser.org.ExpressionException;
 
 /**
