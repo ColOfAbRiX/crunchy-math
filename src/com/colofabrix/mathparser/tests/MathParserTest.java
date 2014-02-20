@@ -12,10 +12,11 @@ import com.colofabrix.mathparser.org.ConfigException;
 import com.colofabrix.mathparser.org.ExpressionException;
 
 /**
- * @author fcolonna
- *
+ * @author Fabrizio Colonna
  */
-public class MathParserTest {
+public class MathParserTest extends MathParser {
+
+	public MathParserTest() throws ConfigException { super(); }
 
 	private static class TestEntry {
 		public String message = null;

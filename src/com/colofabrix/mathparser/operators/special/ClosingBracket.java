@@ -4,8 +4,9 @@ import java.util.Stack;
 
 import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.expression.GroupingOperator;
+import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.org.ConfigException;
-
+import com.colofabrix.mathparser.org.ExpressionException;
 
 public class ClosingBracket extends GroupingOperator {
 	
@@ -19,7 +20,8 @@ public class ClosingBracket extends GroupingOperator {
 	    return false;
 	}
 
-    public Double executeOperation( Stack<String> operands, Memory memory ) {
+	@Override
+	public Operand executeOperation( Stack<Operand> operands, Memory memory ) throws ExpressionException {
         return null;
     }
 	

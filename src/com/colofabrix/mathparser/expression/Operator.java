@@ -4,7 +4,6 @@ import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.colofabrix.mathparser.MathParser;
 import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.Operators;
 import com.colofabrix.mathparser.org.ConfigException;
@@ -15,7 +14,7 @@ import com.colofabrix.mathparser.org.ExpressionException;
  * 
  * @author Fabrizio Colonna
  */
-public abstract class Operator implements Comparable<Operator>, Cloneable {
+public abstract class Operator extends ExpressionEntry implements Comparable<Operator>, Cloneable {
 	
 	/**
 	 * Marker for the operand number field
@@ -26,14 +25,33 @@ public abstract class Operator implements Comparable<Operator>, Cloneable {
 	 * Regular expression to match the operand number field (<num>#<opname>)
 	 */
 	public static final String OPNUM_REGEX = "^([1-9][0-9]*)?(" + OPNUM_MARK + "?)([^" + OPNUM_MARK + "]+)";
+	
+	/**
+	 * The group number, inside the regex, where the name of the operator is specified
+	 */
 	public static final int NAME_GROUP = 3;
 
+	/**
+	 * Code to identify the object type
+	 */
+	public static final int OPERATOR_CODE = 2;
+	
 	private boolean grouping = false;
 	private int minOperands = 2;
 	private int maxOperands = 2;
 	private int priority = 0;
 	private int opCount = 2;
     private String name;
+	
+	/**
+	 * Returns a code to identify the type of ExprEntry that this class represents
+	 * 
+	 * @return An integer indicating the ExprEntry type
+	 */
+	@Override
+	public int getEntryType() {
+		return Operator.OPERATOR_CODE;
+	}
 	
     /**
      * Executes the operation performed by the operator
@@ -46,7 +64,7 @@ public abstract class Operator implements Comparable<Operator>, Cloneable {
      * @return It returns a number if the operation succeeded or <code>null</code> to express empty-result
      * @throws ExpressionException The exception is thrown when there is an evaluation problem
      */
-    public abstract Double executeOperation( Stack<String> operands, Memory memory ) throws ExpressionException;
+    public abstract Operand executeOperation( Stack<Operand> operands, Memory memory ) throws ExpressionException;
     
     /**
      * Execute the parsing operation that the operator may require
@@ -61,16 +79,16 @@ public abstract class Operator implements Comparable<Operator>, Cloneable {
      * 
      * @param postfix The full postfix stack, as it is build before the call to this method
      * @param opstack The full operator stack, as it is constructed befor the call to this method
-     * @param operators TODO
+     * @param operators A reference to the operators manager
      * @param memory A reference to the main math memory
      * @return An instance of the operator to be pushed at the end of the operators stack, 
      * @throws ExpressionException The exception is thrown when there is an evaluation problem
      */
-    public Operator executeParsing( Stack<String> postfix, Stack<Operator> opstack, Operators operators, Memory memory ) throws ExpressionException
+    public Operator executeParsing( CompositeExpression postfix, Stack<Operator> opstack, Operators operators, Memory memory ) throws ExpressionException
     {
         // Extract all the operators that precede the current one
         while( opstack.size() > 0 && opstack.lastElement().compareTo( this ) >= 0  )
-            postfix.push( opstack.pop().getName() );
+            postfix.push( opstack.pop() );
         
         return this;
     }
@@ -378,6 +396,7 @@ public abstract class Operator implements Comparable<Operator>, Cloneable {
      * @return A Double representing the value of the operand
      * @throws ExpressionException When there is a problem recognizing the operand
      */
+    /*
 	public static Double translateOperand( String operand, Memory memory ) throws ExpressionException {
 		
 		// Numeric operand
@@ -390,6 +409,7 @@ public abstract class Operator implements Comparable<Operator>, Cloneable {
     	
     	throw new ExpressionException();
 	}
+	*/
 	
 	@Override
 	public String toString() {

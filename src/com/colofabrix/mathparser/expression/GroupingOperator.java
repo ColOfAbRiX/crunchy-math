@@ -94,7 +94,7 @@ public abstract class GroupingOperator extends Operator {
      * @throws ExpressionException The exception is thrown when there is an evaluation problem
      */
 	@Override
-	public Operator executeParsing( Stack<String> postfix, Stack<Operator> opstack, Operators operators, Memory memory ) throws ExpressionException {
+	public Operator executeParsing( CompositeExpression postfix, Stack<Operator> opstack, Operators operators, Memory memory ) throws ExpressionException {
 		Operator result;
 		
 		// Executes different parsing between opening and closing grouping
@@ -115,12 +115,12 @@ public abstract class GroupingOperator extends Operator {
      * @see Operator.executeParsing
      * @param postfix The full postfix stack, as it is build before the call to this method
      * @param opstack The full operator stack, as it is constructed befor the call to this method
-     * @param operators TODO
+     * @param operators A reference to the operators manager
      * @param memory A reference to the main math memory
      * @return An instance of the operator to be pushed at the end of the operators stack, 
      * @throws ExpressionException The exception is thrown when there is an evaluation problem
      */
-	protected Operator executeParsingOpening( Stack<String> postfix, Stack<Operator> opstack, Operators operators, Memory memory ) throws ExpressionException {
+	protected Operator executeParsingOpening( CompositeExpression postfix, Stack<Operator> opstack, Operators operators, Memory memory ) throws ExpressionException {
         return this;
 	}
 	
@@ -132,12 +132,12 @@ public abstract class GroupingOperator extends Operator {
      * @see Operator.executeParsing
      * @param postfix The full postfix stack, as it is build before the call to this method
      * @param opstack The full operator stack, as it is constructed befor the call to this method
-     * @param operators TODO
+     * @param operators A reference to the operators manager
      * @param memory A reference to the main math memory
      * @return An instance of the operator to be pushed at the end of the operators stack, 
      * @throws ExpressionException The exception is thrown when there is an evaluation problem
      */
-	protected Operator executeParsingClosing( Stack<String> postfix, Stack<Operator> opstack, Operators operators, Memory memory ) throws ExpressionException {
+	protected Operator executeParsingClosing( CompositeExpression postfix, Stack<Operator> opstack, Operators operators, Memory memory ) throws ExpressionException {
         // Pop all the previous operators from the stack and push them in the postfix string until I find an opening grouping
         while( opstack.size() > 0 ) {
             Operator tmp = opstack.pop();
@@ -151,7 +151,7 @@ public abstract class GroupingOperator extends Operator {
             if( opstack.size() == 0 )
                 throw new ExpressionException();
             */
-            postfix.push( tmp.getName() );
+            postfix.add( tmp );
         }
         
         return null;

@@ -3,7 +3,9 @@ package com.colofabrix.mathparser.operators.special;
 import java.util.Stack;
 
 import com.colofabrix.mathparser.*;
+import com.colofabrix.mathparser.expression.CompositeExpression;
 import com.colofabrix.mathparser.expression.GroupingOperator;
+import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
 import com.colofabrix.mathparser.org.ConfigException;
 import com.colofabrix.mathparser.org.ExpressionException;
@@ -16,34 +18,27 @@ public class VectorPush extends GroupingOperator {
 		this.setPriority( (short)2 );
 	}
 	
-	public Double executeOperation( Stack<String> operands, Memory memory ) throws ExpressionException {
+	@Override
+	public Operand executeOperation( Stack<Operand> operands, Memory memory ) throws ExpressionException {
         return null;
 	}
     
     @Override
-    public Operator executeParsing( Stack<String> postfix, Stack<Operator> opstack, Operators operators, Memory memory ) throws ExpressionException {
-		@SuppressWarnings("unchecked")
-		Stack<String> stack = (Stack<String>)memory.getRaw( VectorOpening.STACK_NAME );
+    public Operator executeParsing( CompositeExpression postfix, Stack<Operator> opstack, Operators operators, Memory memory ) throws ExpressionException {
+    	CompositeExpression stack = (CompositeExpression)memory.getValue( VectorOpening.STACK_NAME );
+    	
     	if( postfix.size() < 1  || stack == null )
     		throw new ExpressionException();
     	
     	// Call basic constructor. It ensures that the postfix stack is filled with all the operands and operators
     	super.executeParsingClosing( postfix, opstack, operators, memory );
     	
-    	// Move all the values until the previous OpeningFunction. OpeningFunction is the only operator
-    	// in opstack, because PushOperator is never pushed
-    	int i = postfix.size() - 1;
-    	while( postfix.size() > 0 && !(operators.fromName(postfix.get(i)) instanceof VectorOpening || operators.fromName(postfix.get(i)) instanceof VectorPush) )
-    		i--;
-    	
-    	i++;
-    	stack.addAll( postfix.subList(i, postfix.size()) );
-
-    	for( ; i <= postfix.size(); i++ )
-    		postfix.pop();
+    	// Move all the values pushed previously to the saved stack until the previous OpeningFunction is found.
+    	while( postfix.size() > 0 && postfix.lastElement() instanceof VectorOpening || postfix.lastElement() instanceof VectorPush )
+    		stack.push( postfix.pop() );
     	
     	// Save the private stack
-		memory.setRaw( VectorOpening.STACK_NAME , stack );
+    	memory.setValue( VectorOpening.STACK_NAME, stack );
         
         return this;
     }

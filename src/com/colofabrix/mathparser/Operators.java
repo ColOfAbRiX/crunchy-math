@@ -3,6 +3,7 @@ package com.colofabrix.mathparser;
 import java.util.*;
 import java.util.regex.*;
 
+import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
 import com.colofabrix.mathparser.operators.*;
 import com.colofabrix.mathparser.operators.special.*;
@@ -48,8 +49,8 @@ public class Operators extends Vector<Operator> {
      * @return It returns a number if the operation succeeded or <code>null</code> to express empty-result
      * @throws ExpressionException The exception is thrown when there is an evaluation problem
      */
-	public Double executeExpression( String operator, Stack<String> operands, Memory memory ) throws ExpressionException {
-		Double value = this.fromName(operator).executeOperation( operands, memory );
+	public Operand executeExpression( Operator operator, Stack<Operand> operands, Memory memory ) throws ExpressionException {
+		Operand value = operator.executeOperation( operands, memory );
 		memory.setValue( Memory.ANSWER_VARIABLE, value );
 		return value;
 	}

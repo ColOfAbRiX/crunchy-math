@@ -2,8 +2,8 @@ package com.colofabrix.mathparser.operators.special;
 
 import java.util.Stack;
 
-import com.colofabrix.mathparser.MathParser;
 import com.colofabrix.mathparser.Memory;
+import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
 import com.colofabrix.mathparser.org.ConfigException;
 import com.colofabrix.mathparser.org.ExpressionException;
@@ -16,20 +16,20 @@ public class AssignmentOperator extends Operator {
 		this.setPriority( (short)-1 );
 	}
 
-	public Double executeOperation( Stack<String> operands, Memory memory ) throws ExpressionException {
+	@Override
+	public Operand executeOperation( Stack<Operand> operands, Memory memory ) throws ExpressionException {
 		if( operands.size() < 2 )
 			throw new ExpressionException(); 
 		
-		String operand = operands.get(1);
+		Operand variable = operands.get(0);
+		Operand operand = operands.get(1);
+
+		// The variable must be... a variable!
+		if( !variable.isVariable() )
+			throw new ExpressionException();
 		
-		// Numeric operand
-    	if( operand.matches(MathParser.NUMBER_REGEX) )
-    		return Double.valueOf( operand );
-    	
-    	// Variable from memory
-    	else if( operand.matches(MathParser.VARIABLE_REGEX) )
-    		return memory.setValue( operand, Double.valueOf(operands.get(0)) );
-    	
-    	return null;
+		return (Operand)memory.setValue(
+				variable.getVariableName(),
+				new Operand(operand.getNumericValue()) );
 	}
 }

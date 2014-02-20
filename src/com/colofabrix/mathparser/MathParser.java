@@ -1,10 +1,9 @@
 package com.colofabrix.mathparser;
 
 import java.util.*;
-import java.util.regex.*;
-
-import com.colofabrix.mathparser.expression.ExprBuilder;
-import com.colofabrix.mathparser.expression.ExprEntry;
+import com.colofabrix.mathparser.expression.CompositeExpression;
+import com.colofabrix.mathparser.expression.ExpressionEntry;
+import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
 import com.colofabrix.mathparser.org.ConfigException;
 import com.colofabrix.mathparser.org.ExpressionException;
@@ -61,31 +60,31 @@ public class MathParser {
 	 * @throws ExpressionException In case of bad input expression
 	 * @throws ConfigException In case of misconfiguration of MathParser
 	 */
-    public Stack<ExprEntry> ConvertToPostfix( String input ) throws ExpressionException, ConfigException {
+    public CompositeExpression ConvertToPostfix( String input ) throws ExpressionException, ConfigException {
 
-        Stack<ExprEntry> infix = new ExprBuilder(this.operators).buildExpression( input );
-        Stack<ExprEntry> postfix = new Stack<>();
-        Stack<ExprEntry> opstack = new Stack<>();
-        ExprEntry lastEntry = null;
+        CompositeExpression infix = CompositeExpression.fromExpression(input, operators, memory);
+        CompositeExpression postfix = new CompositeExpression();
+        Stack<Operator> opstack = new Stack<>();
+        ExpressionEntry lastEntry = null;
 
-        for( ExprEntry entry: infix ) {
+        for( ExpressionEntry entry: infix ) {
         	
             // Add an operator
-        	if( entry.isOperator() ) {
-        		Operator currentOp = entry.getOperator();
+        	if( entry.getEntryType() == Operator.OPERATOR_CODE ) {
+        		Operator currentOp = (Operator)entry;
         		
                 // Two consecutive operators means the last one is unary
-            	if( lastEntry == null || lastEntry.isOperator() )
+            	if( lastEntry == null || lastEntry.getEntryType() == Operator.OPERATOR_CODE )
             		currentOp.setCurrentOperands( 1 );
             	
             	// Execution of the custom parsing performed by the operators themselves
-            	entry = ExprEntry.createExpression( currentOp.executeParsing(postfix, opstack, this.operators, this.memory) );
-                if( entry != null )
-                	opstack.push( entry );
+            	currentOp = currentOp.executeParsing( postfix, opstack, this.operators, this.memory );
+                if( currentOp != null )
+                	opstack.push( currentOp );
         	}
             // Add anything else
         	else
-        		postfix.push( entry );
+        		postfix.add( entry );
         	
             // Remember the last entry
         	lastEntry = entry;
@@ -93,9 +92,9 @@ public class MathParser {
         
         // Transfer the remaining operators
         while( opstack.size() > 0 )
-        	postfix.push( opstack.pop() );
+        	postfix.add( opstack.pop() );
 
-        return postfix;
+        return CompositeExpression.fromExpression(postfix, operators, memory);
     }
     
     /**
@@ -105,16 +104,17 @@ public class MathParser {
      * @return A number indicating the result of the expression
 	 * @throws ExpressionException In case of bad input expression
      */
-    public Double ExecutePostfix( Stack<ExprEntry> input ) throws ExpressionException {
+    public Double ExecutePostfix( CompositeExpression input ) throws ExpressionException {
     	
-        Stack<ExprEntry> localStack = new Stack<>();
+        Stack<Operand> localStack = new Stack<>();
         
-    	for( ExprEntry entry: input ) {
-    		if( entry.isOperator() ) {
-            	Stack<ExprEntry> localOperands = new Stack<>();
+    	for( ExpressionEntry entry: input ) {
+    		if( entry.getEntryType() == Operator.OPERATOR_CODE ) {
+    			Operator currentOp = (Operator)entry;
+            	Stack<Operand> localOperands = new Stack<>();
 
             	// Counting the number of operands needed
-            	int o = entry.getOperator().getCurrentOperands();
+            	int o = currentOp.getCurrentOperands();
                 
             	// Check the operand count for the operator
             	if( localStack.size() != o )
@@ -125,19 +125,19 @@ public class MathParser {
             		localOperands.push( localStack.pop() );
             	
             	// Operator execution
-            	ExprEntry result = this.operators.executeExpression( entry, localOperands, this.memory );
+            	Operand result = this.operators.executeExpression( currentOp, localOperands, this.memory );
             	if( result != null )
             		localStack.push( result );
     		}
-    		else
-    			localStack.push( entry );
+    		else if( entry.getEntryType() == Operand.OPERAND_CODE )
+    			localStack.push( (Operand)entry );
     	}
         
-    	// Check for correct execution - the result must be 1 number
-    	if( localStack.size() != 1 || !localStack.lastElement().isNumber() || !localStack.lastElement().isVariable() )
+    	// Check for correct execution - the result must be 1 number or variable
+    	if( localStack.size() != 1 || localStack.lastElement().getEntryType() != Operand.OPERAND_CODE )
     		throw new ExpressionException();
     	
     	// TODO: Refactor this
-        return Operator.translateOperand( localStack.pop().toString(), memory );
+        return ((Operand)localStack.pop()).getNumericValue();
     }
 }

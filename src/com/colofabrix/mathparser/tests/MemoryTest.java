@@ -5,6 +5,11 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import com.colofabrix.mathparser.Memory;
+import com.colofabrix.mathparser.expression.Operand;
+import com.colofabrix.mathparser.expression.Operator;
+import com.colofabrix.mathparser.operators.CosOperator;
+import com.colofabrix.mathparser.org.ConfigException;
+import com.colofabrix.mathparser.org.ExpressionException;
 
 public class MemoryTest {
 
@@ -12,38 +17,28 @@ public class MemoryTest {
 
 	@Test
 	public void testGetValueOrDefault() {
-		memory.setValue( "test", Math.PI );
-		assertEquals( "Check value get/set for value", Math.PI, memory.getValueOrDefault("test"), 0 );
-		
-		memory.setValue( "test", null );
-		assertEquals( "Check get/set for default", memory.getValueOrDefault("test"), Memory.DEFAULT_VALUE, 0 );
-		
-		memory.setValue( "non_existent_test", null );
-		assertEquals( "Check get/set for non-existent", memory.getValueOrDefault("non_existent_test"), Memory.DEFAULT_VALUE, 0 );
-	}
-
-	@Test
-	public void testGetValue() {
-		memory.setValue( "test", Math.PI );
-		assertEquals( "Check value get/set for value", Math.PI, memory.getValue("test"), 0 );
-		
-		memory.setValue( "test", null );
-		assertNull( "Check get/set for default", memory.getValue("test") );
-		
-		memory.setValue( "non_existent_test", null );
-		assertNull( "Check get/set for non-existent", memory.getValue("non_existent_test") );
-	}
-
-	@Test
-	public void testGetRaw() {
-		Object test = new Object();
-		
-		memory.setRaw( "test", test );
-		assertEquals( "Check value get/set for value", memory.getRaw("test"), test );
-		
-		memory.setRaw( "test", null );
-		assertNull( "Check get/set for default", memory.getRaw("test") );
-		
-		assertNull( "Check get/set for non-existent", memory.getRaw("non_existent_test") );
+		try {
+			// Operator saving and retrival
+			Operator a = new CosOperator();
+			memory.setValue( "test", a );
+			assertSame( "Check value get/set for object",
+					a,
+					memory.getValue("test") );
+			
+			// Test for null
+			memory.setValue( "test", null );
+			assertEquals( "Check get/set for default",
+					Memory.DEFAULT_VALUE.getNumericValue(),
+					((Operand)memory.getValueOrDefault("test")).getNumericValue(), 0 );
+			
+			// Test for non-existent value
+			memory.setValue( "non_existent_test", null );
+			assertEquals( "Check get/set for non-existent",
+					Memory.DEFAULT_VALUE.getNumericValue(),
+					((Operand)memory.getValueOrDefault("non_existent_test")).getNumericValue(), 0 );
+		}
+		catch( ExpressionException | ConfigException e ) {
+			fail( e.getMessage() );
+		}
 	}
 }
