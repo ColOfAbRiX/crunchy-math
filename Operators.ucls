@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class-diagram version="1.1.4" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
   associations="true" dependencies="false" nesting-relationships="true">  
-  <class id="1" language="java" name="com.colofabrix.mathparser.operators.SumOperator" project="MathParser" 
-    file="/MathParser/src/com/colofabrix/mathparser/operators/SumOperator.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="99" width="264" x="41" y="1048"/>    
+  <class id="1" language="java" name="com.colofabrix.mathparser.MathParser" project="MathParser" 
+    file="/MathParser/src/com/colofabrix/mathparser/MathParser.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="189" width="230" x="45" y="69"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="false" static="true"/>      
@@ -13,7 +13,7 @@
   <class id="2" language="java" name="com.colofabrix.mathparser.operators.special.VectorClosing" project="MathParser" 
     file="/MathParser/src/com/colofabrix/mathparser/operators/special/VectorClosing.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="171" width="400" x="678" y="284"/>    
+    <position height="153" width="416" x="-163" y="2199"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="false" static="true"/>      
@@ -22,263 +22,223 @@
   </class>  
   <class id="3" language="java" name="com.colofabrix.mathparser.Operators" project="MathParser" 
     file="/MathParser/src/com/colofabrix/mathparser/Operators.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="153" width="302" x="2404" y="1259"/>    
+    <position height="153" width="376" x="-163" y="298"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="false" static="true"/>      
       <operations public="true" package="true" protected="true" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="4" language="java" name="com.colofabrix.mathparser.operators.IntegralOperator" project="MathParser" 
-    file="/MathParser/src/com/colofabrix/mathparser/operators/IntegralOperator.java" binary="false" 
+  <class id="4" language="java" name="com.colofabrix.mathparser.expression.Operand" project="MathParser" 
+    file="/MathParser/src/com/colofabrix/mathparser/expression/Operand.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="261" width="303" x="250" y="1188"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="true" package="true" protected="true" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="com.colofabrix.mathparser.expression.ExpressionEntry" project="MathParser" 
+    file="/MathParser/src/com/colofabrix/mathparser/expression/ExpressionEntry.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="99" width="264" x="345" y="1048"/>    
+    <position height="135" width="312" x="561" y="1013"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="false" static="true"/>      
       <operations public="true" package="true" protected="true" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="5" language="java" name="com.colofabrix.mathparser.expression.Operator" project="MathParser" 
-    file="/MathParser/src/com/colofabrix/mathparser/expression/Operator.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="513" width="400" x="1558" y="495"/>    
+  <class id="6" language="java" name="com.colofabrix.mathparser.Memory" project="MathParser" 
+    file="/MathParser/src/com/colofabrix/mathparser/Memory.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="153" width="268" x="253" y="298"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="false" static="true"/>      
       <operations public="true" package="true" protected="true" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="6" language="java" name="com.colofabrix.mathparser.operators.CosOperator" project="MathParser" 
-    file="/MathParser/src/com/colofabrix/mathparser/operators/CosOperator.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="117" width="264" x="649" y="1048"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
-      <operations public="true" package="true" protected="true" private="false" static="true"/>    
-    </display>  
-  </class>  
-  <class id="7" language="java" name="com.colofabrix.mathparser.operators.MinusOperator" project="MathParser" 
-    file="/MathParser/src/com/colofabrix/mathparser/operators/MinusOperator.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="99" width="264" x="953" y="1048"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
-      <operations public="true" package="true" protected="true" private="false" static="true"/>    
-    </display>  
-  </class>  
-  <class id="8" language="java" name="com.colofabrix.mathparser.operators.MultiplyOperator" project="MathParser" 
-    file="/MathParser/src/com/colofabrix/mathparser/operators/MultiplyOperator.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
-    <position height="99" width="264" x="1511" y="1048"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
-      <operations public="true" package="true" protected="true" private="false" static="true"/>    
-    </display>  
-  </class>  
-  <class id="9" language="java" name="com.colofabrix.mathparser.operators.special.AssignmentOperator" 
+  <class id="7" language="java" name="com.colofabrix.mathparser.operators.special.AssignmentOperator" 
     project="MathParser" file="/MathParser/src/com/colofabrix/mathparser/operators/special/AssignmentOperator.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="99" width="264" x="1815" y="1048"/>    
+    <position height="99" width="324" x="271" y="1777"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="false" static="true"/>      
       <operations public="true" package="true" protected="true" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="10" language="java" name="com.colofabrix.mathparser.operators.SinOperator" project="MathParser" 
-    file="/MathParser/src/com/colofabrix/mathparser/operators/SinOperator.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="117" width="264" x="2119" y="1048"/>    
+  <class id="8" language="java" name="com.colofabrix.mathparser.expression.Operator" project="MathParser" 
+    file="/MathParser/src/com/colofabrix/mathparser/expression/Operator.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="549" width="416" x="593" y="1188"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="false" static="true"/>      
       <operations public="true" package="true" protected="true" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="11" language="java" name="com.colofabrix.mathparser.operators.DivideOperator" project="MathParser" 
-    file="/MathParser/src/com/colofabrix/mathparser/operators/DivideOperator.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="99" width="264" x="2444" y="1048"/>    
+  <class id="9" language="java" name="com.colofabrix.mathparser.operators.special.Vector" project="MathParser" 
+    file="/MathParser/src/com/colofabrix/mathparser/operators/special/Vector.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="135" width="463" x="132" y="2024"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="false" static="true"/>      
       <operations public="true" package="true" protected="true" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="12" language="java" name="com.colofabrix.mathparser.operators.special.VectorOpening" project="MathParser" 
+  <class id="10" language="java" name="com.colofabrix.mathparser.operators.special.VectorOpening" project="MathParser" 
     file="/MathParser/src/com/colofabrix/mathparser/operators/special/VectorOpening.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="153" width="400" x="1118" y="284"/>    
+    <position height="135" width="416" x="293" y="2199"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="false" static="true"/>      
       <operations public="true" package="true" protected="true" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="13" language="java" name="com.colofabrix.mathparser.operators.special.OpeningBracket" project="MathParser" 
+  <class id="11" language="java" name="com.colofabrix.mathparser.expression.CmplxExpression" project="MathParser" 
+    file="/MathParser/src/com/colofabrix/mathparser/expression/CmplxExpression.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="675" width="397" x="561" y="298"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
+      <operations public="true" package="true" protected="true" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="12" language="java" name="com.colofabrix.mathparser.operators.special.OpeningBracket" project="MathParser" 
     file="/MathParser/src/com/colofabrix/mathparser/operators/special/OpeningBracket.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="117" width="264" x="374" y="284"/>    
+    <position height="117" width="324" x="635" y="2024"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="false" static="true"/>      
       <operations public="true" package="true" protected="true" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="14" language="java" name="com.colofabrix.mathparser.expression.GroupingOperator" project="MathParser" 
-    file="/MathParser/src/com/colofabrix/mathparser/expression/GroupingOperator.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
-    <position height="207" width="440" x="1558" y="37"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
-      <operations public="true" package="true" protected="true" private="false" static="true"/>    
-    </display>  
-  </class>  
-  <class id="15" language="java" name="com.colofabrix.mathparser.operators.special.ClosingBracket" project="MathParser" 
+  <class id="13" language="java" name="com.colofabrix.mathparser.operators.special.ClosingBracket" project="MathParser" 
     file="/MathParser/src/com/colofabrix/mathparser/operators/special/ClosingBracket.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="117" width="264" x="2019" y="284"/>    
+    <position height="117" width="324" x="999" y="2024"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="false" static="true"/>      
       <operations public="true" package="true" protected="true" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="16" language="java" name="com.colofabrix.mathparser.operators.special.VectorPush" project="MathParser" 
+  <class id="14" language="java" name="com.colofabrix.mathparser.operators.special.VectorPush" project="MathParser" 
     file="/MathParser/src/com/colofabrix/mathparser/operators/special/VectorPush.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="135" width="400" x="1558" y="284"/>    
+    <position height="117" width="416" x="749" y="2199"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="false" static="true"/>      
       <operations public="true" package="true" protected="true" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="17" language="java" name="com.colofabrix.mathparser.operators.PowerOperator" project="MathParser" 
-    file="/MathParser/src/com/colofabrix/mathparser/operators/PowerOperator.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="99" width="264" x="2748" y="1048"/>    
+  <class id="15" language="java" name="com.colofabrix.mathparser.expression.GroupingOperator" project="MathParser" 
+    file="/MathParser/src/com/colofabrix/mathparser/expression/GroupingOperator.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="207" width="456" x="635" y="1777"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="false" static="true"/>      
       <operations public="true" package="true" protected="true" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="18" language="java" name="com.colofabrix.mathparser.MathParser" project="MathParser" 
-    file="/MathParser/src/com/colofabrix/mathparser/MathParser.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="171" width="214" x="1257" y="1048"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
-      <operations public="true" package="true" protected="true" private="false" static="true"/>    
-    </display>  
-  </class>  
-  <class id="19" language="java" name="com.colofabrix.mathparser.Memory" project="MathParser" 
-    file="/MathParser/src/com/colofabrix/mathparser/Memory.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="207" width="186" x="1257" y="1259"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="false" static="true"/>      
-      <operations public="true" package="true" protected="true" private="false" static="true"/>    
-    </display>  
-  </class>  
-  <dependency id="20">    
-    <bendpoint x="2413" y="1048"/>    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="3"/>  
-  </dependency>  
-  <generalization id="21">    
-    <end type="SOURCE" refId="15"/>    
-    <end type="TARGET" refId="14"/>  
+  <generalization id="16">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="9"/>  
   </generalization>  
-  <generalization id="22">    
-    <bendpoint x="1988" y="284"/>    
+  <generalization id="17">    
     <end type="SOURCE" refId="14"/>    
-    <end type="TARGET" refId="5"/>  
+    <end type="TARGET" refId="9"/>  
   </generalization>  
-  <generalization id="23">    
+  <generalization id="18">    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="8"/>  
+  </generalization>  
+  <generalization id="19">    
     <end type="SOURCE" refId="9"/>    
-    <end type="TARGET" refId="5"/>  
+    <end type="TARGET" refId="15"/>  
   </generalization>  
-  <dependency id="24">    
-    <end type="SOURCE" refId="16"/>    
-    <end type="TARGET" refId="5"/>  
-  </dependency>  
-  <generalization id="25">    
+  <generalization id="20">    
     <end type="SOURCE" refId="11"/>    
     <end type="TARGET" refId="5"/>  
   </generalization>  
-  <dependency id="26">    
+  <generalization id="21">    
     <end type="SOURCE" refId="12"/>    
-    <end type="TARGET" refId="5"/>  
-  </dependency>  
-  <generalization id="27">    
+    <end type="TARGET" refId="15"/>  
+  </generalization>  
+  <association id="22">    
+    <bendpoint x="271" y="1013"/>    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="23" name="memory"/>      
+      <multiplicity id="24" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="25">    
     <end type="SOURCE" refId="13"/>    
-    <end type="TARGET" refId="14"/>  
+    <end type="TARGET" refId="15"/>  
   </generalization>  
-  <dependency id="28">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="18"/>  
-  </dependency>  
-  <generalization id="29">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="14"/>  
+  <generalization id="26">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="9"/>  
   </generalization>  
+  <association id="27">    
+    <bendpoint x="250" y="1013"/>    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="28" name="DEFAULT_VALUE"/>      
+      <multiplicity id="29" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
   <generalization id="30">    
-    <end type="SOURCE" refId="17"/>    
-    <end type="TARGET" refId="5"/>  
-  </generalization>  
-  <generalization id="31">    
     <end type="SOURCE" refId="8"/>    
     <end type="TARGET" refId="5"/>  
   </generalization>  
-  <generalization id="32">    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="5"/>  
-  </generalization>  
-  <generalization id="33">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="5"/>  
-  </generalization>  
+  <association id="31">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="32" name="memory"/>      
+      <multiplicity id="33" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
   <association id="34">    
-    <end type="SOURCE" refId="18" navigable="false">      
-      <attribute id="35" name="operators"/>      
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="35" name="memory"/>      
       <multiplicity id="36" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="37">    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="38" name="subExpressions"/>      
+      <multiplicity id="39" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="40">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="41" name="operators"/>      
+      <multiplicity id="42" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="3" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization id="37">    
-    <end type="SOURCE" refId="1"/>    
+  <generalization id="43">    
+    <end type="SOURCE" refId="4"/>    
     <end type="TARGET" refId="5"/>  
   </generalization>  
-  <dependency id="38">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="5"/>  
-  </dependency>  
-  <generalization id="39">    
-    <end type="SOURCE" refId="16"/>    
-    <end type="TARGET" refId="14"/>  
-  </generalization>  
-  <generalization id="40">    
+  <generalization id="44">    
     <end type="SOURCE" refId="7"/>    
-    <end type="TARGET" refId="5"/>  
+    <end type="TARGET" refId="8"/>  
   </generalization>  
-  <generalization id="41">    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="5"/>  
-  </generalization>  
-  <generalization id="42">    
-    <end type="SOURCE" refId="12"/>    
-    <end type="TARGET" refId="14"/>  
-  </generalization>  
-  <association id="43">    
-    <end type="SOURCE" refId="18" navigable="false">      
-      <attribute id="44" name="memory"/>      
-      <multiplicity id="45" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="19" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
     accessors="true" visibility="true">    
     <attributes public="true" package="true" protected="true" private="false" static="true"/>    

@@ -32,13 +32,24 @@ public class Operators extends java.util.Vector<Operator> {
         this.add( new SinOperator() );
         this.add( new CosOperator() );
         this.add( new TanOperator() );
+        this.add( new ArcosOperator() );
+        this.add( new ArsinOperator() );
+        this.add( new ArtanOperator() );
+        this.add( new SinhOperator() );
+        this.add( new CoshOperator() );
+        this.add( new TanhOperator() );
         
         this.add( new ExpOperator() );
         this.add( new LogOperator() );
         this.add( new LnOperator() );
         
+        this.add( new RandomOperator() );
         this.add( new AbsOperator() );
         this.add( new IntegralOperator() );
+
+        this.add( new CeilOperator() );
+        this.add( new FloorOperator() );
+        this.add( new RoundOperator() );
         
 		this.add( new AssignmentOperator() );
         this.add( new OpeningBracket() );
