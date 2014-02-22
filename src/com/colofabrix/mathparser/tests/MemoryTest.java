@@ -38,7 +38,8 @@ public class MemoryTest {
 					((Operand)memory.getValueOrDefault("non_existent_test")).getNumericValue(), 0 );
 		}
 		catch( ExpressionException | ConfigException e ) {
-			fail( e.getMessage() );
+			e.printStackTrace();
+			fail( e.getMessage().getClass().toString() );
 		}
 	}
 }

@@ -45,7 +45,7 @@ public abstract class ExpressionEntry {
 	public static ExpressionEntry fromStringEntry( String word, Operators operators, Memory memory ) throws ExpressionException {
 		// Creates an operator
 		if( operators.isOperator(word) )
-			return operators.fromName( word );
+			return (ExpressionEntry)operators.fromName( word ).clone();
 		
 		// Creates a number operand
 		else if( word.matches(MathParser.NUMBER_REGEX) )

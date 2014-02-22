@@ -3,6 +3,7 @@ package com.colofabrix.mathparser;
 import java.util.*;
 import java.util.regex.*;
 
+import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
 import com.colofabrix.mathparser.operators.*;
@@ -14,7 +15,7 @@ import com.colofabrix.mathparser.org.*;
  * 
  * @author Fabrizio Colonna
  */
-public class Operators extends Vector<Operator> {
+public class Operators extends java.util.Vector<Operator> {
 	private static final long serialVersionUID = 9039898627558124444L;
 	
 	/**
@@ -27,9 +28,18 @@ public class Operators extends Vector<Operator> {
 		this.add( new MultiplyOperator() );
 		this.add( new DivideOperator() );
 		this.add( new PowerOperator() );
+		
         this.add( new SinOperator() );
         this.add( new CosOperator() );
+        this.add( new TanOperator() );
+        
+        this.add( new ExpOperator() );
+        this.add( new LogOperator() );
+        this.add( new LnOperator() );
+        
+        this.add( new AbsOperator() );
         this.add( new IntegralOperator() );
+        
 		this.add( new AssignmentOperator() );
         this.add( new OpeningBracket() );
         this.add( new ClosingBracket() );
@@ -49,7 +59,7 @@ public class Operators extends Vector<Operator> {
      * @return It returns a number if the operation succeeded or <code>null</code> to express empty-result
      * @throws ExpressionException The exception is thrown when there is an evaluation problem
      */
-	public Operand executeExpression( Operator operator, Stack<Operand> operands, Memory memory ) throws ExpressionException {
+	public Operand executeExpression( Operator operator, Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
 		Operand value = operator.executeOperation( operands, memory );
 		memory.setValue( Memory.ANSWER_VARIABLE, value );
 		return value;

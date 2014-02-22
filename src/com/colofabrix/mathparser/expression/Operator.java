@@ -64,7 +64,7 @@ public abstract class Operator extends ExpressionEntry implements Comparable<Ope
      * @return It returns a number if the operation succeeded or <code>null</code> to express empty-result
      * @throws ExpressionException The exception is thrown when there is an evaluation problem
      */
-    public abstract Operand executeOperation( Stack<Operand> operands, Memory memory ) throws ExpressionException;
+    public abstract Operand executeOperation( Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException;
     
     /**
      * Execute the parsing operation that the operator may require
@@ -84,7 +84,7 @@ public abstract class Operator extends ExpressionEntry implements Comparable<Ope
      * @return An instance of the operator to be pushed at the end of the operators stack, 
      * @throws ExpressionException The exception is thrown when there is an evaluation problem
      */
-    public Operator executeParsing( CompositeExpression postfix, Stack<Operator> opstack, Operators operators, Memory memory ) throws ExpressionException
+    public Operator executeParsing( CmplxExpression postfix, Stack<Operator> opstack, Operators operators, Memory memory ) throws ExpressionException
     {
         // Extract all the operators that precede the current one
         while( opstack.size() > 0 && opstack.lastElement().compareTo( this ) >= 0  )
@@ -180,7 +180,7 @@ public abstract class Operator extends ExpressionEntry implements Comparable<Ope
         //	return base -Short.MAX_VALUE;
         
         // Unary operators have priority over math operators
-        if( this.opCount == 1 )
+        if( this.opCount != 2 )
             return base + Short.MAX_VALUE;
         
         return base;
@@ -385,34 +385,8 @@ public abstract class Operator extends ExpressionEntry implements Comparable<Ope
     	return Integer.valueOf( m.group(1) );
     }
 	
-    /**
-     * Translate an operand from string to Double
-     * 
-     * <p>A string can contain a number or a variable name. This function returns the correct value
-     * that represent the string.</p>
-     * 
-     * @param operand A string containing the operand
-     * @param memory A reference do the Math Parser memory
-     * @return A Double representing the value of the operand
-     * @throws ExpressionException When there is a problem recognizing the operand
-     */
-    /*
-	public static Double translateOperand( String operand, Memory memory ) throws ExpressionException {
-		
-		// Numeric operand
-    	if( operand.matches(MathParser.NUMBER_REGEX) )
-    		return Double.valueOf( operand );
-    	
-    	// Variable from memory
-    	else if( operand.matches(MathParser.VARIABLE_REGEX) )
-    		return memory.getValue( operand );
-    	
-    	throw new ExpressionException();
-	}
-	*/
-	
 	@Override
 	public String toString() {
-		return this.name;
+		return this.getName();
 	}
 }

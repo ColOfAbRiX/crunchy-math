@@ -3,6 +3,7 @@ package com.colofabrix.mathparser.operators.special;
 import java.util.Stack;
 
 import com.colofabrix.mathparser.Memory;
+import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
 import com.colofabrix.mathparser.org.ConfigException;
@@ -17,12 +18,20 @@ public class AssignmentOperator extends Operator {
 	}
 
 	@Override
-	public Operand executeOperation( Stack<Operand> operands, Memory memory ) throws ExpressionException {
+	public Operand executeOperation( Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
+		Operand variable, operand;
+		
 		if( operands.size() < 2 )
 			throw new ExpressionException(); 
 		
-		Operand variable = operands.get(0);
-		Operand operand = operands.get(1);
+		// The operands must be of type Operand, otherwise Exception
+		try {
+			variable = (Operand)operands.pop();
+			operand = (Operand)operands.pop();
+		}
+		catch( ClassCastException e ) {
+			throw new ExpressionException();
+		}
 
 		// The variable must be... a variable!
 		if( !variable.isVariable() )

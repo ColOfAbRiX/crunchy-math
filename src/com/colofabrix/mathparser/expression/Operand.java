@@ -22,6 +22,20 @@ public class Operand extends ExpressionEntry {
 	private Double value = null;
 	
 	/**
+	 * Extract a number from an entry, if present
+	 * 
+	 * @param entry The entry to where extract the number
+	 * @return The number contained in the entry
+	 * @throws ExpressionException When the entry cannot be converted in a number
+	 */
+	public static double extractNumber( ExpressionEntry entry ) throws ExpressionException {
+		if( entry.getEntryType() != Operand.OPERAND_CODE )
+			throw new ExpressionException();
+		
+		return ((Operand)entry).getNumericValue();
+	}
+	
+	/**
 	 * This constructor creates an operand which contains a variable
 	 * 
 	 * @param varName Variable name

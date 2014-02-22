@@ -3,6 +3,7 @@ package com.colofabrix.mathparser.operators;
 import java.util.Stack;
 
 import com.colofabrix.mathparser.Memory;
+import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
 import com.colofabrix.mathparser.org.ConfigException;
@@ -14,17 +15,25 @@ public class MinusOperator extends Operator {
 		super();
 		this.setBaseName( "-" );
 		this.setPriority( (short)0 );
-		this.setOperandsLimit( 1, this.getOperandsMax() );
+		this.setOperandsLimit( 1, 2 );
 	}
 
 	@Override
-	public Operand executeOperation( Stack<Operand> operands, Memory memory ) throws ExpressionException {
-		if( operands.size() < 2 )
+	public Operand executeOperation( Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
+		double value1, value2;
+		
+		if( operands.size() < this.getCurrentOperands() )
 			throw new ExpressionException(); 
 
-		double value1 = operands.get(1).getNumericValue();
-		double value2 = operands.get(0).getNumericValue();
-		
-    	return new Operand( value1 - value2 );
+		value1 = Operand.extractNumber( operands.pop() );
+
+		// Fetch the second operand only if needed
+		if( this.getCurrentOperands() == 1 ) {
+			return new Operand( -value1 );
+		}
+		else {
+			value2 = Operand.extractNumber( operands.pop() );
+			return new Operand( value1 - value2 );
+		}
 	}
 }

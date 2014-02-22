@@ -1,8 +1,10 @@
 package com.colofabrix.mathparser;
 
 import java.util.*;
-import com.colofabrix.mathparser.expression.CompositeExpression;
+
+import com.colofabrix.mathparser.expression.CmplxExpression;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
+import com.colofabrix.mathparser.expression.GroupingOperator;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
 import com.colofabrix.mathparser.org.ConfigException;
@@ -60,10 +62,10 @@ public class MathParser {
 	 * @throws ExpressionException In case of bad input expression
 	 * @throws ConfigException In case of misconfiguration of MathParser
 	 */
-    public CompositeExpression ConvertToPostfix( String input ) throws ExpressionException, ConfigException {
+    public CmplxExpression ConvertToPostfix( String input ) throws ExpressionException, ConfigException {
 
-        CompositeExpression infix = CompositeExpression.fromExpression(input, operators, memory);
-        CompositeExpression postfix = new CompositeExpression();
+        CmplxExpression infix = CmplxExpression.fromExpression(input, operators, memory);
+        CmplxExpression postfix = new CmplxExpression();
         Stack<Operator> opstack = new Stack<>();
         ExpressionEntry lastEntry = null;
 
@@ -72,10 +74,15 @@ public class MathParser {
             // Add an operator
         	if( entry.getEntryType() == Operator.OPERATOR_CODE ) {
         		Operator currentOp = (Operator)entry;
-        		
-                // Two consecutive operators means the last one is unary
-            	if( lastEntry == null || lastEntry.getEntryType() == Operator.OPERATOR_CODE )
+
+        		// At the beginning of the expression are unary only the operators with getOperandMin == 1
+            	if( (lastEntry == null && currentOp.getOperandsMin() == 1) )
             		currentOp.setCurrentOperands( 1 );
+            	
+                // Two consecutive operators means the the latter is unary, except in case of the first one is a closing grouping
+            	if( lastEntry != null && lastEntry.getEntryType() == Operator.OPERATOR_CODE && !(((Operator)lastEntry).isGrouping() && !((GroupingOperator)lastEntry).isOpening()) )
+            		if( currentOp.getOperandsMin() <= 2 )
+            			currentOp.setCurrentOperands( 1 );
             	
             	// Execution of the custom parsing performed by the operators themselves
             	currentOp = currentOp.executeParsing( postfix, opstack, this.operators, this.memory );
@@ -94,7 +101,7 @@ public class MathParser {
         while( opstack.size() > 0 )
         	postfix.add( opstack.pop() );
 
-        return CompositeExpression.fromExpression(postfix, operators, memory);
+        return CmplxExpression.fromExpression(postfix, operators, memory);
     }
     
     /**
@@ -104,20 +111,19 @@ public class MathParser {
      * @return A number indicating the result of the expression
 	 * @throws ExpressionException In case of bad input expression
      */
-    public Double ExecutePostfix( CompositeExpression input ) throws ExpressionException {
-    	
-        Stack<Operand> localStack = new Stack<>();
+    public Double ExecutePostfix( CmplxExpression input ) throws ExpressionException {    	
+        Stack<ExpressionEntry> localStack = new Stack<>();
         
     	for( ExpressionEntry entry: input ) {
     		if( entry.getEntryType() == Operator.OPERATOR_CODE ) {
     			Operator currentOp = (Operator)entry;
-            	Stack<Operand> localOperands = new Stack<>();
+            	Stack<ExpressionEntry> localOperands = new Stack<>();
 
             	// Counting the number of operands needed
             	int o = currentOp.getCurrentOperands();
                 
             	// Check the operand count for the operator
-            	if( localStack.size() != o )
+            	if( localStack.size() < o )
             		throw new ExpressionException();
             	
             	// Operand feching
@@ -129,8 +135,8 @@ public class MathParser {
             	if( result != null )
             		localStack.push( result );
     		}
-    		else if( entry.getEntryType() == Operand.OPERAND_CODE )
-    			localStack.push( (Operand)entry );
+    		else
+    			localStack.push( entry );
     	}
         
     	// Check for correct execution - the result must be 1 number or variable
@@ -139,5 +145,23 @@ public class MathParser {
     	
     	// TODO: Refactor this
         return ((Operand)localStack.pop()).getNumericValue();
+    }
+    
+    /**
+     * Executes an postfix-notation mathematical expression
+     * 
+     * @param input The input stack containing the expression
+     * @return A number indicating the result of the expression
+	 * @throws ExpressionException In case of bad input expression
+     */
+    public Double ExecutePostfix( ExpressionEntry input ) throws ExpressionException {
+    	
+    	if( input.getEntryType() == Operand.OPERAND_CODE )
+    		return ((Operand)input).getNumericValue();
+    	
+    	else if( input.getEntryType() == CmplxExpression.COMPOSITE_CODE )
+    		return this.ExecutePostfix( (CmplxExpression)input );
+    	
+    	return null;
     }
 }

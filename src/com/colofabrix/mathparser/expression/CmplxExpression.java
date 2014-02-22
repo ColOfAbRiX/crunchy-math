@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.regex.Matcher;
-
 import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.Operators;
 import com.colofabrix.mathparser.org.ExpressionException;
@@ -18,7 +17,7 @@ import com.colofabrix.mathparser.org.ExpressionException;
  * 
  * @author Fabrizio Colonna
  */
-public class CompositeExpression extends ExpressionEntry implements List<ExpressionEntry> {
+public class CmplxExpression extends ExpressionEntry implements List<ExpressionEntry> {
 
 	/**
 	 * Code to identify the object type
@@ -28,7 +27,7 @@ public class CompositeExpression extends ExpressionEntry implements List<Express
 	ArrayList<ExpressionEntry> subExpressions = new ArrayList<>();
 	
 	/**
-	 * Creates a CompositeExpression starting from a string
+	 * Creates a CmplxExpression starting from a string
 	 * 
 	 * <p>The method splits the string in its component and create an appropriate ExpressionEntry for
 	 * every token.</p>
@@ -36,13 +35,13 @@ public class CompositeExpression extends ExpressionEntry implements List<Express
 	 * @param expression The expression to converts
 	 * @param operators A reference to the operators in use
 	 * @param memory A reference to the memory in use
-	 * @return A CompositeExpression object containing the translated string expression
+	 * @return A CmplxExpression object containing the translated string expression
 	 * @throws ExpressionException
 	 */
-	public static CompositeExpression fromExpression( String expression, Operators operators, Memory memory ) throws ExpressionException {
+	public static CmplxExpression fromExpression( String expression, Operators operators, Memory memory ) throws ExpressionException {
 		// The input string is split in its forming components and translated in object-form
 		Matcher m = operators.getParsingRegex().matcher( expression );
-		CompositeExpression composite = new CompositeExpression();
+		CmplxExpression composite = new CmplxExpression();
 
 		// Saves all matches in a list
 		while( m.find() )
@@ -52,21 +51,35 @@ public class CompositeExpression extends ExpressionEntry implements List<Express
 	}
 	
 	/**
-	 * Creates a CompositeExpression starting from a string
+	 * Creates a CmplxExpression starting from a string
 	 * 
 	 * <p>The method splits the string in its component and create an appropriate ExpressionEntry for
 	 * every token.</p>
 	 * 
-	 * @param stack A stack of ExpressionEntry to add in a new CompositeExpression
+	 * @param stack A stack of ExpressionEntry to add in a new CmplxExpression
 	 * @param operators A reference to the operators in use
 	 * @param memory A reference to the memory in use
-	 * @return A CompositeExpression object containing the added CompositeExpression(s)
+	 * @return A CmplxExpression object containing the added CmplxExpression(s)
 	 * @throws ExpressionException
 	 */
-	public static CompositeExpression fromExpression( Collection<ExpressionEntry> stack, Operators operators, Memory memory ) throws ExpressionException {
-		CompositeExpression composite = new CompositeExpression();
+	public static CmplxExpression fromExpression( List<ExpressionEntry> stack, Operators operators, Memory memory ) throws ExpressionException {
+		CmplxExpression composite = new CmplxExpression();
 		composite.addAll( stack );
 		return composite;
+	}
+	
+	public boolean isMinimizable() {
+		boolean result = true;
+		
+		for( ExpressionEntry entry: this.subExpressions ) {
+			if( entry.getEntryType() == Operand.OPERAND_CODE && ((Operand)entry).isVariable() )
+				return false;
+			
+			else if( entry.getEntryType() == CmplxExpression.COMPOSITE_CODE )
+				result = ((CmplxExpression)entry).isMinimizable();
+		}
+		
+		return result;
 	}
 	
 	public ExpressionEntry lastElement() {
@@ -90,7 +103,7 @@ public class CompositeExpression extends ExpressionEntry implements List<Express
 	}
 
 	public void push(ExpressionEntry e) {
-		this.add( this.size() - 1, e );
+		this.add( this.size(), e );
 	}
 
 	/**
@@ -103,7 +116,7 @@ public class CompositeExpression extends ExpressionEntry implements List<Express
 	 */
 	@Override
 	public int getEntryType() {
-		return CompositeExpression.COMPOSITE_CODE;
+		return CmplxExpression.COMPOSITE_CODE;
 	}
 
 	/**

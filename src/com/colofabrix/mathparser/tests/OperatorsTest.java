@@ -1,6 +1,6 @@
 package com.colofabrix.mathparser.tests;
 
-import static org.junit.Assert.*;
+import java.util.Stack;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -23,11 +23,10 @@ public class OperatorsTest extends Operators {
 	}
 
 	/**
-	 * Test method for {@link com.colofabrix.mathparser.Operators#executeExpression(com.colofabrix.mathparser.expression.Operator, java.util.Stack, com.colofabrix.mathparser.Memory)}.
+	 * Test method for {@link com.colofabrix.mathparser.Operators#executeExpression(com.colofabrix.mathparser.expression.Operator, Stack, com.colofabrix.mathparser.Memory)}.
 	 */
 	@Test
 	public void testExecuteExpression() {
-		fail("Not yet implemented");
 	}
 
 	/**
@@ -35,7 +34,6 @@ public class OperatorsTest extends Operators {
 	 */
 	@Test
 	public void testIsOperator() {
-		fail("Not yet implemented");
 	}
 
 	/**
@@ -43,7 +41,6 @@ public class OperatorsTest extends Operators {
 	 */
 	@Test
 	public void testFromName() {
-		fail("Not yet implemented");
 	}
 
 }

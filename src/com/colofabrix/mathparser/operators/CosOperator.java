@@ -3,6 +3,7 @@ package com.colofabrix.mathparser.operators;
 import java.util.Stack;
 
 import com.colofabrix.mathparser.Memory;
+import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
 import com.colofabrix.mathparser.org.ConfigException;
@@ -27,11 +28,11 @@ public class CosOperator extends Operator {
 	}
 	
 	@Override
-	public Operand executeOperation( Stack<Operand> operands, Memory memory ) throws ExpressionException {
+	public Operand executeOperation( Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
 		if( operands.size() < 1 )
 			throw new ExpressionException(); 
 
-		double value1 = operands.get(0).getNumericValue();
+		double value1 = Operand.extractNumber( operands.pop() );
 		
     	return new Operand( Math.cos(value1) );
 	}

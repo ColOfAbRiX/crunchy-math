@@ -3,6 +3,7 @@ package com.colofabrix.mathparser.operators.special;
 import java.util.Stack;
 
 import com.colofabrix.mathparser.Memory;
+import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.GroupingOperator;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.org.ConfigException;
@@ -22,7 +23,7 @@ public class OpeningBracket extends GroupingOperator {
 	}
 
 	@Override
-	public Operand executeOperation( Stack<Operand> operands, Memory memory ) throws ExpressionException {
+	public Operand executeOperation( Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
         return null;
     }	
 }

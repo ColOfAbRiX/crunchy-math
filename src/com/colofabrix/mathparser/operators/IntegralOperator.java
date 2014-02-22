@@ -4,7 +4,6 @@ import java.util.Stack;
 import com.colofabrix.mathparser.MathParser;
 import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.Operators;
-import com.colofabrix.mathparser.expression.CompositeExpression;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
@@ -22,20 +21,20 @@ public class IntegralOperator extends Operator {
 	}
 	
 	@Override
-	public Operand executeOperation( Stack<Operand> operands, Memory memory ) throws ExpressionException {
+	public Operand executeOperation( Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
 		if( operands.size() < 5 )	// Start, End, Function, Variable, Step
 			throw new ExpressionException(); 
 
-		// Interval start - position 4
-		double start = operands.get(4).getNumericValue();
-		// Interval end - position 3
-		double end = operands.get(3).getNumericValue();
-		// Expression to evaluate - position 2
-		ExpressionEntry expression = operands.get(2);
+		// Interval start
+		double start = Operand.extractNumber( operands.pop() );
+		// Interval end
+		double end = Operand.extractNumber( operands.pop() );
+		// Expression to evaluate
+		ExpressionEntry expression = operands.pop();
 		// Integration variable
-		Operand variable = operands.get(1);
+		Operand variable = (Operand)operands.pop();
 		// Calculation increment
-		double step = operands.get(0).getNumericValue();
+		double step = Operand.extractNumber( operands.pop() );
 		Double result = 0.0;
 
 		// Interval ends in correct order
@@ -44,25 +43,26 @@ public class IntegralOperator extends Operator {
 		}
 		// Default step
 		step = Math.max( step, 1 / 1000000 );
-		// The main variable is substituted with an hidden variable
-		//expression = expression.replaceAll( Pattern.quote(variable.get), ".int_" + variable );
-		//variable = variable.replaceAll( Pattern.quote(variable), ".int_" + variable );
+		
+		// Save the value of a possible old variable
+		ExpressionEntry oldMemory = memory.getValue( variable.getVariableName() );
 		
 		try {
 			// Creation of the parser
 			MathParser mp = new MathParser( new Operators(), memory );
-			// Conversion of the expression
-			CompositeExpression postfix = mp.ConvertToPostfix( expression.toString() );
 		
 			// Sum of the function over the interval
 			for( double current = start; current <= end; current += step ) {
 				memory.setValue( variable.getVariableName(), new Operand(current) );
-				result += mp.ExecutePostfix( postfix ) * step;
+				result += mp.ExecutePostfix( expression ) * step;
 			}
 		}
 		catch (ConfigException e) {
 			throw new ExpressionException();
 		}
+		
+		// Restore the old variable in memory
+		memory.setValue( variable.getVariableName(), oldMemory );
 		
     	return new Operand( result );
 	}

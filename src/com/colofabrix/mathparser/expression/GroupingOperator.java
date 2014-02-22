@@ -94,7 +94,7 @@ public abstract class GroupingOperator extends Operator {
      * @throws ExpressionException The exception is thrown when there is an evaluation problem
      */
 	@Override
-	public Operator executeParsing( CompositeExpression postfix, Stack<Operator> opstack, Operators operators, Memory memory ) throws ExpressionException {
+	public Operator executeParsing( CmplxExpression postfix, Stack<Operator> opstack, Operators operators, Memory memory ) throws ExpressionException {
 		Operator result;
 		
 		// Executes different parsing between opening and closing grouping
@@ -120,7 +120,7 @@ public abstract class GroupingOperator extends Operator {
      * @return An instance of the operator to be pushed at the end of the operators stack, 
      * @throws ExpressionException The exception is thrown when there is an evaluation problem
      */
-	protected Operator executeParsingOpening( CompositeExpression postfix, Stack<Operator> opstack, Operators operators, Memory memory ) throws ExpressionException {
+	protected Operator executeParsingOpening( CmplxExpression postfix, Stack<Operator> opstack, Operators operators, Memory memory ) throws ExpressionException {
         return this;
 	}
 	
@@ -137,7 +137,7 @@ public abstract class GroupingOperator extends Operator {
      * @return An instance of the operator to be pushed at the end of the operators stack, 
      * @throws ExpressionException The exception is thrown when there is an evaluation problem
      */
-	protected Operator executeParsingClosing( CompositeExpression postfix, Stack<Operator> opstack, Operators operators, Memory memory ) throws ExpressionException {
+	protected Operator executeParsingClosing( CmplxExpression postfix, Stack<Operator> opstack, Operators operators, Memory memory ) throws ExpressionException {
         // Pop all the previous operators from the stack and push them in the postfix string until I find an opening grouping
         while( opstack.size() > 0 ) {
             Operator tmp = opstack.pop();
