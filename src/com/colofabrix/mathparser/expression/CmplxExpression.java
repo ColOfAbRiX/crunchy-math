@@ -68,6 +68,13 @@ public class CmplxExpression extends ExpressionEntry implements List<ExpressionE
 		return composite;
 	}
 	
+	/**
+	 * Checks if an expression is minimizable
+	 * 
+	 * <p>An expression is minimizable if it doesn't contain any variable</p>
+	 * 
+	 * @return <code>true</code> if the expression is minimizable</code>
+	 */
 	public boolean isMinimizable() {
 		boolean result = true;
 		
@@ -82,6 +89,11 @@ public class CmplxExpression extends ExpressionEntry implements List<ExpressionE
 		return result;
 	}
 	
+	/**
+	 * Gets the last element of the expression
+	 * 
+	 * @return An ExpressionEntry at the end of the expression or <code>null</code> if the list is empty
+	 */
 	public ExpressionEntry lastElement() {
 		if( this.size() == 0 )
 			return null;
@@ -89,6 +101,11 @@ public class CmplxExpression extends ExpressionEntry implements List<ExpressionE
 		return this.subExpressions.get( this.size() - 1);
 	}
 	
+	/**
+	 * Gets the first element of the expression
+	 * 
+	 * @return An ExpressionEntry at the beginning of the expression or <code>null</code> if the list is empty
+	 */
 	public ExpressionEntry firstElement() {
 		if( this.subExpressions.size() == 0 )
 			return null;
@@ -96,12 +113,22 @@ public class CmplxExpression extends ExpressionEntry implements List<ExpressionE
 		return this.subExpressions.get( 0 );
 	}
 
+	/**
+	 * Gets the last element of the expression and remove it from the list
+	 * 
+	 * @return An ExpressionEntry at the end of the expression or <code>null</code> if the list is empty
+	 */
 	public ExpressionEntry pop() {
 		ExpressionEntry temp = this.lastElement();
 		this.remove( this.size() - 1);
 		return temp;
 	}
 
+	/**
+	 * Add an ExpressionEntry at the end of the expression
+	 * 
+	 * @param e The ExpressionEntry to add
+	 */
 	public void push(ExpressionEntry e) {
 		this.add( this.size(), e );
 	}

@@ -35,7 +35,7 @@ public class RandomOperator extends Operator {
 
 		double value1 = Operand.extractNumber( operands.pop() );
 		
-		Random rnd = new Random( (long)value1 );
+		Random rnd = new Random( (long)value1 ^ System.nanoTime() );
 		
     	return new Operand( rnd.nextDouble() );
 	}

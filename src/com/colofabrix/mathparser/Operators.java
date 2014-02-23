@@ -23,12 +23,14 @@ public class Operators extends java.util.Vector<Operator> {
 	 * @throws ConfigException 
 	 */
 	public Operators() throws ConfigException {
+		// Algebraic operators
 		this.add( new SumOperator() );
 		this.add( new MinusOperator() );
 		this.add( new MultiplyOperator() );
 		this.add( new DivideOperator() );
 		this.add( new PowerOperator() );
 		
+		// Trigonometric operators
         this.add( new SinOperator() );
         this.add( new CosOperator() );
         this.add( new TanOperator() );
@@ -39,24 +41,32 @@ public class Operators extends java.util.Vector<Operator> {
         this.add( new CoshOperator() );
         this.add( new TanhOperator() );
         
+        // Exponentiation operators
         this.add( new ExpOperator() );
         this.add( new LogOperator() );
         this.add( new LnOperator() );
         
-        this.add( new RandomOperator() );
-        this.add( new AbsOperator() );
-        this.add( new IntegralOperator() );
-
+        // Rounding operators
         this.add( new CeilOperator() );
         this.add( new FloorOperator() );
         this.add( new RoundOperator() );
-        
+
+        // Structural operators
 		this.add( new AssignmentOperator() );
         this.add( new OpeningBracket() );
         this.add( new ClosingBracket() );
         this.add( new VectorOpening() );
         this.add( new VectorPush() );
         this.add( new VectorClosing() );
+        
+        // Mixed operators
+        this.add( new RandomOperator() );
+        this.add( new AbsOperator() );
+        this.add( new IntegralOperator() );
+
+        // Management operators
+        this.add( new MemoryOperator() );
+        this.add( new OperatorsOperator() );
 	}
 	
     /**

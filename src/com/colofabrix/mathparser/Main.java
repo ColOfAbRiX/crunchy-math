@@ -8,28 +8,37 @@ import com.colofabrix.mathparser.org.*;
 public class Main {
 
     public static void main( String[] args ) {
+		MathParser mp;
+		
+		try {
+			mp = new MathParser();
+		}
+		catch (ConfigException e) {
+			e.printStackTrace();
+			return;
+		}
 
 		while( true ) {
-			System.out.print( "Type the expression you want to evaluate: " );
-
 			try {
+				System.out.print( "Type the expression you want to evaluate: " );
+
 				BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 				String input = in.readLine();
 				
 				if( input.isEmpty() )
 					break;
-			
-				MathParser mp = new MathParser();
+
 				CmplxExpression ce = mp.ConvertToPostfix( input );
 				Double result = mp.ExecutePostfix( ce );
-						
+
 				System.out.println( "    Convertex expression: " + ce.toString() );
 				System.out.println( "    The result is: " + result );
+				
+				System.out.println();
 			}
 			catch (ExpressionException | ConfigException | IOException e) {
 				System.out.println( "Exception during the evaluation" );
 			}
-			System.out.println();
 		}
     }    
 }

@@ -85,4 +85,13 @@ public class Memory {
 		
 		return value;
 	}
+
+	/**
+	 * Gets a reference to the hashmap which stores the memory
+	 * 
+	 * @return A Map object containing the memory of the parser
+	 */
+	public Map<String, ExpressionEntry> getDirectMemoryReference() {
+		return this.memory;
+	}
 }

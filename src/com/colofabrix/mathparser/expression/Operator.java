@@ -385,6 +385,14 @@ public abstract class Operator extends ExpressionEntry implements Comparable<Ope
     	return Integer.valueOf( m.group(1) );
     }
 	
+    
+	/**
+	 * Get a string representation of the entry
+	 * 
+	 * <p>The string representation is commonly used to create output expressions</p>
+	 * 
+	 * @returns A string containing a representation of the object.
+	 */
 	@Override
 	public String toString() {
 		return this.getName();
