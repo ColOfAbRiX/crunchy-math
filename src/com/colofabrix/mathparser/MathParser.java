@@ -19,16 +19,6 @@ import com.colofabrix.mathparser.org.ExpressionException;
  */
 public class MathParser {
 	
-	/**
-	 * Regular expression to match a variable name
-	 */
-	public static final String VARIABLE_REGEX = "([a-zA-Z_]|\\.[a-zA-Z_])[a-zA-Z0-9_]*";
-	
-	/**
-	 * Regular espression to match allowed numbers
-	 */
-	public static final String NUMBER_REGEX = "-?[0-9]*\\.[0-9]+|[0-9]+";
-	
 	private Operators operators;
 	private Memory memory = new Memory();
 
@@ -64,7 +54,7 @@ public class MathParser {
 	 */
     public CmplxExpression ConvertToPostfix( String input ) throws ExpressionException, ConfigException {
 
-        CmplxExpression infix = CmplxExpression.fromExpression(input, operators, memory);
+    	CmplxExpression infix = CmplxExpression.fromExpression(input, operators, memory);
         CmplxExpression postfix = new CmplxExpression();
         Stack<Operator> opstack = new Stack<>();
         ExpressionEntry lastEntry = null;
@@ -124,7 +114,7 @@ public class MathParser {
                 
             	// Check the operand count for the operator
             	if( localStack.size() < o )
-            		throw new ExpressionException();
+            		throw new ExpressionException( "Wrong number of operand specified" );
             	
             	// Operand feching
             	for( ; o > 0; o-- )
@@ -141,9 +131,9 @@ public class MathParser {
         
     	// Check for correct execution - the result must be 1 number or variable
     	if( localStack.size() != 1 || localStack.lastElement().getEntryType() != Operand.OPERAND_CODE )
-    		throw new ExpressionException();
+    		return Double.NaN;
     	
-    	// TODO: Refactor this
+    	// TODO: Refactor this, check what type it should return and if it always not allowed to return something different than a number
         return ((Operand)localStack.pop()).getNumericValue();
     }
     

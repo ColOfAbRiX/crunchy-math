@@ -20,7 +20,7 @@ public class MultiplyOperator extends Operator {
 	@Override
 	public Operand executeOperation( Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
 		if( operands.size() < 2 )
-			throw new ExpressionException(); 
+			throw new ExpressionException( "Wrong number of given parameters" );
 
 		double value1 = Operand.extractNumber( operands.pop() );
 		double value2 = Operand.extractNumber( operands.pop() );

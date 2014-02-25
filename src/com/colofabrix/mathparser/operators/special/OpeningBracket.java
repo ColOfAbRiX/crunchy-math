@@ -1,15 +1,18 @@
 package com.colofabrix.mathparser.operators.special;
 
-import java.util.Stack;
-
-import com.colofabrix.mathparser.Memory;
-import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.GroupingOperator;
-import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.org.ConfigException;
-import com.colofabrix.mathparser.org.ExpressionException;
 
-
+/**
+ * An opening bracket operator
+ * 
+ * <p>Brackets are used to give priority to some section of expressions.<br/>
+ * A opening bracket serves to mark the beginning of a subexpression that will be later processed as
+ * a differen entity. The push is performed by the parent class {@link GroupingOperator},
+ * this class is only used to define a name and a priorit
+ * 
+ * @author Fabrizio Colonna
+ */
 public class OpeningBracket extends GroupingOperator {
 	
     public OpeningBracket() throws ConfigException {
@@ -21,9 +24,4 @@ public class OpeningBracket extends GroupingOperator {
 	public boolean isOpening() {
 	    return true;
 	}
-
-	@Override
-	public Operand executeOperation( Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
-        return null;
-    }	
 }

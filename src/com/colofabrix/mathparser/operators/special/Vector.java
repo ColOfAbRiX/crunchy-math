@@ -12,15 +12,45 @@ import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
 import com.colofabrix.mathparser.org.ExpressionException;
 
+/**
+ * Represent the basic type to implement the operators to work with Vectors
+ * 
+ * <p>A vector type will create a vector in memory named {@link Vector.OUTPUT_NAME} which will contain
+ * all the operands specified in the vector. The vector type will also refer all the included indexes
+ * to the preceding opreator.<br/>
+ * What's inside a vector will be minimized if possible, otherwise it will be kept as a {@link CmplxExpression}</p>
+ * 
+ * @author Fabrizio Colonna
+ */
 public abstract class Vector extends GroupingOperator {
 
-	@Override
-	public Operand executeOperation(Stack<ExpressionEntry> operands, Memory memory) throws ExpressionException {
-		return null;
-	}
+	/**
+	 * Name of the created variable in memory
+	 */
+	public static final String OUTPUT_NAME = "vector";
+	
+	/**
+	 * Name of the variable that is used for internal works
+	 */
+	public static final String STACK_NAME = ".vector_internal";
 
-	public abstract boolean isOpening();
-
+	/**
+	 * Moves the operands and the operators between stacks
+	 * 
+	 * <p>The vector type uses an internal representation of a vector (a Stack<ExpressionEntry> stored
+	 * in memory) which is different than the usual postfix/opstack stacks. This function will fetch
+	 * the operands from postfix and the operators from opstack and it will put everything in the local
+	 * stack.<br/>
+	 * The method will fetch everything was put in the stack until a previous OpenVector or PushVector
+	 * is found.<p>
+	 * 
+     * @param postfix The full postfix stack, as it is build before the call to this method
+     * @param opstack The full operator stack, as it is constructed befor the call to this method
+     * @param operators A reference to the operators manager
+     * @param memory A reference to the main math memory
+	 * @return An ExpressionEntry found since the last OpeningVector or PushVector 
+	 * @throws ExpressionException If no parameters are given to the function
+	 */
 	protected ExpressionEntry prepareOperands( CmplxExpression postfix, Stack<Operator> opstack, Operators operators, Memory memory ) throws ExpressionException {
 		MathParser mp = new MathParser( operators, memory );
 		CmplxExpression local = new CmplxExpression();
@@ -50,7 +80,7 @@ public abstract class Vector extends GroupingOperator {
     	
 		// Size of zero means an that no operands are specified and this is not allowed
     	else
-    		throw new ExpressionException();
+			throw new ExpressionException( "There must be at least one parameter" );
 	}
 	
 }

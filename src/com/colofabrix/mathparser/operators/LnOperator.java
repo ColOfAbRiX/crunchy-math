@@ -20,17 +20,9 @@ public class LnOperator extends Operator {
 	}
 	
 	@Override
-    public void setCurrentOperands( int value ) {
-		try {
-			super.setCurrentOperands( 1 );
-		}
-		catch (ConfigException e) {}
-	}
-	
-	@Override
 	public Operand executeOperation( Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
 		if( operands.size() < 1 )
-			throw new ExpressionException(); 
+			throw new ExpressionException( "Wrong number of given parameters" );
 
 		double value1 = Operand.extractNumber( operands.pop() );
 		

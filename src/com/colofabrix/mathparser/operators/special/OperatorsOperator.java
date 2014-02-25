@@ -10,6 +10,11 @@ import com.colofabrix.mathparser.expression.Operator;
 import com.colofabrix.mathparser.org.ConfigException;
 import com.colofabrix.mathparser.org.ExpressionException;
 
+/**
+ * Displays operators information
+ * 
+ * @author Fabrizio Colonna
+ */
 public class OperatorsOperator extends Operator {
 
 	private Operators ops;
@@ -22,29 +27,28 @@ public class OperatorsOperator extends Operator {
 		this.setCurrentOperands( 1 );
 	}
 	
-	@Override
-    public void setCurrentOperands( int value ) {
-		try {
-			super.setCurrentOperands( 1 );
-		}
-		catch (ConfigException e) {}
-	}
-	
+	/**
+	 * This method is used to save the operators information locally
+	 */
 	@Override
 	public Operator executeParsing(CmplxExpression postfix, Stack<Operator> opstack, Operators operators, Memory memory) throws ExpressionException {
 		this.ops = operators;
 		return this;
 	};
 	
+	/**
+	 * Select the sub-function to call
+	 */
 	@Override
 	public Operand executeOperation( Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
 		if( operands.size() < 1 )
-			throw new ExpressionException(); 
+			throw new ExpressionException( "Wrong number of given parameters" );
 
 		int value1 = (int)Math.round( Operand.extractNumber( operands.pop() ) );
 		
 		switch( value1 ) {
 		case 1:
+			// DISPLAY OPERATORS LIST
 			this.displayOperators( this.ops );
 			break;
 		}

@@ -1,6 +1,7 @@
 package com.colofabrix.mathparser.expression;
 
 import com.colofabrix.mathparser.Memory;
+import com.colofabrix.mathparser.org.ConfigException;
 import com.colofabrix.mathparser.org.ExpressionException;
 
 /**
@@ -20,6 +21,16 @@ public class Operand extends ExpressionEntry {
 	private Memory memory;
 	private String varName = null;
 	private Double value = null;
+
+	/**
+	 * Regular expression to match a variable name
+	 */
+	public static final String VARIABLE_REGEX = "([a-zA-Z_]|[^0-9][a-zA-Z_])[a-zA-Z0-9_]*";
+
+	/**
+	 * Regular espression to match allowed numbers
+	 */
+	public static final String NUMBER_REGEX = "-?[0-9]*\\.[0-9]+|[0-9]+";
 	
 	/**
 	 * Extract a number from an entry, if present
@@ -27,10 +38,11 @@ public class Operand extends ExpressionEntry {
 	 * @param entry The entry to where extract the number
 	 * @return The number contained in the entry
 	 * @throws ExpressionException When the entry cannot be converted in a number
+	 * @throws ConfigException 
 	 */
 	public static double extractNumber( ExpressionEntry entry ) throws ExpressionException {
 		if( entry.getEntryType() != Operand.OPERAND_CODE )
-			throw new ExpressionException();
+			throw new ExpressionException( "The entry cannot be converted in a number" );
 		
 		return ((Operand)entry).getNumericValue();
 	}
@@ -106,20 +118,14 @@ public class Operand extends ExpressionEntry {
 	 */
 	public Double getNumericValue() throws ExpressionException {
 		if( this.isVariable() ) {
-			if( memory == null )
-				throw new ExpressionException();
-			
 			ExpressionEntry memoryValue = this.memory.getValue( this.varName );
-			if( memoryValue.getEntryType() != Operand.OPERAND_CODE )
-				throw new ExpressionException();
-			
-			return ((Operand)memoryValue).getNumericValue();
+			return Operand.extractNumber( memoryValue );
 		}		
 			
 		if( this.value != null ) 
 			return this.value;
 		
-		throw new ExpressionException();
+		throw new ExpressionException( "Cannot convert this entry in a number" );
 	}
 	
 	/**
@@ -158,5 +164,10 @@ public class Operand extends ExpressionEntry {
 		catch (ExpressionException e) {
 			return "";
 		}
+	}
+
+	@Override
+	public boolean isMinimizable() {
+		return !this.isVariable();
 	}
 }

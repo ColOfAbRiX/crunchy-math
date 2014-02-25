@@ -2,7 +2,7 @@ package com.colofabrix.mathparser;
 
 import java.io.*;
 
-import com.colofabrix.mathparser.expression.CmplxExpression;
+import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.org.*;
 
 public class Main {
@@ -28,7 +28,7 @@ public class Main {
 				if( input.isEmpty() )
 					break;
 
-				CmplxExpression ce = mp.ConvertToPostfix( input );
+				ExpressionEntry ce = mp.ConvertToPostfix( input );
 				Double result = mp.ExecutePostfix( ce );
 
 				System.out.println( "    Convertex expression: " + ce.toString() );

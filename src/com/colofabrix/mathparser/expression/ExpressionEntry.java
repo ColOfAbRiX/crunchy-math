@@ -1,6 +1,5 @@
 package com.colofabrix.mathparser.expression;
 
-import com.colofabrix.mathparser.MathParser;
 import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.Operators;
 import com.colofabrix.mathparser.org.ExpressionException;
@@ -33,6 +32,15 @@ public abstract class ExpressionEntry {
 	public abstract String toString();
 	
 	/**
+	 * Checks if an expression is minimizable
+	 * 
+	 * <p>An expression is minimizable if it doesn't contain any variable</p>
+	 * 
+	 * @return <code>true</code> if the expression is minimizable</code>
+	 */
+	public abstract boolean isMinimizable();
+
+	/**
 	 * Creates an instance of ExpressionEntry to hold an 
 	 * 
 	 * <p>This builder starts from a single string entry, a single token like a number or an operator,
@@ -48,11 +56,15 @@ public abstract class ExpressionEntry {
 			return (ExpressionEntry)operators.fromName( word ).clone();
 		
 		// Creates a number operand
-		else if( word.matches(MathParser.NUMBER_REGEX) )
+		else if( word.matches(Operand.NUMBER_REGEX) )
 			return new Operand( Double.parseDouble(word) );
 		
+		// Creates an option
+		else if( word.matches(Option.OPTION_REGEX) )
+			return new Option( word );
+		
 		// Creates a variable operand
-		else if( word.matches(MathParser.VARIABLE_REGEX) )
+		else if( word.matches(Operand.VARIABLE_REGEX) )
 			return new Operand( word, memory );
 		
 		// Not recognized

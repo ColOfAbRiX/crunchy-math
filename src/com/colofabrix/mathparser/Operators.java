@@ -6,6 +6,7 @@ import java.util.regex.*;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
+import com.colofabrix.mathparser.expression.Option;
 import com.colofabrix.mathparser.operators.*;
 import com.colofabrix.mathparser.operators.special.*;
 import com.colofabrix.mathparser.org.*;
@@ -67,6 +68,8 @@ public class Operators extends java.util.Vector<Operator> {
         // Management operators
         this.add( new MemoryOperator() );
         this.add( new OperatorsOperator() );
+        this.add( new OptionOperator() );
+        this.add( new OptionSetOperator() );
 	}
 	
     /**
@@ -74,6 +77,8 @@ public class Operators extends java.util.Vector<Operator> {
 	 * 
 	 * <p>Every concrete implementation of Operator must implement this method with the operation that
 	 * it has to do.</p>
+	 * <p>This class will also set the variable "Ans" which contains the last result of an operation
+	 * or {@link Double.NaN} if there is no result.</p>
      *  
      * @param operands A stack containing the operands in reversed order
      * @param memory A reference to the main math memory
@@ -82,7 +87,12 @@ public class Operators extends java.util.Vector<Operator> {
      */
 	public Operand executeExpression( Operator operator, Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
 		Operand value = operator.executeOperation( operands, memory );
-		memory.setValue( Memory.ANSWER_VARIABLE, value );
+		
+		if( value != null )
+			memory.setValue( Memory.ANSWER_VARIABLE, value );
+		else
+			memory.setValue( Memory.ANSWER_VARIABLE, new Operand(Double.NaN) );
+			
 		return value;
 	}
 
@@ -134,6 +144,6 @@ public class Operators extends java.util.Vector<Operator> {
 		for( Operator op: this )
             regex += Pattern.quote( op.getBaseName() ) + "|";
 
-        return Pattern.compile( "(" + regex + MathParser.NUMBER_REGEX + "|" + MathParser.VARIABLE_REGEX + ")" );
+        return Pattern.compile( "(" + regex + Operand.NUMBER_REGEX + "|" + Operand.VARIABLE_REGEX + "|" + Option.OPTION_REGEX + ")" );
 	}
 }

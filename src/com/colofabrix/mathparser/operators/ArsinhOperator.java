@@ -9,11 +9,11 @@ import com.colofabrix.mathparser.operators.special.TrigonometricOperator;
 import com.colofabrix.mathparser.org.ConfigException;
 import com.colofabrix.mathparser.org.ExpressionException;
 
-public class ArtanOperator extends TrigonometricOperator {
+public class ArsinhOperator extends TrigonometricOperator {
 
-	public ArtanOperator() throws ConfigException {
+	public ArsinhOperator() throws ConfigException {
 		super();
-		this.setBaseName( "Arctan" );
+		this.setBaseName( "Arsinh" );
 	}
 	
 	@Override
@@ -22,7 +22,7 @@ public class ArtanOperator extends TrigonometricOperator {
 			throw new ExpressionException( "Wrong number of given parameters" );
 
 		double value1 = Operand.extractNumber( operands.pop() );
-		double result = Math.atan( value1 );
+		double result = Math.log(value1 + Math.sqrt(Math.pow(value1, 2) + 1));
 		
     	return new Operand( this.getCurrent(result) );
 	}

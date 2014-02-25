@@ -23,7 +23,7 @@ public class MinusOperator extends Operator {
 		double value1, value2;
 		
 		if( operands.size() < this.getCurrentOperands() )
-			throw new ExpressionException(); 
+			throw new ExpressionException( "Wrong number of given parameters" );
 
 		value1 = Operand.extractNumber( operands.pop() );
 

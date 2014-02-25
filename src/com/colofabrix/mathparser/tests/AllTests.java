@@ -8,5 +8,6 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses( {
 	MathParserTest.class,
 	MemoryTest.class,
-	OperatorsTest.class })
+	OperatorsTest.class,
+	TrigonometricOperatorTest.class })
 public class AllTests { }

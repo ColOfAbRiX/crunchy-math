@@ -69,27 +69,6 @@ public class CmplxExpression extends ExpressionEntry implements List<ExpressionE
 	}
 	
 	/**
-	 * Checks if an expression is minimizable
-	 * 
-	 * <p>An expression is minimizable if it doesn't contain any variable</p>
-	 * 
-	 * @return <code>true</code> if the expression is minimizable</code>
-	 */
-	public boolean isMinimizable() {
-		boolean result = true;
-		
-		for( ExpressionEntry entry: this.subExpressions ) {
-			if( entry.getEntryType() == Operand.OPERAND_CODE && ((Operand)entry).isVariable() )
-				return false;
-			
-			else if( entry.getEntryType() == CmplxExpression.COMPOSITE_CODE )
-				result = ((CmplxExpression)entry).isMinimizable();
-		}
-		
-		return result;
-	}
-	
-	/**
 	 * Gets the last element of the expression
 	 * 
 	 * @return An ExpressionEntry at the end of the expression or <code>null</code> if the list is empty
@@ -277,5 +256,20 @@ public class CmplxExpression extends ExpressionEntry implements List<ExpressionE
 	@Override
 	public <T> T[] toArray(T[] a) {
 		return this.subExpressions.toArray( a );
+	}
+
+	/**
+	 * Checks if an expression is minimizable
+	 * 
+	 * <p>An expression is minimizable if it doesn't contain any variable</p>
+	 * 
+	 * @return <code>true</code> if the expression is minimizable</code>
+	 */
+	public boolean isMinimizable() {
+		for( ExpressionEntry entry: this )
+			if( !entry.isMinimizable() )
+				return false;
+		
+		return true;
 	}
 }

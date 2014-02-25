@@ -78,7 +78,16 @@ public abstract class GroupingOperator extends Operator {
 		return;
 	};
 
-    /**
+
+	/**
+	 * A grouping operator executes no mathematical operations
+	 */
+	@Override
+	public Operand executeOperation(Stack<ExpressionEntry> operands, Memory memory) throws ExpressionException {
+		return null;
+	}
+
+	/**
      * Execute the parsing operation that the operator may require
      * 
      * <p>The parsing operation is an operation that is performed when the operator is fetched from
@@ -120,7 +129,7 @@ public abstract class GroupingOperator extends Operator {
      * @return An instance of the operator to be pushed at the end of the operators stack, 
      * @throws ExpressionException The exception is thrown when there is an evaluation problem
      */
-	protected Operator executeParsingOpening( CmplxExpression postfix, Stack<Operator> opstack, Operators operators, Memory memory ) throws ExpressionException {
+	protected Operator executeParsingOpening( ExpressionEntry postfix, Stack<Operator> opstack, Operators operators, Memory memory ) throws ExpressionException {
         return this;
 	}
 	

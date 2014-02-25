@@ -23,7 +23,7 @@ public class IntegralOperator extends Operator {
 	@Override
 	public Operand executeOperation( Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
 		if( operands.size() < 5 )	// Start, End, Function, Variable, Step
-			throw new ExpressionException(); 
+			throw new ExpressionException( "Wrong number of given parameters" );
 
 		// Interval start
 		double start = Operand.extractNumber( operands.pop() );
@@ -57,8 +57,8 @@ public class IntegralOperator extends Operator {
 				result += mp.ExecutePostfix( expression ) * step;
 			}
 		}
-		catch (ConfigException e) {
-			throw new ExpressionException();
+		catch( ConfigException e ) {
+			throw new ExpressionException( "Error evaluating integral expressions" );
 		}
 		
 		// Restore the old variable in memory

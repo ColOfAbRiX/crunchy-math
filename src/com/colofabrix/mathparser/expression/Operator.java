@@ -117,7 +117,7 @@ public abstract class Operator extends ExpressionEntry implements Comparable<Ope
      */
     public void setCurrentOperands( int value ) throws ConfigException {
     	if( value < this.minOperands || value > this.maxOperands )
-    		throw new ConfigException();
+    		throw new ConfigException( "Number of parameters not allowed for this operator" );
     	
     	this.opCount = value;
     }
@@ -266,8 +266,8 @@ public abstract class Operator extends ExpressionEntry implements Comparable<Ope
 	 * @throws ConfigException 
 	 */
     public void setBaseName( String name ) throws ConfigException {
-    	if( this.name != null && !this.name.isEmpty()  )
-    		throw new ConfigException();
+    	if( name == null || name.equals("") )
+    		throw new ConfigException( "You cannot set an empty name" );
     		
         this.name = name;
     }
@@ -396,5 +396,10 @@ public abstract class Operator extends ExpressionEntry implements Comparable<Ope
 	@Override
 	public String toString() {
 		return this.getName();
+	}
+	
+	@Override
+	public boolean isMinimizable() {
+		return true;
 	}
 }
