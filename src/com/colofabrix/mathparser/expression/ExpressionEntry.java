@@ -26,7 +26,7 @@ public abstract class ExpressionEntry {
 	 * 
 	 * <p>The string representation is commonly used to create output expressions</p>
 	 * 
-	 * @returns A string containing a representation of the object.
+	 * @return A string containing a representation of the object.
 	 */
 	@Override
 	public abstract String toString();

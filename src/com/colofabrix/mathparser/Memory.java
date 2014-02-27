@@ -36,7 +36,7 @@ public class Memory {
 	 * 
 	 * @param address The name of the variable to get
 	 * @return The value of the memory address corresponding to the variable or DEFAULT_VALUE
-	 * @see DEFAULT_VALUE
+	 * @see Memory#DEFAULT_VALUE
 	 */
 	public ExpressionEntry getValueOrDefault( String address ) {
 		if( !this.memory.containsKey(address) )

@@ -30,7 +30,7 @@ public class MemoryOperator extends Operator {
 	 */
 	@Override
 	public Operand executeOperation( Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
-		if( operands.size() < 1 )
+		if( operands.size() < this.getCurrentOperands() )
 			throw new ExpressionException( "Wrong number of given parameters" );
 
 		int value1 = (int)Math.round( Operand.extractNumber( operands.pop() ) );

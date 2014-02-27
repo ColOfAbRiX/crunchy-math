@@ -39,10 +39,7 @@ public abstract class GroupingOperator extends Operator {
      * Gets the absolute priority of the operand
      * 
      * <p>The priority of an operator is expressed using an Integer, while a priority can only be
-     * set using a Short because priorities use levels.</p>
-     * 
-     * @see com.colofabrix.mathparser.Operator.getPriority
-     * @param priority A number that establish the priority of the operator.
+     * set using a Short because priorities use levels. For more information see {@link Operator#getPriority()}</p>
      */
     @Override
     public int getPriority() {
@@ -95,7 +92,7 @@ public abstract class GroupingOperator extends Operator {
      * The default implementation for a grouping operator divides the operation for the opening groping
      * and the closing groping, calling the respective functions</p>
      *
-     * @see Operator.executeParsing
+     * @see Operator#executeParsing
      * @param postfix The full postfix stack, as it is build before the call to this method
      * @param opstack The full operator stack, as it is constructed befor the call to this method
      * @param memory A reference to the main math memory
@@ -121,7 +118,7 @@ public abstract class GroupingOperator extends Operator {
      * 
      * <p>This function is called when an openining grouping is fetched from the input string</p>
      *
-     * @see Operator.executeParsing
+     * @see Operator#executeParsing
      * @param postfix The full postfix stack, as it is build before the call to this method
      * @param opstack The full operator stack, as it is constructed befor the call to this method
      * @param operators A reference to the operators manager
@@ -138,7 +135,7 @@ public abstract class GroupingOperator extends Operator {
      * 
      * <p>This function is called when an closing grouping is fetched from the input string</p>
      *
-     * @see Operator.executeParsing
+     * @see Operator#executeParsing
      * @param postfix The full postfix stack, as it is build before the call to this method
      * @param opstack The full operator stack, as it is constructed befor the call to this method
      * @param operators A reference to the operators manager

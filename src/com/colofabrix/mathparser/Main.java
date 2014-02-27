@@ -40,5 +40,5 @@ public class Main {
 				System.out.println( "Exception during the evaluation" );
 			}
 		}
-    }    
+    }
 }

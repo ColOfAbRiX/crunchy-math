@@ -37,7 +37,7 @@ public class AssignmentOperator extends Operator {
 	public Operand executeOperation( Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
 		Operand variable, operand;
 		
-		if( operands.size() < 2 )
+		if( operands.size() < this.getCurrentOperands() )
 			throw new ExpressionException( "Wrong number of given parameters" );
 		
 		// The operands must be of type Operand, otherwise Exception

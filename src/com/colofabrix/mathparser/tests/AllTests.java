@@ -10,4 +10,6 @@ import org.junit.runners.Suite.SuiteClasses;
 	MemoryTest.class,
 	OperatorsTest.class,
 	TrigonometricOperatorTest.class })
-public class AllTests { }
+public class AllTests {
+	public static double PRECISION_ERROR_ALLOWED = 1E-6;
+}

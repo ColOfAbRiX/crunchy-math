@@ -113,6 +113,21 @@ public class CmplxExpression extends ExpressionEntry implements List<ExpressionE
 	}
 
 	/**
+	 * Checks if an expression is minimizable
+	 * 
+	 * <p>An expression is minimizable if it doesn't contain any variable</p>
+	 * 
+	 * @return <code>true</code> if the expression is minimizable</code>
+	 */
+	public boolean isMinimizable() {
+		for( ExpressionEntry entry: this )
+			if( !entry.isMinimizable() )
+				return false;
+		
+		return true;
+	}
+
+	/**
 	 * Find the type of entry the object represents
 	 * 
 	 * <p>This method is used to identify the type of the object stored in the entry. It must be
@@ -130,7 +145,7 @@ public class CmplxExpression extends ExpressionEntry implements List<ExpressionE
 	 * 
 	 * <p>The string representation is commonly used to create output expressions</p>
 	 * 
-	 * @returns A string containing a representation of the object.
+	 * @return A string containing a representation of the object.
 	 */
 	@Override
 	public String toString() {
@@ -256,20 +271,5 @@ public class CmplxExpression extends ExpressionEntry implements List<ExpressionE
 	@Override
 	public <T> T[] toArray(T[] a) {
 		return this.subExpressions.toArray( a );
-	}
-
-	/**
-	 * Checks if an expression is minimizable
-	 * 
-	 * <p>An expression is minimizable if it doesn't contain any variable</p>
-	 * 
-	 * @return <code>true</code> if the expression is minimizable</code>
-	 */
-	public boolean isMinimizable() {
-		for( ExpressionEntry entry: this )
-			if( !entry.isMinimizable() )
-				return false;
-		
-		return true;
 	}
 }

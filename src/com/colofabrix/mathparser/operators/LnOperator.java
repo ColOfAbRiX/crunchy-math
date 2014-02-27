@@ -21,7 +21,7 @@ public class LnOperator extends Operator {
 	
 	@Override
 	public Operand executeOperation( Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
-		if( operands.size() < 1 )
+		if( operands.size() < this.getCurrentOperands() )
 			throw new ExpressionException( "Wrong number of given parameters" );
 
 		double value1 = Operand.extractNumber( operands.pop() );

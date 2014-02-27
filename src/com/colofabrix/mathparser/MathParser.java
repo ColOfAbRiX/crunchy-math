@@ -20,7 +20,7 @@ import com.colofabrix.mathparser.org.ExpressionException;
 public class MathParser {
 	
 	private Operators operators;
-	private Memory memory = new Memory();
+	private Memory memory;
 
 	/**
 	 * Creates and initialize the MathParser
@@ -30,8 +30,8 @@ public class MathParser {
 	 * @param manager The choosen Operators Manager, which contains a collection of supported operators.
 	 */
 	public MathParser( Operators manager, Memory memory ) {
-		this.operators = manager;
-		this.memory = memory;
+		this.setOperators(manager);
+		this.setMemory(memory);
 	}
 	
 	/**
@@ -40,8 +40,8 @@ public class MathParser {
 	 * @throws ConfigException
 	 */
 	public MathParser() throws ConfigException {
-		this.operators = new Operators();
-		this.memory = new Memory();
+		this.setOperators(new Operators());
+		this.setMemory(new Memory());
 	}
 	
 	/**
@@ -54,7 +54,7 @@ public class MathParser {
 	 */
     public CmplxExpression ConvertToPostfix( String input ) throws ExpressionException, ConfigException {
 
-    	CmplxExpression infix = CmplxExpression.fromExpression(input, operators, memory);
+    	CmplxExpression infix = CmplxExpression.fromExpression(input, getOperators(), getMemory());
         CmplxExpression postfix = new CmplxExpression();
         Stack<Operator> opstack = new Stack<>();
         ExpressionEntry lastEntry = null;
@@ -75,7 +75,7 @@ public class MathParser {
             			currentOp.setCurrentOperands( 1 );
             	
             	// Execution of the custom parsing performed by the operators themselves
-            	currentOp = currentOp.executeParsing( postfix, opstack, this.operators, this.memory );
+            	currentOp = currentOp.executeParsing( postfix, opstack, this.getOperators(), this.getMemory() );
                 if( currentOp != null )
                 	opstack.push( currentOp );
         	}
@@ -91,7 +91,7 @@ public class MathParser {
         while( opstack.size() > 0 )
         	postfix.add( opstack.pop() );
 
-        return CmplxExpression.fromExpression(postfix, operators, memory);
+        return CmplxExpression.fromExpression(postfix, getOperators(), getMemory());
     }
     
     /**
@@ -121,7 +121,7 @@ public class MathParser {
             		localOperands.push( localStack.pop() );
             	
             	// Operator execution
-            	Operand result = this.operators.executeExpression( currentOp, localOperands, this.memory );
+            	Operand result = this.getOperators().executeExpression( currentOp, localOperands, this.getMemory() );
             	if( result != null )
             		localStack.push( result );
     		}
@@ -154,4 +154,32 @@ public class MathParser {
     	
     	return null;
     }
+
+	/**
+	 * @return the operators
+	 */
+	public Operators getOperators() {
+		return operators;
+	}
+
+	/**
+	 * @param operators the operators to set
+	 */
+	protected void setOperators(Operators operators) {
+		this.operators = operators;
+	}
+
+	/**
+	 * @return the memory
+	 */
+	public Memory getMemory() {
+		return memory;
+	}
+
+	/**
+	 * @param memory the memory to set
+	 */
+	private void setMemory(Memory memory) {
+		this.memory = memory;
+	}
 }

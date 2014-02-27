@@ -30,6 +30,8 @@ public class Operators extends java.util.Vector<Operator> {
 		this.add( new MultiplyOperator() );
 		this.add( new DivideOperator() );
 		this.add( new PowerOperator() );
+		this.add( new RootOperator() );
+		this.add( new FactOperator() );
 		
 		// Trigonometric operators
         this.add( new SinOperator() );
@@ -51,6 +53,8 @@ public class Operators extends java.util.Vector<Operator> {
         this.add( new CeilOperator() );
         this.add( new FloorOperator() );
         this.add( new RoundOperator() );
+        this.add( new MinOperator() );
+        this.add( new MaxOperator() );
 
         // Structural operators
 		this.add( new AssignmentOperator() );
@@ -68,8 +72,8 @@ public class Operators extends java.util.Vector<Operator> {
         // Management operators
         this.add( new MemoryOperator() );
         this.add( new OperatorsOperator() );
-        this.add( new OptionOperator() );
-        this.add( new OptionSetOperator() );
+        this.add( new SetOperator() );
+        this.add( new GetOperator() );
 	}
 	
     /**
@@ -78,7 +82,7 @@ public class Operators extends java.util.Vector<Operator> {
 	 * <p>Every concrete implementation of Operator must implement this method with the operation that
 	 * it has to do.</p>
 	 * <p>This class will also set the variable "Ans" which contains the last result of an operation
-	 * or {@link Double.NaN} if there is no result.</p>
+	 * or {@link Double#NaN} if there is no result.</p>
      *  
      * @param operands A stack containing the operands in reversed order
      * @param memory A reference to the main math memory
@@ -114,7 +118,7 @@ public class Operators extends java.util.Vector<Operator> {
 	 * <p>The functions retrieves the operator corresponding to the name given. The name can be both
 	 * a base name or a full name.</p>
 	 * 
-	 * @param name The name of the operator to fetch
+	 * @param word The name of the operator to fetch
 	 * @return An instance corresponding to the operator found or <code>null</code> if no operator is found
 	 */
 	public Operator fromName( String word ) {

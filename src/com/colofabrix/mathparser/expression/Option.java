@@ -8,7 +8,6 @@ package com.colofabrix.mathparser.expression;
 public class Option extends ExpressionEntry {
 
 	private String name;
-	private ExpressionEntry value;
 	
 	/**
 	 * Code to identify the object type
@@ -24,6 +23,11 @@ public class Option extends ExpressionEntry {
 	 * Regular expression to match an option name
 	 */
 	public static final String OPTION_REGEX = "\\" + Option.OPTION_MARK + "([a-zA-Z_]|\\.[a-zA-Z_])[a-zA-Z0-9_]*";
+	
+	/**
+	 * Regular expression to match a string
+	 */
+	public static final String STRING_VALUE = "\"(?:[^\"\\]|\\.)*\"";
 
 	/**
 	 * Constructor
@@ -35,26 +39,23 @@ public class Option extends ExpressionEntry {
 	}
 	
 	/**
-	 * @return the name
+	 * Gets the base name of the Option
+	 * 
+	 * @return The name of the option
 	 */
 	public String getName() {
 		return this.name;
 	}
 
 	/**
-	 * @return Return the value of the option
+	 * Gets the name of the Option comprehensive of the marker
+	 * 
+	 * @return The name of the option
 	 */
-	public ExpressionEntry getValue() {
-		return this.value;
+	public String getFullName() {
+		return Option.OPTION_MARK + this.getName();
 	}
 
-	/**
-	 * @param value The value to set
-	 */
-	public void setValue( ExpressionEntry value ) {
-		this.value = value;
-	}
-	
 	/**
 	 * Returns a code to identify the type of ExprEntry that this class represents
 	 * 
@@ -66,7 +67,7 @@ public class Option extends ExpressionEntry {
 	}
 	
 	public String toString() {
-		return Option.OPTION_MARK + this.getName();
+		return this.getFullName();
 	}
 
 	@Override

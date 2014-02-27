@@ -192,7 +192,7 @@ public abstract class Operator extends ExpressionEntry implements Comparable<Ope
      * <p>The priority of an operator is expressed using an Integer, while a priority can only be
      * set using a Short because priorities use levels.</p>
      * 
-     * @see getPriority
+     * @see #getPriority
      * @param priority A number that establish the priority of the operator.
      */
     protected void setPriority( short priority ) {
@@ -391,7 +391,7 @@ public abstract class Operator extends ExpressionEntry implements Comparable<Ope
 	 * 
 	 * <p>The string representation is commonly used to create output expressions</p>
 	 * 
-	 * @returns A string containing a representation of the object.
+	 * @return A string containing a representation of the object.
 	 */
 	@Override
 	public String toString() {

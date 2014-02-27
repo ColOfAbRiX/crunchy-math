@@ -33,15 +33,16 @@ public class OperatorsOperator extends Operator {
 	@Override
 	public Operator executeParsing(CmplxExpression postfix, Stack<Operator> opstack, Operators operators, Memory memory) throws ExpressionException {
 		this.ops = operators;
-		return this;
+		return super.executeParsing( postfix, opstack, operators, memory );
 	};
 	
 	/**
 	 * Select the sub-function to call
+	 * 1 = Display all operators
 	 */
 	@Override
 	public Operand executeOperation( Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
-		if( operands.size() < 1 )
+		if( operands.size() < this.getCurrentOperands() )
 			throw new ExpressionException( "Wrong number of given parameters" );
 
 		int value1 = (int)Math.round( Operand.extractNumber( operands.pop() ) );

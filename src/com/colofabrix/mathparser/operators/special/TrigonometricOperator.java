@@ -1,7 +1,15 @@
 package com.colofabrix.mathparser.operators.special;
 
+import java.util.Stack;
+
+import com.colofabrix.mathparser.Memory;
+import com.colofabrix.mathparser.Operators;
+import com.colofabrix.mathparser.expression.CmplxExpression;
+import com.colofabrix.mathparser.expression.ExpressionEntry;
+import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
 import com.colofabrix.mathparser.org.ConfigException;
+import com.colofabrix.mathparser.org.ExpressionException;
 
 /**
  * Represents a trigonometric operator
@@ -12,12 +20,13 @@ import com.colofabrix.mathparser.org.ConfigException;
  */
 public abstract class TrigonometricOperator extends Operator {
 	
-	private DegreesUnits selectedUnit;
+	protected static final String OPTION_UNITS = "$degrees";
+	private Memory memory;
 	
 	/**
 	 * Default constructor
 	 * 
-	 * <p>It initialize the object with RADIANS as measure unit</p>
+	 * <p>It initialize the object with RADIANS as unit of measurement</p>
 	 * 
 	 * @throws ConfigException
 	 */
@@ -28,7 +37,7 @@ public abstract class TrigonometricOperator extends Operator {
 	/**
 	 * Constructor with option setting
 	 * 
-	 * @param unit Select the measure unit for degrees
+	 * @param unit Select the unit of measurement for degrees
 	 * @throws ConfigException
 	 */
 	public TrigonometricOperator( DegreesUnits unit ) throws ConfigException {
@@ -40,21 +49,34 @@ public abstract class TrigonometricOperator extends Operator {
 	}
 
 	/**
-	 * Gets the current degrees measure unit
+	 * Gets the current degrees unit of measurement
 	 * 
-	 * @return A code from {@see DegreesUnits} representing the currently selected measure unit
+	 * @return A code from {@link DegreesUnits} representing the currently selected unit of measurement
+	 * @throws ExpressionException 
 	 */
-	public DegreesUnits getSelectedUnit() {
-		return selectedUnit;
+	public DegreesUnits getSelectedUnit() throws ExpressionException {
+		if( this.memory == null )
+			return DegreesUnits.RADIANS;
+		
+		ExpressionEntry value = this.memory.getValue( TrigonometricOperator.OPTION_UNITS );
+		
+		if( value == null || value.getEntryType() != Operand.OPERAND_CODE ) {
+			return DegreesUnits.RADIANS;
+		}
+		
+		return DegreesUnits.fromValue( ((Operand)value).getNumericValue().intValue() );
 	}
 
 	/**
-	 * Sets the current degrees measure unit
+	 * Sets the current degrees unit of measurement
 	 * 
-	 * @param selectedUnit A code from {@see DegreesUnits} representing the currently selected measure unit
+	 * @param selectedUnit A code from {@link DegreesUnits} representing the currently selected unit of measurement
 	 */
 	public void setSelectedUnit( DegreesUnits selectedUnit ) {
-		this.selectedUnit = selectedUnit;
+		if( this.memory == null )
+			return;
+		
+		this.memory.setValue( TrigonometricOperator.OPTION_UNITS, new Operand(selectedUnit.getValue() + 0.0) );
 	}
 	
 	/**
@@ -100,47 +122,57 @@ public abstract class TrigonometricOperator extends Operator {
 	/**
 	 * Converts a degrees value from the specified value to radians
 	 * 
-	 * <p>The measure unit of the input value is the one that is set on the object. See
-	 * {@link TrigonometricOperator.setSelectedUnit}</p>
+	 * <p>The unit of measurement of the input value is the one that is set on the object. See
+	 * {@link TrigonometricOperator#setSelectedUnit}</p>
 	 * 
 	 * @param value The value to convert. Its unit of measure is implicit
 	 * @return The converted degrees expressed in radians
+	 * @throws ExpressionException 
 	 */
-	public double getRadians( double value ) {
-		
+	public double getRadians( double value ) throws ExpressionException {
 		switch( this.getSelectedUnit() ) {
-		default:
-		case RADIANS:
-			return value; 
-			
-		case DEGREES:
-			return this.degreesToRadians( value );
-			
-		case GRADIANS:
-			return this.gradiansToRadians( value );
+			default:
+			case RADIANS:
+				return value;
+				
+			case DEGREES:
+				return this.degreesToRadians( value );
+				
+			case GRADIANS:
+				return this.gradiansToRadians( value );
 		}
 	}
 	
 	/**
 	 * Converts a degrees value from radians to the currend unit
 	 * 
-	 * <p>The measure unit of the output value is the one that is set in the object. See
-	 * {@link TrigonometricOperator.setSelectedUnit}</p>
+	 * <p>The unit of measurement of the output value is the one that is set in the object. See
+	 * {@link TrigonometricOperator#setSelectedUnit}</p>
 	 * 
-	 * @param value The value to convert in radians
-	 * @return The converted degrees expressed as the measure unit set in the object
+	 * @param radians The value to convert in radians
+	 * @return The converted degrees expressed as the unit of measurement set in the object
+	 * @throws ExpressionException 
 	 */
-	public double getCurrent( double radians ) {
+	public double getCurrent( double radians ) throws ExpressionException {
 		switch( this.getSelectedUnit() ) {
-		default:
-		case RADIANS:
-			return radians; 
-			
-		case DEGREES:
-			return this.radiansToDegrees( radians );
-			
-		case GRADIANS:
-			return this.radiansToGradians( radians );
+			default:
+			case RADIANS:
+				return radians; 
+				
+			case DEGREES:
+				return this.radiansToDegrees( radians );
+				
+			case GRADIANS:
+				return this.radiansToGradians( radians );
 		}
+	}
+	
+	/**
+	 * This method is used to save a memory reference locally
+	 */
+	@Override
+	public Operator executeParsing(CmplxExpression postfix, Stack<Operator> opstack, Operators operators, Memory memory) throws ExpressionException {
+		this.memory = memory;
+		return super.executeParsing(postfix, opstack, operators, memory);
 	}
 }

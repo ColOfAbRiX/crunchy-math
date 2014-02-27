@@ -20,12 +20,6 @@ public class OperatorsTest extends Operators {
 	 */
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		/*
-		root;
-		Math.max(a, b);
-		Math.min(a,b);
-		Math.random();
-		*/
 	}
 
 	/**

@@ -15,7 +15,7 @@ import com.colofabrix.mathparser.org.ExpressionException;
 /**
  * Represent the basic type to implement the operators to work with Vectors
  * 
- * <p>A vector type will create a vector in memory named {@link Vector.OUTPUT_NAME} which will contain
+ * <p>A vector type will create a vector in memory named {@link Vector#OUTPUT_NAME} which will contain
  * all the operands specified in the vector. The vector type will also refer all the included indexes
  * to the preceding opreator.<br/>
  * What's inside a vector will be minimized if possible, otherwise it will be kept as a {@link CmplxExpression}</p>

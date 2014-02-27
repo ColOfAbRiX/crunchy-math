@@ -25,7 +25,7 @@ public class Operand extends ExpressionEntry {
 	/**
 	 * Regular expression to match a variable name
 	 */
-	public static final String VARIABLE_REGEX = "([a-zA-Z_]|[^0-9][a-zA-Z_])[a-zA-Z0-9_]*";
+	public static final String VARIABLE_REGEX = "([a-zA-Z_]|[^0-9\\s][a-zA-Z_])[a-zA-Z0-9_]*";
 
 	/**
 	 * Regular espression to match allowed numbers
@@ -151,7 +151,7 @@ public class Operand extends ExpressionEntry {
 	 * 
 	 * <p>The string representation is commonly used to create output expressions</p>
 	 * 
-	 * @returns A string containing a representation of the object.
+	 * @return A string containing a representation of the object.
 	 */
 	@Override
 	public String toString() {
@@ -166,6 +166,9 @@ public class Operand extends ExpressionEntry {
 		}
 	}
 
+	/**
+	 * An operand is minimizable only if it is not a variable
+	 */
 	@Override
 	public boolean isMinimizable() {
 		return !this.isVariable();
