@@ -79,7 +79,7 @@ public class TrigonometricOperatorTest {
 			test.setSelectedUnit( DegreesUnits.GRADIANS );
 			operand.push( new Operand( 0.5 ) );
 			result = test.executeOperation( operand, new Memory() );
-			assertEquals( "Using gradians", 33.333333333333333, result.getNumericValue(), AllTests.PRECISION_ERROR_ALLOWED );
+			assertEquals( "Using gradians", 100/3.0, result.getNumericValue(), AllTests.PRECISION_ERROR_ALLOWED );
 		}
 		catch( ConfigException | ExpressionException e ) {
 			e.printStackTrace();
