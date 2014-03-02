@@ -23,6 +23,8 @@ package com.colofabrix.mathparser.operators;
 import java.util.Random;
 import java.util.Stack;
 
+import org.apfloat.Apfloat;
+
 import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
@@ -45,10 +47,10 @@ public class RandomOperator extends Operator {
 		if( operands.size() < this.getCurrentOperands() )
 			throw new ExpressionException( "Wrong number of given parameters" );
 
-		double value1 = Operand.extractNumber( operands.pop() );
+		Apfloat value1 = Operand.extractNumber( operands.pop() );
 		
-		Random rnd = new Random( (long)value1 ^ System.nanoTime() );
+		Random rnd = new Random( value1.longValue() ^ System.nanoTime() );
 		
-    	return new Operand( rnd.nextDouble() );
+    	return new Operand( new Apfloat(rnd.nextDouble(), Apfloat.INFINITE) );
 	}
 }

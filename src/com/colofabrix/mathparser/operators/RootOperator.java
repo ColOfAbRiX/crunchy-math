@@ -22,6 +22,9 @@ package com.colofabrix.mathparser.operators;
 
 import java.util.Stack;
 
+import org.apfloat.Apfloat;
+import org.apfloat.ApfloatMath;
+
 import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
@@ -42,9 +45,9 @@ public class RootOperator extends Operator {
 		if( operands.size() < this.getCurrentOperands() )
 			throw new ExpressionException( "Wrong number of given parameters" );
 
-		double value1 = Operand.extractNumber( operands.pop() );
-		double value2 = Operand.extractNumber( operands.pop() );
+		Apfloat value1 = Operand.extractNumber( operands.pop() );
+		Apfloat value2 = Operand.extractNumber( operands.pop() );
 		
-    	return new Operand( Math.pow(value1, 1 / value2) );
+    	return new Operand( ApfloatMath.pow(value1, new Apfloat(1).divide(value2)) );
 	}
 }

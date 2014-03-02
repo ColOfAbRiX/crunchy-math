@@ -22,10 +22,10 @@ package com.colofabrix.mathparser.tests;
 
 import static org.junit.Assert.*;
 
+import org.apfloat.Apfloat;
 import org.junit.Test;
 
 import com.colofabrix.mathparser.*;
-import com.colofabrix.mathparser.Operators;
 import com.colofabrix.mathparser.expression.CmplxExpression;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
@@ -49,12 +49,12 @@ public class CmplxExpressionTest extends CmplxExpression {
 		try {
 			// Manual creation of a reference sub-expression
 			CmplxExpression reference = new CmplxExpression();
-			reference.add( new Operand(3.0) );
+			reference.add( new Operand( new Apfloat(3)) );
 			reference.add( new MultiplyOperator() );
 			reference.add( new OpeningBracket() );
-			reference.add( new Operand(2.0) );
+			reference.add( new Operand( new Apfloat(2) ) );
 			reference.add( new MinusOperator() );
-			reference.add( new Operand(1.0) );
+			reference.add( new Operand( new Apfloat(1) ) );
 			reference.add( new ClosingBracket() );
 			
 			// Method testing
@@ -79,15 +79,15 @@ public class CmplxExpressionTest extends CmplxExpression {
 			// Manual creation of a reference sub-expression
 			CmplxExpression test = new CmplxExpression();
 
-			test.add( new Operand(3.0) );
+			test.add( new Operand( new Apfloat(3) ) );
 			test.add( new MultiplyOperator() );
 			test.add( new OpeningBracket() );
-			test.add( new Operand(2.0) );
+			test.add( new Operand( new Apfloat(2) ) );
 			test.add( new MinusOperator() );
-			test.add( new Operand(1.0) );
+			test.add( new Operand( new Apfloat(1) ) );
 			test.add( new ClosingBracket() );
 			
-			assertEquals( "String comparison test", "3.0 * ( 2.0 - 1.0 )", test.toString() );
+			assertEquals( "String comparison test", "3 * ( 2 - 1 )", test.toString() );
 		}
 		catch (ConfigException e) {
 			e.printStackTrace();
@@ -102,12 +102,12 @@ public class CmplxExpressionTest extends CmplxExpression {
 			ExpressionEntry item1, item2;
 			int support;
 			
-			test.add( item1 = new Operand(3.0) );
+			test.add( item1 =  new Operand( new Apfloat(3) ) );
 			test.add( new MultiplyOperator() );
 			test.add( new OpeningBracket() );
-			test.add( new Operand(2.0) );
+			test.add( new Operand( new Apfloat(2) ) );
 			test.add( new MinusOperator() );
-			test.add( new Operand(1.0) );
+			test.add( new Operand( new Apfloat(1) ) );
 			test.add( item2 = new ClosingBracket() );
 			
 			assertSame( "Test .firstElement()", item1, test.firstElement() );

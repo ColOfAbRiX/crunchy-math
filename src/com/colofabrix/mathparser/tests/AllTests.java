@@ -29,7 +29,11 @@ import org.junit.runners.Suite.SuiteClasses;
 	MathParserTest.class,
 	MemoryTest.class,
 	OperatorsTest.class,
-	TrigonometricOperatorTest.class })
+	TrigonometricOperatorTest.class,
+	CmplxExpressionTest.class,
+	OperandTest.class,
+	OperatorTest.class,
+	VectorTest.class})
 public class AllTests {
 	public static double PRECISION_ERROR_ALLOWED = 1E-6;
 }

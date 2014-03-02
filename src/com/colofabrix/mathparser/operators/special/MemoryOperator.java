@@ -23,6 +23,8 @@ package com.colofabrix.mathparser.operators.special;
 import java.util.Map;
 import java.util.Stack;
 
+import org.apfloat.Apfloat;
+
 import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
@@ -53,7 +55,7 @@ public class MemoryOperator extends Operator {
 		if( operands.size() < this.getCurrentOperands() )
 			throw new ExpressionException( "Wrong number of given parameters" );
 
-		int value1 = (int)Math.round( Operand.extractNumber( operands.pop() ) );
+		int value1 = Operand.extractNumber( operands.pop() ).intValue();
 		
 		switch( value1 ) {
 		case 1:
@@ -63,7 +65,7 @@ public class MemoryOperator extends Operator {
 		}
 
 		
-    	return new Operand( 0.0 );
+    	return new Operand( new Apfloat(0) );
 	}
 	
 	private void displayMemory( Memory mem ) {

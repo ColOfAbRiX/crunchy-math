@@ -22,6 +22,9 @@ package com.colofabrix.mathparser.operators;
 
 import java.util.Stack;
 
+import org.apfloat.Apfloat;
+import org.apfloat.ApfloatMath;
+
 import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
@@ -41,8 +44,8 @@ public class ArcoshOperator extends TrigonometricOperator {
 		if( operands.size() < this.getCurrentOperands() )
 			throw new ExpressionException( "Wrong number of given parameters" );
 
-		double value1 = Operand.extractNumber( operands.pop() );
-		double result = Math.log(value1 + Math.sqrt(Math.pow(value1, 2) - 1));
+		Apfloat value1 = Operand.extractNumber( operands.pop() );
+		Apfloat result = ApfloatMath.log(value1.add(ApfloatMath.sqrt(ApfloatMath.pow(value1, new Apfloat(2)).subtract( new Apfloat(1)))));
 		
     	return new Operand( this.getCurrent(result) );
 	}

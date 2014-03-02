@@ -22,6 +22,9 @@ package com.colofabrix.mathparser.operators;
 
 import java.util.Stack;
 
+import org.apfloat.Apfloat;
+import org.apfloat.ApfloatMath;
+
 import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
@@ -33,7 +36,7 @@ public class LnOperator extends Operator {
 
 	public LnOperator() throws ConfigException {
 		super();
-		this.setBaseName( "Exp" );
+		this.setBaseName( "Ln" );
 		this.setPriority( (short)2 );
 		this.setOperandsLimit( 1, 1 );
 		this.setCurrentOperands( 1 );
@@ -44,8 +47,8 @@ public class LnOperator extends Operator {
 		if( operands.size() < this.getCurrentOperands() )
 			throw new ExpressionException( "Wrong number of given parameters" );
 
-		double value1 = Operand.extractNumber( operands.pop() );
+		Apfloat value1 = Operand.extractNumber( operands.pop() );
 		
-    	return new Operand( Math.exp(value1) );
+    	return new Operand( ApfloatMath.log(value1, ApfloatMath.exp(new Apfloat(1))) );
 	}
 }

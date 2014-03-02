@@ -22,6 +22,9 @@ package com.colofabrix.mathparser.operators;
 
 import java.util.Stack;
 
+import org.apfloat.Apfloat;
+import org.apfloat.ApfloatMath;
+
 import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
@@ -44,8 +47,8 @@ public class LogOperator extends Operator {
 		if( operands.size() < this.getCurrentOperands() )
 			throw new ExpressionException( "Wrong number of given parameters" );
 
-		double value1 = Operand.extractNumber( operands.pop() );
+		Apfloat value1 = Operand.extractNumber( operands.pop() );
 		
-    	return new Operand( Math.log10(value1) );
+    	return new Operand( ApfloatMath.log(value1, new Apfloat(10))  );
 	}
 }

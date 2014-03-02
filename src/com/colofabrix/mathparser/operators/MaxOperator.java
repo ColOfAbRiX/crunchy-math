@@ -21,7 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 package com.colofabrix.mathparser.operators;
 
 import java.util.Stack;
-
+import org.apfloat.Apfloat;
 import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
@@ -42,9 +42,12 @@ public class MaxOperator extends Operator {
 		if( operands.size() < this.getCurrentOperands() )
 			throw new ExpressionException( "Wrong number of given parameters" );
 
-		double value1 = Operand.extractNumber( operands.pop() );
-		double value2 = Operand.extractNumber( operands.pop() );
+		Apfloat value1 = Operand.extractNumber( operands.pop() );
+		Apfloat value2 = Operand.extractNumber( operands.pop() );
 		
-    	return new Operand( Math.max(value1, value2) );
+		if( value1.compareTo(value2) > 0 )
+			return new Operand( value1 );
+		else
+			return new Operand( value2 );
 	}
 }

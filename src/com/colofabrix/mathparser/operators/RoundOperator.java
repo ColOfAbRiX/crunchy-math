@@ -20,7 +20,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 package com.colofabrix.mathparser.operators;
 
+import java.math.RoundingMode;
 import java.util.Stack;
+
+import org.apfloat.Apfloat;
+import org.apfloat.ApfloatMath;
 
 import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
@@ -44,8 +48,8 @@ public class RoundOperator extends Operator {
 		if( operands.size() < this.getCurrentOperands() )
 			throw new ExpressionException( "Wrong number of given parameters" );
 
-		double value1 = Operand.extractNumber( operands.pop() );
+		Apfloat value1 = Operand.extractNumber( operands.pop() );
 		
-    	return new Operand( (double)Math.round(value1) );
+    	return new Operand( ApfloatMath.round(value1, 0, RoundingMode.HALF_EVEN) );
 	}
 }

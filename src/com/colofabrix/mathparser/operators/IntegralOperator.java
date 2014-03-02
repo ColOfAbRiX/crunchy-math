@@ -24,6 +24,8 @@ import java.util.Stack;
 
 import org.apache.commons.math3.analysis.*;
 import org.apache.commons.math3.analysis.integration.*;
+import org.apfloat.Apfloat;
+
 import com.colofabrix.mathparser.MathParser;
 import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.Operators;
@@ -76,10 +78,10 @@ public class IntegralOperator extends Operator {
 		public double value( double arg0 ) {
 			this.mp.getMemory().setValue(
 					this.variable.getVariableName(),
-					new Operand( arg0 ) );
+					new Operand( new Apfloat(arg0) ) );
 			
 			try {
-				return mp.ExecutePostfix( this.expression );
+				return mp.ExecutePostfix(this.expression).doubleValue();
 			}
 			catch( ExpressionException e ) {
 				throw new IllegalArgumentException();
@@ -117,9 +119,9 @@ public class IntegralOperator extends Operator {
 			throw new ExpressionException( "Wrong number of given parameters" );
 
 		// Interval start
-		double lower = Operand.extractNumber( operands.pop() );
+		Apfloat lower = Operand.extractNumber( operands.pop() );
 		// Interval end
-		double upper = Operand.extractNumber( operands.pop() );
+		Apfloat upper = Operand.extractNumber( operands.pop() );
 		// Expression to evaluate
 		ExpressionEntry expression = operands.pop();
 		// Integration variable
@@ -127,7 +129,19 @@ public class IntegralOperator extends Operator {
 
 		WorkingExpression function = new WorkingExpression( this.parser, expression, variable );
 		BaseAbstractUnivariateIntegrator integrator = new SimpsonIntegrator();
-		Double result = integrator.integrate( 1000, function, lower, upper );
+		
+		Apfloat result = null;
+		int maxEval = 10000, eval = 10, exp = 5;
+		
+		// It starts with a low number of evaluation and exponentially increase to the set maximum
+		while( result == null && eval <= maxEval ) {
+			try {
+				result = new Apfloat( integrator.integrate(eval, function, lower.doubleValue(), upper.doubleValue()) );
+			}
+			catch( org.apache.commons.math3.exception.TooManyEvaluationsException e ) {
+				eval *= exp;
+			}
+		}
 		
     	return new Operand( result );
 	}

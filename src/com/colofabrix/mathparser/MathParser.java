@@ -22,6 +22,8 @@ package com.colofabrix.mathparser;
 
 import java.util.*;
 
+import org.apfloat.Apfloat;
+
 import com.colofabrix.mathparser.expression.CmplxExpression;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.GroupingOperator;
@@ -121,7 +123,7 @@ public class MathParser {
      * @return A number indicating the result of the expression
 	 * @throws ExpressionException In case of bad input expression
      */
-    public Double ExecutePostfix( CmplxExpression input ) throws ExpressionException {    	
+    public Apfloat ExecutePostfix( CmplxExpression input ) throws ExpressionException {    	
         Stack<ExpressionEntry> localStack = new Stack<>();
         
     	for( ExpressionEntry entry: input ) {
@@ -148,12 +150,13 @@ public class MathParser {
     		else
     			localStack.push( entry );
     	}
-        
+    	
+    	// FIXME: It returns null...
     	// Check for correct execution - the result must be 1 number or variable
     	if( localStack.size() != 1 || localStack.lastElement().getEntryType() != Operand.OPERAND_CODE )
-    		return Double.NaN;
+    		return null;
     	
-    	// TODO: Refactor this, check what type it should return and if it always not allowed to return something different than a number
+    	// TODO: Here the code to manage the output precision of the calculations
         return ((Operand)localStack.pop()).getNumericValue();
     }
     
@@ -164,9 +167,10 @@ public class MathParser {
      * @return A number indicating the result of the expression
 	 * @throws ExpressionException In case of bad input expression
      */
-    public Double ExecutePostfix( ExpressionEntry input ) throws ExpressionException {
+    public Apfloat ExecutePostfix( ExpressionEntry input ) throws ExpressionException {
     	
     	if( input.getEntryType() == Operand.OPERAND_CODE )
+        	// TODO: Here the code to manage the output precision of the calculations
     		return ((Operand)input).getNumericValue();
     	
     	else if( input.getEntryType() == CmplxExpression.COMPOSITE_CODE )

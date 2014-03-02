@@ -115,7 +115,7 @@ public class Operators extends java.util.Vector<Operator> {
 		if( value != null )
 			memory.setValue( Memory.ANSWER_VARIABLE, value );
 		else
-			memory.setValue( Memory.ANSWER_VARIABLE, new Operand(Double.NaN) );
+			memory.setValue( Memory.ANSWER_VARIABLE, null );
 			
 		return value;
 	}

@@ -22,6 +22,9 @@ package com.colofabrix.mathparser.operators;
 
 import java.util.Stack;
 
+import org.apfloat.Apfloat;
+import org.apfloat.ApfloatMath;
+
 import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
@@ -41,8 +44,8 @@ public class ArtanhOperator extends TrigonometricOperator {
 		if( operands.size() < this.getCurrentOperands() )
 			throw new ExpressionException( "Wrong number of given parameters" );
 
-		double value1 = Operand.extractNumber( operands.pop() );
-		double result = 0.5 * Math.log((1 + value1) / (1 - value1));
+		Apfloat value1 = Operand.extractNumber( operands.pop() );
+		Apfloat result = ApfloatMath.log(value1.add(new Apfloat(1).divide(value1.subtract(new Apfloat(1)))).multiply(new Apfloat(0.5)));
 		
     	return new Operand( this.getCurrent(result) );
 	}

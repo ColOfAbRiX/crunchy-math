@@ -22,6 +22,8 @@ package com.colofabrix.mathparser;
 
 import java.util.*;
 
+import org.apfloat.Apfloat;
+
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
 
@@ -37,7 +39,7 @@ public class Memory {
 	/**
 	 * Default value for the non-defined variables
 	 */
-	public static final Operand DEFAULT_VALUE = new Operand( 0.0 );
+	public static final Operand DEFAULT_VALUE = new Operand( new Apfloat(0) );
 	
 	/**
 	 * Name of the variable containing the value of the previous calculation

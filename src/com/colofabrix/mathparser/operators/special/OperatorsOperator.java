@@ -21,6 +21,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 package com.colofabrix.mathparser.operators.special;
 
 import java.util.Stack;
+
+import org.apfloat.Apfloat;
+
 import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.Operators;
 import com.colofabrix.mathparser.expression.CmplxExpression;
@@ -65,7 +68,7 @@ public class OperatorsOperator extends Operator {
 		if( operands.size() < this.getCurrentOperands() )
 			throw new ExpressionException( "Wrong number of given parameters" );
 
-		int value1 = (int)Math.round( Operand.extractNumber( operands.pop() ) );
+		int value1 = Operand.extractNumber( operands.pop() ).intValue();
 		
 		switch( value1 ) {
 		case 1:
@@ -75,7 +78,7 @@ public class OperatorsOperator extends Operator {
 		}
 
 		
-    	return new Operand( 0.0 );
+    	return new Operand( new Apfloat(0) );
 	}
 	
 	private void displayOperators( Operators ops ) {

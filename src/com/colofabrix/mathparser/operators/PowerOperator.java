@@ -22,10 +22,14 @@ package com.colofabrix.mathparser.operators;
 
 import java.util.Stack;
 
+import org.apfloat.Apfloat;
+import org.apfloat.ApfloatMath;
+
 import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
+import com.colofabrix.mathparser.lib.ApfloatConsts;
 import com.colofabrix.mathparser.org.ConfigException;
 import com.colofabrix.mathparser.org.ExpressionException;
 
@@ -42,9 +46,9 @@ public class PowerOperator extends Operator {
 		if( operands.size() < this.getCurrentOperands() )
 			throw new ExpressionException( "Wrong number of given parameters" );
 
-		double value1 = Operand.extractNumber( operands.pop() );
-		double value2 = Operand.extractNumber( operands.pop() );
+		Apfloat value1 = Operand.extractNumber( operands.pop() );
+		Apfloat value2 = Operand.extractNumber( operands.pop() );
 		
-    	return new Operand( Math.pow(value1, value2) );
+    	return new Operand( ApfloatMath.pow(value1.precision(ApfloatConsts.POW_PRECISION), value2.precision(ApfloatConsts.POW_PRECISION)) );
 	}
 }

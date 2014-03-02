@@ -20,8 +20,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 package com.colofabrix.mathparser.expression;
 
+import org.apfloat.Apfloat;
+
 import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.Operators;
+import com.colofabrix.mathparser.lib.ApfloatConsts;
 import com.colofabrix.mathparser.org.ExpressionException;
 
 /**
@@ -77,7 +80,7 @@ public abstract class ExpressionEntry {
 		
 		// Creates a number operand
 		else if( word.matches(Operand.NUMBER_REGEX) )
-			return new Operand( Double.parseDouble(word) );
+			return new Operand( new Apfloat(word, ApfloatConsts.STRING_PRECISION) );
 		
 		// Creates an option
 		else if( word.matches(Option.OPTION_REGEX) )

@@ -20,6 +20,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 package com.colofabrix.mathparser.expression;
 
+import org.apfloat.Apfloat;
+
 import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.org.ConfigException;
 import com.colofabrix.mathparser.org.ExpressionException;
@@ -40,7 +42,8 @@ public class Operand extends ExpressionEntry {
 	
 	private Memory memory;
 	private String varName = null;
-	private Double value = null;
+	//private Double value = null;
+	private Apfloat value;
 
 	/**
 	 * Regular expression to match a variable name
@@ -60,7 +63,7 @@ public class Operand extends ExpressionEntry {
 	 * @throws ExpressionException When the entry cannot be converted in a number
 	 * @throws ConfigException 
 	 */
-	public static double extractNumber( ExpressionEntry entry ) throws ExpressionException {
+	public static Apfloat extractNumber( ExpressionEntry entry ) throws ExpressionException {
 		if( entry.getEntryType() != Operand.OPERAND_CODE )
 			throw new ExpressionException( "The entry cannot be converted in a number" );
 		
@@ -93,7 +96,7 @@ public class Operand extends ExpressionEntry {
 	 * 
 	 * @param number The number to store
 	 */
-	public Operand( Double number ) {
+	public Operand( Apfloat number ) {
 		this( null, null, false, number, null );
 	}
 	
@@ -105,7 +108,7 @@ public class Operand extends ExpressionEntry {
 	 * @param number The number to store
 	 * @param memory Reference to the memory
 	 */
-	protected Operand( String varName, ExpressionEntry varValue, boolean setVarValue, Double number, Memory memory ) {
+	protected Operand( String varName, ExpressionEntry varValue, boolean setVarValue, Apfloat number, Memory memory ) {
 		this.value = number;
 		this.varName = varName;
 		this.memory = memory;
@@ -136,7 +139,7 @@ public class Operand extends ExpressionEntry {
 	 * @return The number stored or <code>null</code>
 	 * @throws ExpressionException When there is a mismatch between the variable, the memory or between internal fields
 	 */
-	public Double getNumericValue() throws ExpressionException {
+	public Apfloat getNumericValue() throws ExpressionException {
 		if( this.isVariable() ) {
 			ExpressionEntry memoryValue = this.memory.getValue( this.varName );
 			return Operand.extractNumber( memoryValue );

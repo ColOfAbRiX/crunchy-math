@@ -49,7 +49,7 @@ public class Main {
 					break;
 
 				ExpressionEntry ce = mp.ConvertToPostfix( input );
-				Double result = mp.ExecutePostfix( ce );
+				Double result = mp.ExecutePostfix( ce ).doubleValue();
 
 				System.out.println( "    Convertex expression: " + ce.toString() );
 				System.out.println( "    The result is: " + result );

@@ -1,11 +1,13 @@
 TODO LIST
 -------------
 Features:
- - Add arbitrary rounding of results
-   - This might imply the use of arbitrary precision math libraries
  - Add list of all the options available
  - Add a library of constants
  - Add selection of integration algorithms
 
 Bugs:
  - Two consecutive unary operators don't work (try "Round !5" or "Round 5!")
+ 
+Done
+ - Add arbitrary rounding of results
+   - This might imply the use of arbitrary precision math libraries

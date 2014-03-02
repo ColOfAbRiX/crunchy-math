@@ -22,12 +22,14 @@ package com.colofabrix.mathparser.operators.special;
 
 import java.util.Stack;
 
+import org.apfloat.Apfloat;
 import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.Operators;
 import com.colofabrix.mathparser.expression.CmplxExpression;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
+import com.colofabrix.mathparser.lib.ApfloatConsts;
 import com.colofabrix.mathparser.org.ConfigException;
 import com.colofabrix.mathparser.org.ExpressionException;
 
@@ -40,6 +42,7 @@ import com.colofabrix.mathparser.org.ExpressionException;
  */
 public abstract class TrigonometricOperator extends Operator {
 	
+	protected static final int PI_PRECISION = 200;
 	protected static final String OPTION_UNITS = "$degrees";
 	private Memory memory;
 	
@@ -96,7 +99,8 @@ public abstract class TrigonometricOperator extends Operator {
 		if( this.memory == null )
 			return;
 		
-		this.memory.setValue( TrigonometricOperator.OPTION_UNITS, new Operand(selectedUnit.getValue() + 0.0) );
+		// TODO: This is not the best way to save an option value
+		this.memory.setValue( TrigonometricOperator.OPTION_UNITS, new Operand(new Apfloat(selectedUnit.getValue())) );
 	}
 	
 	/**
@@ -105,8 +109,8 @@ public abstract class TrigonometricOperator extends Operator {
 	 * @param degrees The degrees to convert, expressed in degrees
 	 * @return The converted degrees expressed in radians
 	 */
-	protected double degreesToRadians( double degrees ) {
-		return degrees * Math.PI / 180;
+	protected Apfloat degreesToRadians( Apfloat degrees ) {
+		return degrees.multiply( ApfloatConsts.PI.divide(new Apfloat(180)) );
 	}
 	
 	/**
@@ -115,8 +119,8 @@ public abstract class TrigonometricOperator extends Operator {
 	 * @param radians The degrees to convert, expressed in radians
 	 * @return The converted degrees expressed in common degrees
 	 */
-	protected double radiansToDegrees( double radians ) {
-		return radians * 180 / Math.PI;
+	protected Apfloat radiansToDegrees( Apfloat radians ) {
+		return radians.multiply( new Apfloat(180).divide(ApfloatConsts.PI) );
 	}
 
 	/**
@@ -125,8 +129,8 @@ public abstract class TrigonometricOperator extends Operator {
 	 * @param gradians The degrees to convert, expressed in gradians
 	 * @return The converted degrees expressed in radians
 	 */
-	protected double gradiansToRadians( double gradians ) {
-		return gradians * Math.PI / 200;
+	protected Apfloat gradiansToRadians( Apfloat gradians ) {
+		return gradians.multiply( ApfloatConsts.PI.divide(new Apfloat(200)) );
 	}
 	
 	/**
@@ -135,8 +139,8 @@ public abstract class TrigonometricOperator extends Operator {
 	 * @param radians The degrees to convert, expressed in gradians
 	 * @return The converted degrees expressed in common radians
 	 */
-	protected double radiansToGradians( double radians ) {
-		return radians * 200 / Math.PI;
+	protected Apfloat radiansToGradians( Apfloat radians ) {
+		return radians.multiply( new Apfloat(200).divide(ApfloatConsts.PI) );
 	}
 	
 	/**
@@ -149,7 +153,7 @@ public abstract class TrigonometricOperator extends Operator {
 	 * @return The converted degrees expressed in radians
 	 * @throws ExpressionException 
 	 */
-	public double getRadians( double value ) throws ExpressionException {
+	public Apfloat getRadians( Apfloat value ) throws ExpressionException {
 		switch( this.getSelectedUnit() ) {
 			default:
 			case RADIANS:
@@ -173,7 +177,7 @@ public abstract class TrigonometricOperator extends Operator {
 	 * @return The converted degrees expressed as the unit of measurement set in the object
 	 * @throws ExpressionException 
 	 */
-	public double getCurrent( double radians ) throws ExpressionException {
+	public Apfloat getCurrent( Apfloat radians ) throws ExpressionException {
 		switch( this.getSelectedUnit() ) {
 			default:
 			case RADIANS:

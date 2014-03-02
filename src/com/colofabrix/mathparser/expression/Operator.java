@@ -35,7 +35,7 @@ import com.colofabrix.mathparser.org.ExpressionException;
  * @author Fabrizio Colonna
  */
 public abstract class Operator extends ExpressionEntry implements Comparable<Operator>, Cloneable {
-	
+
 	/**
 	 * Marker for the operand number field
 	 */

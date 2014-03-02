@@ -48,14 +48,14 @@ public class MemoryTest {
 			// Test for null
 			memory.setValue( "test", null );
 			assertEquals( "Check get/set for default",
-					Memory.DEFAULT_VALUE.getNumericValue(),
-					((Operand)memory.getValueOrDefault("test")).getNumericValue(), 0 );
+					Memory.DEFAULT_VALUE.getNumericValue().doubleValue(),
+					((Operand)memory.getValueOrDefault("test")).getNumericValue().doubleValue(), 0 );
 			
 			// Test for non-existent value
 			memory.setValue( "non_existent_test", null );
 			assertEquals( "Check get/set for non-existent",
-					Memory.DEFAULT_VALUE.getNumericValue(),
-					((Operand)memory.getValueOrDefault("non_existent_test")).getNumericValue(), 0 );
+					Memory.DEFAULT_VALUE.getNumericValue().doubleValue(),
+					((Operand)memory.getValueOrDefault("non_existent_test")).getNumericValue().doubleValue(), 0 );
 		}
 		catch( ExpressionException | ConfigException e ) {
 			e.printStackTrace();

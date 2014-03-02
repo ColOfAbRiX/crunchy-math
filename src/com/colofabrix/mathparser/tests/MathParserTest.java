@@ -1,5 +1,5 @@
 /*
-Crunchy Math, Version 1.0, February 2014
+Crunchy Math, Version 1, February 2014
 Copyright (C) 2014 Fabrizio Colonna <colofabrix@gmail.com>
 
 This file is part of Crunchy Math.
@@ -63,8 +63,8 @@ public class MathParserTest extends MathParser {
 		// SIMPLE EXPRESSION TESTING
 		tests.add( new TestEntry("Basic expression with brackets",
 				"3 * (2 + 1)",				// Input infix string
-				"3.0 2.0 1.0 + *",			// Output postfix string
-				9.0 ) );					// Numeric result
+				"3 2 1 + *",			// Output postfix string
+				9 ) );					// Numeric result
 		
 		tests.add( new TestEntry("Assignment",
 				"x = " + Math.PI,
@@ -73,91 +73,96 @@ public class MathParserTest extends MathParser {
 		
 		tests.add( new TestEntry("Variable reference",
 				"y = x ^ 2",
-				"y x 2.0 ^ =",
+				"y x 2 ^ =",
 				Math.pow(Math.PI, 2) ) );
 		
 		// BRACKETS TESTING
 		tests.add( new TestEntry("Brackets at the beginning",
 				"(2 + 1)",
-				"2.0 1.0 +",
-				 3.0) );
+				"2 1 +",
+				 3) );
 
 		tests.add( new TestEntry("Double operator after closing bracket",
 				"(2 + 1) / 1",
-				"2.0 1.0 + 1.0 /",
-				 3.0) );
+				"2 1 + 1 /",
+				 3) );
 		
 		tests.add( new TestEntry("Unary operator after opening bracket",
 				"3 * (-2 + 1)",
-				"3.0 2.0 #- 1.0 + *",
-				 -3.0) );
+				"3 2 #- 1 + *",
+				 -3) );
 		
 		tests.add( new TestEntry("Unary operator before opening bracket",
 				"-(2 + 1)",
-				"2.0 1.0 + #-",
-				-3.0) );
+				"2 1 + #-",
+				-3) );
 		
 		tests.add( new TestEntry("Unary operator between operator and opening bracket",
 				"3 * -(2 + 1)",
-				"3.0 2.0 1.0 + #- *",
-				-9.0) );
+				"3 2 1 + #- *",
+				-9) );
 
 		// UNARY FUNCTIONS TESTING
 		tests.add( new TestEntry("Function with an operation before",
 				"x = Sin 5",
-				"x 5.0 #Sin =",
+				"x 5 #Sin =",
 				-0.9589242746631385 ) );
 
 		tests.add( new TestEntry("Function with an operatio after",
 				"Sin 5 / 5",
-				"5.0 #Sin 5.0 /",
+				"5 #Sin 5 /",
 				-0.1917848549326277 ) );
 		
 		tests.add( new TestEntry("Function between operations",
 				"2 * Sin 5 / 3",
-				"2.0 5.0 #Sin 3.0 / *",
+				"2 5 #Sin 3 / *",
 				-0.6392828497754256 ) );
 		
 		tests.add( new TestEntry("Function inside brackets",
 				"2 * (5 + Sin 6)",
-				"2.0 5.0 6.0 #Sin + *",
+				"2 5 6 #Sin + *",
 				9.441169003602148 ) );
 		
 		tests.add( new TestEntry("Function with operand inside brackets",
 				"5 + Sin (6)",
-				"5.0 6.0 #Sin +",
+				"5 6 #Sin +",
 				4.720584501801074 ) );
 		
 		tests.add( new TestEntry("Function inside brackets between operations",
 				"2 * (5 + Sin 6) / 7",
-				"2.0 5.0 6.0 #Sin + 7.0 / *",
+				"2 5 6 #Sin + 7 / *",
 				1.3487384290860212 ) );
 		
 		tests.add( new TestEntry("Complex expression",
 				"2 * (5 + Sin 6) / (7 + 1)",
-				"2.0 5.0 6.0 #Sin + 7.0 1.0 + / *",
+				"2 5 6 #Sin + 7 1 + / *",
 				1.1801461254502685) );
 
 		// CUSTOM FUNCTIONS
 		tests.add( new TestEntry("Simple integration of a variable",
 				"Int[0, 1, x, x]",
-				"0.0 1.0 x x 4#Int",
+				"0 1 x x 4#Int",
 				 0.5 ) );
 		
 		tests.add( new TestEntry("Integration over a negative interval",
 				"Int[-1, 1, x, x]",
-				"-1.0 1.0 x x 4#Int",
+				"-1 1 x x 4#Int",
 				0 ) );
 		
 		tests.add( new TestEntry("Integration with decimal numbers",
 				"Int[0, " + Math.PI + ", x, x]",
-				"0.0 " + Math.PI + " x x 4#Int",
+				"0 " + Math.PI + " x x 4#Int",
 				 Math.pow(Math.PI, 2) / 2) );
 		
 		tests.add( new TestEntry("Integration over a function with decimal number",
 				"Int[0, " + Math.PI + ", Sin x, x]",
-				"0.0 " + Math.PI + " x #Sin x 4#Int",
+				"0 " + Math.PI + " x #Sin x 4#Int",
 				2 ) );
+		
+		tests.add( new TestEntry("Integration over a function with expressions as upper limit",
+				"Int[0, 2 * " + Math.PI + ", Sin x, x]",
+				"0 6.283185307179586 x #Sin x 4#Int",
+				0 ) );
 		
 		tests.add( new TestEntry("Integration over a function with decimal and negative number",
 				"Int[-" + Math.PI + ", " + Math.PI + ", Sin x, x]",
@@ -166,30 +171,31 @@ public class MathParserTest extends MathParser {
 		
 		tests.add( new TestEntry("Operation before integration",
 				"2 + Int[0, 1, x, x]",
-				"2.0 0.0 1.0 x x 4#Int +",
+				"2 0 1 x x 4#Int +",
 				 2.5 ) );
 		
 		tests.add( new TestEntry("Operation after integration",
 				"Int[0, 1, x, x] * 2",
-				"0.0 1.0 x x 4#Int 2.0 *",
-				 1.0 ) );
+				"0 1 x x 4#Int 2 *",
+				 1 ) );
 		
 		tests.add( new TestEntry("Integration inside brackets",
 				"2 - (Int[0, 1, x, x] * 3)",
-				"2.0 0.0 1.0 x x 4#Int 3.0 * -",
+				"2 0 1 x x 4#Int 3 * -",
 				 0.5 ) );
 		
 		tests.add( new TestEntry("Integration of a complex function",
 				"Int[-1, 1, x * Sin x, x]",
-				"-1.0 1.0 x x #Sin * x 4#Int",
+				"-1 1 x x #Sin * x 4#Int",
 				0.6023373578795135 ) );
 		
 		// COMPLEX EXPRESSIONS
 		tests.add( new TestEntry("Complex expression 1",
-				"-1 + Int[-2, 1, x ^ 2 * Sin x, x]",
-				"1.0 #- -2.0 1.0 x 2.0 ^ x #Sin * x 4#Int +",
-				-3.2462391049130788248 ) );
+				"-1 + Int[-2, 1, (x + 3) ^ 2 * Sin x, x]",
+				"1 #- -2 1 x 3 + 2 ^ x #Sin * x 4#Int +",
+				0.40227728650772178 ) );
 		
+		// FIXME: This feature has still to be checked
 		tests.add( new TestEntry("Sequence of unary operators",
 				"Round ! 5",
 				"5 #! #Round",
@@ -223,7 +229,7 @@ public class MathParserTest extends MathParser {
 			for( TestEntry test: tests ) {
 				System.out.printf("Execution: %s: %s ---> ", test.message, test.infixString );
 						
-				double result = mp.ExecutePostfix( mp.ConvertToPostfix(test.infixString));
+				double result = mp.ExecutePostfix( mp.ConvertToPostfix(test.infixString)).doubleValue();
 				double error = 1E+6 * Math.abs((test.result - result) / test.result);
 
 				if( Double.compare(error, Double.NaN) != 0 && error != 0 ) {
