@@ -23,7 +23,6 @@ package com.colofabrix.mathparser.expression;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.Operators;
 import com.colofabrix.mathparser.org.ConfigException;
@@ -301,7 +300,14 @@ public abstract class Operator extends ExpressionEntry implements Comparable<Ope
      */
     @Override
     public int compareTo( Operator op ) {
-        return (int)Math.signum( this.getPriority() - op.getPriority() );
+    	int fix = 0;
+    	
+    	// When we are comparing two unary operators, the current one has less priority
+    	// An example is Cos Sin 3 --> 3 #Sin #Cos
+    	if( this.getCurrentOperands() == 1 && op.getCurrentOperands() == 1 )
+    		fix = 1;
+    	
+        return (int)Math.signum( this.getPriority() - fix - op.getPriority() );
     }
     
     
@@ -323,7 +329,7 @@ public abstract class Operator extends ExpressionEntry implements Comparable<Ope
         if( op.getClass() == String.class )
                 return this.equals( (String)op );
 
-        else if( op.getClass() == Operator.class )
+        else if( op instanceof Operator )
             return this.equals( (Operator)op );
 
         return false;

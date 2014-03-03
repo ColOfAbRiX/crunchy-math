@@ -5,9 +5,18 @@ Features:
  - Add a library of constants
  - Add selection of integration algorithms
 
-Bugs:
- - Two consecutive unary operators don't work (try "Round !5" or "Round 5!")
+Changes
+ - Complete the Unit Testings
+ - Change the methods executeOperation and executeParsing and remove the arguments operators and memory
  
+Bugs:
+
+DONE LIST
+-------------
 Done
+ - Add an exception handler to transform from Apfloat exception to internal exceptions
  - Add arbitrary rounding of results
    - This might imply the use of arbitrary precision math libraries
+
+Fixed
+ - Two consecutive unary operators don't work (try "Round !5" or "Round 5!")

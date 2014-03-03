@@ -110,14 +110,20 @@ public class Operators extends java.util.Vector<Operator> {
      * @throws ExpressionException The exception is thrown when there is an evaluation problem
      */
 	public Operand executeExpression( Operator operator, Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
-		Operand value = operator.executeOperation( operands, memory );
-		
-		if( value != null )
-			memory.setValue( Memory.ANSWER_VARIABLE, value );
-		else
-			memory.setValue( Memory.ANSWER_VARIABLE, null );
+		try {
+			Operand value = operator.executeOperation( operands, memory );
 			
-		return value;
+			if( value != null )
+				memory.setValue( Memory.ANSWER_VARIABLE, value );
+			
+			else
+				memory.setValue( Memory.ANSWER_VARIABLE, null );
+				
+			return value;
+		}
+		catch( Exception e ) {
+			throw new ExpressionException( e.getMessage() );
+		}
 	}
 
 	/**

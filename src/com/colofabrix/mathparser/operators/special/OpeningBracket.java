@@ -17,7 +17,7 @@ Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public
 License along with Crunchy Math; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-*/
+ */
 package com.colofabrix.mathparser.operators.special;
 
 import com.colofabrix.mathparser.expression.GroupingOperator;
@@ -26,22 +26,23 @@ import com.colofabrix.mathparser.org.ConfigException;
 /**
  * An opening bracket operator
  * 
- * <p>Brackets are used to give priority to some section of expressions.<br/>
- * A opening bracket serves to mark the beginning of a subexpression that will be later processed as
- * a differen entity. The push is performed by the parent class {@link GroupingOperator},
- * this class is only used to define a name and a priorit
+ * <p>
+ * Brackets are used to give priority to some section of expressions.<br/>
+ * A opening bracket serves to mark the beginning of a subexpression that will be later processed as a differen entity.
+ * The push is performed by the parent class {@link GroupingOperator}, this class is only used to define a name and a
+ * priorit
  * 
  * @author Fabrizio Colonna
  */
 public class OpeningBracket extends GroupingOperator {
-	
+
     public OpeningBracket() throws ConfigException {
-    	super();
+        super();
         this.setBaseName( "(" );
         this.setPriority( (short)0 );
     }
-    
-	public boolean isOpening() {
-	    return true;
-	}
+
+    public boolean isOpening() {
+        return true;
+    }
 }

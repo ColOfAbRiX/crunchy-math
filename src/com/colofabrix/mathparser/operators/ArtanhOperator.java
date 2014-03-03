@@ -17,14 +17,12 @@ Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public
 License along with Crunchy Math; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-*/
+ */
 package com.colofabrix.mathparser.operators;
 
 import java.util.Stack;
-
 import org.apfloat.Apfloat;
 import org.apfloat.ApfloatMath;
-
 import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
@@ -34,19 +32,20 @@ import com.colofabrix.mathparser.org.ExpressionException;
 
 public class ArtanhOperator extends TrigonometricOperator {
 
-	public ArtanhOperator() throws ConfigException {
-		super();
-		this.setBaseName( "Arsin" );
-	}
-	
-	@Override
-	public Operand executeOperation( Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
-		if( operands.size() < this.getCurrentOperands() )
-			throw new ExpressionException( "Wrong number of given parameters" );
+    public ArtanhOperator() throws ConfigException {
+        super();
+        this.setBaseName( "Arsin" );
+    }
 
-		Apfloat value1 = Operand.extractNumber( operands.pop() );
-		Apfloat result = ApfloatMath.log(value1.add(new Apfloat(1).divide(value1.subtract(new Apfloat(1)))).multiply(new Apfloat(0.5)));
-		
-    	return new Operand( this.getCurrent(result) );
-	}
+    @Override
+    public Operand executeOperation( Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
+        if( operands.size() < this.getCurrentOperands() )
+            throw new ExpressionException( "Wrong number of given parameters" );
+
+        Apfloat value1 = Operand.extractNumber( operands.pop() );
+        Apfloat result = ApfloatMath.log( value1.add( new Apfloat( 1 ).divide( value1.subtract( new Apfloat( 1 ) ) ) )
+                .multiply( new Apfloat( 0.5 ) ) );
+
+        return new Operand( this.getCurrent( result ) );
+    }
 }

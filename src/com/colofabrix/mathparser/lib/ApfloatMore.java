@@ -18,31 +18,21 @@ You should have received a copy of the GNU Lesser General Public
 License along with Crunchy Math; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package com.colofabrix.mathparser.operators.special;
+package com.colofabrix.mathparser.lib;
 
-import com.colofabrix.mathparser.expression.GroupingOperator;
-import com.colofabrix.mathparser.org.ConfigException;
+import org.apfloat.*;
 
-/**
- * A closing bracket operator
- * 
- * <p>
- * Brackets are used to give priority to some section of expressions.<br/>
- * A closing bracket serves to say that a subexpression is finished and to push all the operands and operators to the
- * correct stack. The push is performed by the parent class {@link GroupingOperator}, this class is only used to define
- * a name and a priority
- * </p>
- * 
- * @author Fabrizio Colonna
- */
-public class ClosingBracket extends GroupingOperator {
-    public ClosingBracket() throws ConfigException {
-        super();
-        this.setBaseName( ")" );
-        this.setPriority( (short)0 );
+public final class ApfloatMore {
+    public static Apfloat safeExp( Apfloat arg0 ) {
+        return ApfloatMath.exp( arg0.precision( ApfloatConsts.EXP_PRECISION ) );
     }
 
-    public boolean isOpening() {
-        return false;
+    public static Apfloat safePow( Apfloat arg0, Apfloat arg1 ) {
+        return ApfloatMath.pow( arg0.precision( ApfloatConsts.POW_PRECISION ),
+                arg1.precision( ApfloatConsts.POW_PRECISION ) );
+    }
+
+    public static boolean isInteger( Apfloat arg0 ) {
+        return arg0.equals( arg0.floor() );
     }
 }

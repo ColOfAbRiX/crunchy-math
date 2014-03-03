@@ -17,14 +17,12 @@ Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public
 License along with Crunchy Math; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-*/
+ */
 package com.colofabrix.mathparser.operators;
 
 import java.util.Stack;
-
 import org.apfloat.Apfloat;
 import org.apfloat.ApfloatMath;
-
 import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
@@ -34,19 +32,20 @@ import com.colofabrix.mathparser.org.ExpressionException;
 
 public class ArsinhOperator extends TrigonometricOperator {
 
-	public ArsinhOperator() throws ConfigException {
-		super();
-		this.setBaseName( "Arsinh" );
-	}
-	
-	@Override
-	public Operand executeOperation( Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
-		if( operands.size() < this.getCurrentOperands() )
-			throw new ExpressionException( "Wrong number of given parameters" );
+    public ArsinhOperator() throws ConfigException {
+        super();
+        this.setBaseName( "Arsinh" );
+    }
 
-		Apfloat value1 = Operand.extractNumber( operands.pop() );
-		Apfloat result = ApfloatMath.log(value1.add(ApfloatMath.sqrt(ApfloatMath.pow(value1, new Apfloat(2)).add(new Apfloat(1)))));		
-		
-    	return new Operand( this.getCurrent(result) );
-	}
+    @Override
+    public Operand executeOperation( Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
+        if( operands.size() < this.getCurrentOperands() )
+            throw new ExpressionException( "Wrong number of given parameters" );
+
+        Apfloat value1 = Operand.extractNumber( operands.pop() );
+        Apfloat result = ApfloatMath.log( value1.add( ApfloatMath.sqrt( ApfloatMath.pow( value1, new Apfloat( 2 ) )
+                .add( new Apfloat( 1 ) ) ) ) );
+
+        return new Operand( this.getCurrent( result ) );
+    }
 }

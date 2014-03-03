@@ -110,7 +110,7 @@ public abstract class TrigonometricOperator extends Operator {
 	 * @return The converted degrees expressed in radians
 	 */
 	protected Apfloat degreesToRadians( Apfloat degrees ) {
-		return degrees.multiply( ApfloatConsts.PI.divide(new Apfloat(180)) );
+		return degrees.multiply( ApfloatConsts.PI.divide(ApfloatConsts.Angular.DEG_180) );
 	}
 	
 	/**
@@ -120,7 +120,7 @@ public abstract class TrigonometricOperator extends Operator {
 	 * @return The converted degrees expressed in common degrees
 	 */
 	protected Apfloat radiansToDegrees( Apfloat radians ) {
-		return radians.multiply( new Apfloat(180).divide(ApfloatConsts.PI) );
+		return radians.multiply( ApfloatConsts.Angular.DEG_180.divide(ApfloatConsts.PI) );
 	}
 
 	/**
@@ -130,7 +130,7 @@ public abstract class TrigonometricOperator extends Operator {
 	 * @return The converted degrees expressed in radians
 	 */
 	protected Apfloat gradiansToRadians( Apfloat gradians ) {
-		return gradians.multiply( ApfloatConsts.PI.divide(new Apfloat(200)) );
+		return gradians.multiply( ApfloatConsts.PI.divide(ApfloatConsts.Angular.GRAD_200) );
 	}
 	
 	/**
@@ -140,7 +140,7 @@ public abstract class TrigonometricOperator extends Operator {
 	 * @return The converted degrees expressed in common radians
 	 */
 	protected Apfloat radiansToGradians( Apfloat radians ) {
-		return radians.multiply( new Apfloat(200).divide(ApfloatConsts.PI) );
+		return radians.multiply( ApfloatConsts.Angular.GRAD_200.divide(ApfloatConsts.PI) );
 	}
 	
 	/**

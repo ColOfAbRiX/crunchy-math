@@ -17,14 +17,12 @@ Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public
 License along with Crunchy Math; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-*/
+ */
 package com.colofabrix.mathparser.operators;
 
 import java.util.Stack;
-
 import org.apfloat.Apfloat;
 import org.apfloat.ApfloatMath;
-
 import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
@@ -34,19 +32,19 @@ import com.colofabrix.mathparser.org.ExpressionException;
 
 public class TanOperator extends TrigonometricOperator {
 
-	public TanOperator() throws ConfigException {
-		super();
-		this.setBaseName( "Tan" );
-	}
-	
-	@Override
-	public Operand executeOperation( Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
-		if( operands.size() < this.getCurrentOperands() )
-			throw new ExpressionException( "Wrong number of given parameters" );
+    public TanOperator() throws ConfigException {
+        super();
+        this.setBaseName( "Tan" );
+    }
 
-		Apfloat value1 = Operand.extractNumber( operands.pop() );
-		Apfloat radians = this.getRadians( value1 );
+    @Override
+    public Operand executeOperation( Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
+        if( operands.size() < this.getCurrentOperands() )
+            throw new ExpressionException( "Wrong number of given parameters" );
 
-    	return new Operand( ApfloatMath.tan(radians) );
-	}
+        Apfloat value1 = Operand.extractNumber( operands.pop() );
+        Apfloat radians = this.getRadians( value1 );
+
+        return new Operand( ApfloatMath.tan( radians ) );
+    }
 }

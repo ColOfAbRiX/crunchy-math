@@ -17,38 +17,35 @@ Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public
 License along with Crunchy Math; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-*/
+ */
 package com.colofabrix.mathparser.operators;
 
 import java.util.Stack;
-
 import org.apfloat.Apfloat;
-import org.apfloat.ApfloatMath;
-
 import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
-import com.colofabrix.mathparser.lib.ApfloatConsts;
+import com.colofabrix.mathparser.lib.ApfloatMore;
 import com.colofabrix.mathparser.org.ConfigException;
 import com.colofabrix.mathparser.org.ExpressionException;
 
 public class PowerOperator extends Operator {
 
-	public PowerOperator() throws ConfigException {
-		super();
-		this.setBaseName( "^" );
-		this.setPriority( (short)3 );
-	}
+    public PowerOperator() throws ConfigException {
+        super();
+        this.setBaseName( "^" );
+        this.setPriority( (short)3 );
+    }
 
-	@Override
-	public Operand executeOperation( Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
-		if( operands.size() < this.getCurrentOperands() )
-			throw new ExpressionException( "Wrong number of given parameters" );
+    @Override
+    public Operand executeOperation( Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
+        if( operands.size() < this.getCurrentOperands() )
+            throw new ExpressionException( "Wrong number of given parameters" );
 
-		Apfloat value1 = Operand.extractNumber( operands.pop() );
-		Apfloat value2 = Operand.extractNumber( operands.pop() );
-		
-    	return new Operand( ApfloatMath.pow(value1.precision(ApfloatConsts.POW_PRECISION), value2.precision(ApfloatConsts.POW_PRECISION)) );
-	}
+        Apfloat value1 = Operand.extractNumber( operands.pop() );
+        Apfloat value2 = Operand.extractNumber( operands.pop() );
+
+        return new Operand( ApfloatMore.safePow( value1, value2 ) );
+    }
 }

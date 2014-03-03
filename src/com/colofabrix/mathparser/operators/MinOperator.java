@@ -17,13 +17,11 @@ Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public
 License along with Crunchy Math; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-*/
+ */
 package com.colofabrix.mathparser.operators;
 
 import java.util.Stack;
-
 import org.apfloat.Apfloat;
-
 import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
@@ -33,23 +31,23 @@ import com.colofabrix.mathparser.org.ExpressionException;
 
 public class MinOperator extends Operator {
 
-	public MinOperator() throws ConfigException {
-		super();
-		this.setBaseName( "Min" );
-		this.setPriority( (short)0 );
-	}
-	
-	@Override
-	public Operand executeOperation( Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
-		if( operands.size() < this.getCurrentOperands() )
-			throw new ExpressionException( "Wrong number of given parameters" );
+    public MinOperator() throws ConfigException {
+        super();
+        this.setBaseName( "Min" );
+        this.setPriority( (short)0 );
+    }
 
-		Apfloat value1 = Operand.extractNumber( operands.pop() );
-		Apfloat value2 = Operand.extractNumber( operands.pop() );
-		
-		if( value1.compareTo(value2) < 0 )
-			return new Operand( value1 );
-		else
-			return new Operand( value2 );
-	}
+    @Override
+    public Operand executeOperation( Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
+        if( operands.size() < this.getCurrentOperands() )
+            throw new ExpressionException( "Wrong number of given parameters" );
+
+        Apfloat value1 = Operand.extractNumber( operands.pop() );
+        Apfloat value2 = Operand.extractNumber( operands.pop() );
+
+        if( value1.compareTo( value2 ) < 0 )
+            return new Operand( value1 );
+        else
+            return new Operand( value2 );
+    }
 }

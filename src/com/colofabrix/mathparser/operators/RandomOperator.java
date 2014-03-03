@@ -17,14 +17,12 @@ Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public
 License along with Crunchy Math; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-*/
+ */
 package com.colofabrix.mathparser.operators;
 
 import java.util.Random;
 import java.util.Stack;
-
 import org.apfloat.Apfloat;
-
 import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
@@ -34,23 +32,23 @@ import com.colofabrix.mathparser.org.ExpressionException;
 
 public class RandomOperator extends Operator {
 
-	public RandomOperator() throws ConfigException {
-		super();
-		this.setBaseName( "Rnd" );
-		this.setPriority( (short)2 );
-		this.setOperandsLimit( 1, 1 );
-		this.setCurrentOperands( 1 );
-	}
-	
-	@Override
-	public Operand executeOperation( Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
-		if( operands.size() < this.getCurrentOperands() )
-			throw new ExpressionException( "Wrong number of given parameters" );
+    public RandomOperator() throws ConfigException {
+        super();
+        this.setBaseName( "Rnd" );
+        this.setPriority( (short)2 );
+        this.setOperandsLimit( 1, 1 );
+        this.setCurrentOperands( 1 );
+    }
 
-		Apfloat value1 = Operand.extractNumber( operands.pop() );
-		
-		Random rnd = new Random( value1.longValue() ^ System.nanoTime() );
-		
-    	return new Operand( new Apfloat(rnd.nextDouble(), Apfloat.INFINITE) );
-	}
+    @Override
+    public Operand executeOperation( Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
+        if( operands.size() < this.getCurrentOperands() )
+            throw new ExpressionException( "Wrong number of given parameters" );
+
+        Apfloat value1 = Operand.extractNumber( operands.pop() );
+
+        Random rnd = new Random( value1.longValue() ^ System.nanoTime() );
+
+        return new Operand( new Apfloat( rnd.nextDouble(), Apfloat.INFINITE ) );
+    }
 }

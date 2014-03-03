@@ -17,7 +17,7 @@ Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public
 License along with Crunchy Math; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-*/
+ */
 package com.colofabrix.mathparser.expression;
 
 /**
@@ -27,72 +27,72 @@ package com.colofabrix.mathparser.expression;
  */
 public class Option extends ExpressionEntry {
 
-	private String name;
-	
-	/**
-	 * Code to identify the object type
-	 */
-	public static final int OPTION_CODE = 4;
-	
-	/**
-	 * Marker to identify an option
-	 */
-	public static final String OPTION_MARK = "$";
+    private String name;
 
-	/**
-	 * Regular expression to match an option name
-	 */
-	public static final String OPTION_REGEX = "\\" + Option.OPTION_MARK + "([a-zA-Z_]|\\.[a-zA-Z_])[a-zA-Z0-9_]*";
-	
-	/**
-	 * Regular expression to match a string
-	 */
-	public static final String STRING_VALUE = "\"(?:[^\"\\]|\\.)*\"";
+    /**
+     * Code to identify the object type
+     */
+    public static final int OPTION_CODE = 4;
 
-	/**
-	 * Constructor
-	 * 
-	 * @param name Name of the option
-	 */
-	public Option( String name ) {
-		this.name = name.replaceAll("^\\" + Option.OPTION_MARK, "" );
-	}
-	
-	/**
-	 * Gets the base name of the Option
-	 * 
-	 * @return The name of the option
-	 */
-	public String getName() {
-		return this.name;
-	}
+    /**
+     * Marker to identify an option
+     */
+    public static final String OPTION_MARK = "$";
 
-	/**
-	 * Gets the name of the Option comprehensive of the marker
-	 * 
-	 * @return The name of the option
-	 */
-	public String getFullName() {
-		return Option.OPTION_MARK + this.getName();
-	}
+    /**
+     * Regular expression to match an option name
+     */
+    public static final String OPTION_REGEX = "\\" + Option.OPTION_MARK + "([a-zA-Z_]|\\.[a-zA-Z_])[a-zA-Z0-9_]*";
 
-	/**
-	 * Returns a code to identify the type of ExprEntry that this class represents
-	 * 
-	 * @return An integer indicating the ExprEntry type
-	 */
-	@Override
-	public int getEntryType() {
-		return Option.OPTION_CODE;
-	}
-	
-	public String toString() {
-		return this.getFullName();
-	}
+    /**
+     * Regular expression to match a string
+     */
+    public static final String STRING_VALUE = "\"(?:[^\"\\]|\\.)*\"";
 
-	@Override
-	public boolean isMinimizable() {
-		return false;
-	}
+    /**
+     * Constructor
+     * 
+     * @param name Name of the option
+     */
+    public Option( String name ) {
+        this.name = name.replaceAll( "^\\" + Option.OPTION_MARK, "" );
+    }
+
+    /**
+     * Gets the base name of the Option
+     * 
+     * @return The name of the option
+     */
+    public String getName() {
+        return this.name;
+    }
+
+    /**
+     * Gets the name of the Option comprehensive of the marker
+     * 
+     * @return The name of the option
+     */
+    public String getFullName() {
+        return Option.OPTION_MARK + this.getName();
+    }
+
+    /**
+     * Returns a code to identify the type of ExprEntry that this class represents
+     * 
+     * @return An integer indicating the ExprEntry type
+     */
+    @Override
+    public int getEntryType() {
+        return Option.OPTION_CODE;
+    }
+
+    public String toString() {
+        return this.getFullName();
+    }
+
+    @Override
+    public boolean isMinimizable() {
+        return false;
+    }
 
 }

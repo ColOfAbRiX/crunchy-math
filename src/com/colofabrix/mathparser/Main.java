@@ -17,48 +17,51 @@ Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public
 License along with Crunchy Math; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-*/
+ */
 package com.colofabrix.mathparser;
 
 import java.io.*;
-
+import org.apfloat.Apfloat;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.org.*;
 
 public class Main {
 
     public static void main( String[] args ) {
-		MathParser mp;
-		
-		try {
-			mp = new MathParser();
-		}
-		catch (ConfigException e) {
-			e.printStackTrace();
-			return;
-		}
+        MathParser mp;
 
-		while( true ) {
-			try {
-				System.out.print( "Type the expression you want to evaluate: " );
+        try {
+            mp = new MathParser();
+        }
+        catch( ConfigException e ) {
+            e.printStackTrace();
+            return;
+        }
 
-				BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-				String input = in.readLine();
-				
-				if( input.isEmpty() )
-					break;
+        while( true ) {
+            try {
+                System.out.print( "Type the expression you want to evaluate: " );
 
-				ExpressionEntry ce = mp.ConvertToPostfix( input );
-				Double result = mp.ExecutePostfix( ce ).doubleValue();
+                BufferedReader in = new BufferedReader( new InputStreamReader( System.in ) );
+                String input = in.readLine();
 
-				System.out.println( "    Convertex expression: " + ce.toString() );
-				System.out.println( "    The result is: " + result );
-				
-				System.out.println();
-			}
-			catch (ExpressionException | ConfigException | IOException e) {
-				System.out.println( "Exception during the evaluation" );
-			}
-		}
+                if( input.isEmpty() )
+                    break;
+
+                ExpressionEntry ce = mp.ConvertToPostfix( input );
+                Apfloat result = mp.ExecutePostfix( ce );
+
+                System.out.println( "    Convertex expression: " + ce.toString() );
+                if( result != null )
+                    System.out.println( "    The result is: " + result );
+                else
+                    System.out.println( "    No numerical result given" );
+
+                System.out.println();
+            }
+            catch( ExpressionException | ConfigException | IOException e ) {
+                System.out.println( "Exception during the evaluation" );
+            }
+        }
     }
 }
