@@ -75,7 +75,7 @@ public class ApfloatStat {
                 backward_index = i - 1;
                 sum = ApfloatConsts.ZERO;
                 for( int j = 0; j < i; j++ ) {
-                    counter = coeff.get( j ).multiply( coeff.get( backward_index ) );
+                    counter = coeff.get( j ).multiply( coeff.get( backward_index ) ); 
                     sum = sum.add( counter.precision( ApfloatConsts.DIVIDE_PRECISION ).divide( coeff_div.get( j ) ) );
                     backward_index--;
                 }

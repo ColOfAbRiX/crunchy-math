@@ -54,7 +54,7 @@ public abstract class TrigonometricOperator extends Operator {
 	 * @throws ConfigException
 	 */
 	public TrigonometricOperator() throws ConfigException {
-		this( DegreesUnits.RADIANS );
+		this( AngleUnit.RADIANS );
 	}; 
 
 	/**
@@ -63,7 +63,7 @@ public abstract class TrigonometricOperator extends Operator {
 	 * @param unit Select the unit of measurement for degrees
 	 * @throws ConfigException
 	 */
-	public TrigonometricOperator( DegreesUnits unit ) throws ConfigException {
+	public TrigonometricOperator( AngleUnit unit ) throws ConfigException {
 		this.setSelectedUnit( unit );
 		
 		this.setPriority( (short)2 );
@@ -74,28 +74,28 @@ public abstract class TrigonometricOperator extends Operator {
 	/**
 	 * Gets the current degrees unit of measurement
 	 * 
-	 * @return A code from {@link DegreesUnits} representing the currently selected unit of measurement
+	 * @return A code from {@link AngleUnit} representing the currently selected unit of measurement
 	 * @throws ExpressionException 
 	 */
-	public DegreesUnits getSelectedUnit() throws ExpressionException {
+	public AngleUnit getSelectedUnit() throws ExpressionException {
 		if( this.memory == null )
-			return DegreesUnits.RADIANS;
+			return AngleUnit.RADIANS;
 		
 		ExpressionEntry value = this.memory.getValue( TrigonometricOperator.OPTION_UNITS );
 		
 		if( value == null || value.getEntryType() != Operand.OPERAND_CODE ) {
-			return DegreesUnits.RADIANS;
+			return AngleUnit.RADIANS;
 		}
 		
-		return DegreesUnits.fromValue( ((Operand)value).getNumericValue().intValue() );
+		return AngleUnit.fromValue( ((Operand)value).getNumericValue().intValue() );
 	}
 
 	/**
 	 * Sets the current degrees unit of measurement
 	 * 
-	 * @param selectedUnit A code from {@link DegreesUnits} representing the currently selected unit of measurement
+	 * @param selectedUnit A code from {@link AngleUnit} representing the currently selected unit of measurement
 	 */
-	public void setSelectedUnit( DegreesUnits selectedUnit ) {
+	public void setSelectedUnit( AngleUnit selectedUnit ) {
 		if( this.memory == null )
 			return;
 		

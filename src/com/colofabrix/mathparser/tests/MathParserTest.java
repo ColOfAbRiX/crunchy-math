@@ -24,6 +24,7 @@ import static org.junit.Assert.*;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.ArrayList;
+import org.apfloat.Apfloat;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import com.colofabrix.mathparser.*;
@@ -42,9 +43,13 @@ public class MathParserTest extends MathParser {
         public String message = null;
         public String infixString = null;
         public String postfixString = null;
-        public double result;
+        public Double result;
 
         public TestEntry( String message, String infix, String postfix, double result ) {
+            this( message, infix, postfix, (Double)result );
+        }
+        
+        public TestEntry( String message, String infix, String postfix, Double result ) {
             this.message = message;
             this.infixString = infix;
             this.postfixString = postfix;
@@ -106,17 +111,17 @@ public class MathParserTest extends MathParser {
         tests.add( new TestEntry( "Vector creation",
                 "[1, 2, 3]",
                 "1 2 3",
-                3 ) );
+                null ) );
 
         tests.add( new TestEntry( "Vector inner expression",
                 "[-1, 2, 3]",
                 "-1 2 3",
-                3 ) );
+                null ) );
 
         tests.add( new TestEntry( "Vector inner complex expression",
                 "[1, 2 * Sin 4 - 1, 3]",
                 "1 -2.5136049906158565027452781890236581882718257746729 3",
-                3 ) );
+                null ) );
 
         // UNARY FUNCTIONS TESTING
         tests.add( new TestEntry( "Function with an operation before",
@@ -226,11 +231,10 @@ public class MathParserTest extends MathParser {
                 "4 #Cos #Sin",
                 -0.6080830096407655 ) );
 
-        // FIXME: Not working yet
         tests.add( new TestEntry( "Multiple sequences of unary operators",
-                "Sin Cos 4 - - 2 * Round 5 !",
-                "4 #Cos #Sin",
-                -0.6080830096407655 ) );
+                "Sin Cos 4 - - - 2 * Round 5 !",
+                "4 #Cos #Sin 2 #- #- 5 #! #Round * -",
+                -240.60808300964076 ) );
 
         // COMPLEX EXPRESSIONS
         tests.add( new TestEntry( "Complex expression 1",
@@ -243,12 +247,12 @@ public class MathParserTest extends MathParser {
     public void testConvertToPostfix() {
         try {
             for( TestEntry test: tests ) {
-                System.out.printf( "Conversion: %s: %s ---> ", test.message, test.infixString );
-
                 String result = mp.ConvertToPostfix( test.infixString ).toString();
-                assertEquals( test.message, test.postfixString, result );
-
+                
+                System.out.printf( "Conversion: %s: %s ---> ", test.message, test.infixString );
                 System.out.println( result );
+                
+                assertEquals( test.message, test.postfixString, result );
             }
         }
         catch( Exception e ) {
@@ -266,18 +270,25 @@ public class MathParserTest extends MathParser {
             for( TestEntry test: tests ) {
                 System.out.printf( "Execution: %s: %s ---> ", test.message, test.infixString );
 
-                double result = mp.ExecutePostfix( mp.ConvertToPostfix( test.infixString ) ).doubleValue();
-                double error = 1E+6 * Math.abs( (test.result - result) / test.result );
-
-                if( Double.compare( error, Double.NaN ) != 0 && error != 0 ) {
-                    BigDecimal bd = new BigDecimal( error );
-                    bd = bd.round( new MathContext( 4 ) );
-                    error = bd.doubleValue();
+                Apfloat output = mp.ExecutePostfix( mp.ConvertToPostfix( test.infixString ) );
+                if( output != null ) {
+                    double result = output.doubleValue();
+                    double error = 1E+6 * Math.abs( (test.result - result) / test.result );
+    
+                    if( Double.compare( error, Double.NaN ) != 0 && error != 0 ) {
+                        BigDecimal bd = new BigDecimal( error );
+                        bd = bd.round( new MathContext( 4 ) );
+                        error = bd.doubleValue();
+                    }
+    
+                    System.out.printf( "%s (Error %sppm)\n", Double.toString( result ), Double.toString( error ) );
+                    
+                    assertEquals( test.message, test.result, result, AllTests.PRECISION_ERROR_ALLOWED );
                 }
-
-                assertEquals( test.message, test.result, result, AllTests.PRECISION_ERROR_ALLOWED );
-
-                System.out.printf( "%s (Error %sppm)\n", Double.toString( result ), Double.toString( error ) );
+                else {
+                    System.out.printf( "null value" );
+                    assertNull( test.message, output );
+                }
             }
         }
         catch( Exception e ) {

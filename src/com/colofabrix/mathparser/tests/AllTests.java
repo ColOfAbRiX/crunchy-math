@@ -35,5 +35,6 @@ import org.junit.runners.Suite.SuiteClasses;
 	OperatorTest.class,
 	VectorTest.class})
 public class AllTests {
-	public static double PRECISION_ERROR_ALLOWED = 1E-6;
+    public static long PRECISION_DIGITS = 6;
+	public static double PRECISION_ERROR_ALLOWED = Math.pow( 10, -PRECISION_DIGITS );
 }

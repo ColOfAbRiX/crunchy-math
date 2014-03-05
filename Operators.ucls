@@ -97,9 +97,9 @@
       <operations public="true" package="true" protected="true" private="false" static="true"/>    
     </display>  
   </class>  
-  <enumeration id="11" language="java" name="com.colofabrix.mathparser.operators.special.DegreesUnits" 
-    project="MathParser" file="/MathParser/src/com/colofabrix/mathparser/operators/special/DegreesUnits.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
+  <enumeration id="11" language="java" name="com.colofabrix.mathparser.operators.special.AngleUnit" project="MathParser" 
+    file="/MathParser/src/com/colofabrix/mathparser/operators/special/AngleUnit.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
     <position height="171" width="196" x="890" y="208"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      

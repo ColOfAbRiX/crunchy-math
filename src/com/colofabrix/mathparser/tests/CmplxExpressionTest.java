@@ -133,9 +133,8 @@ public class CmplxExpressionTest extends CmplxExpression {
 
             assertEquals( "Not minimizable", false, mp.ConvertToPostfix( "x * Sin x" ).isMinimizable() );
             assertEquals( "Not minimizable", false, mp.ConvertToPostfix( "x ^ 2 * Sin x" ).isMinimizable() );
-            assertEquals( "Not minimizable", false, mp.ConvertToPostfix( "-1 + Int[-2, 1, x ^ 2 * Sin x, x, 0.01]" )
-                    .isMinimizable() );
-            assertEquals( "Minimizable", false, mp.ConvertToPostfix( "2 * (5 + Sin 6) / (7 + 1)" ).isMinimizable() );
+            assertEquals( "Not minimizable", false, mp.ConvertToPostfix( "-1 + Int[-2, 1, x ^ 2 * Sin x, x, 0.01]" ).isMinimizable() );
+            assertEquals( "Minimizable", true, mp.ConvertToPostfix( "2 * (5 + Sin 6) / (7 + 1)" ).isMinimizable() );
         }
         catch( ConfigException | ExpressionException e ) {
             e.printStackTrace();

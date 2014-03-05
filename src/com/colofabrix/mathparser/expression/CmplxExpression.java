@@ -196,7 +196,7 @@ public class CmplxExpression extends ExpressionEntry implements List<ExpressionE
      * <p>This version of the method accept an object of type Object and then make use of the other
      * implemented version of this method.</p>
      * 
-     * @param op An Object object to be compared against the current instance.
+     * @param obj An Object object to be compared against the current instance.
      * @return The value <b>zero</b> if the given object is equal to the current one 
      */
     @Override
@@ -213,7 +213,7 @@ public class CmplxExpression extends ExpressionEntry implements List<ExpressionE
      * <p>Equality is implemented iterating through the component of this object and check if every 
      * one is also equals.<br/>
      * 
-     * @param op An Object object to be compared against the current instance.
+     * @param obj An Object object to be compared against the current instance.
      * @return The value <b>zero</b> if the given object is equal to the current one 
      */
     public boolean equals( CmplxExpression obj ) {

@@ -8,6 +8,7 @@ Features:
 Changes
  - Complete the Unit Testings
  - Change the methods executeOperation and executeParsing and remove the arguments operators and memory
+ - Refactor the test MathParserTest.testConvertToPostfix to make use of parametrized tests
  
 Bugs:
 

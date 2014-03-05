@@ -25,7 +25,7 @@ package com.colofabrix.mathparser.operators.special;
  * 
  * @author Fabrizio Colonna
  */
-public enum DegreesUnits {
+public enum AngleUnit {
     /**
      * Degrees {@link <a href="http://en.wikipedia.org/wiki/Degree_(angle)">Degrees</a>}
      */
@@ -43,7 +43,7 @@ public enum DegreesUnits {
 
     private int value;
 
-    DegreesUnits( int value ) {
+    AngleUnit( int value ) {
         this.value = value;
     }
 
@@ -51,7 +51,7 @@ public enum DegreesUnits {
         return this.value;
     }
 
-    public static DegreesUnits fromValue( int value ) {
+    public static AngleUnit fromValue( int value ) {
         switch( value ) {
             case 1:
                 return DEGREES;
