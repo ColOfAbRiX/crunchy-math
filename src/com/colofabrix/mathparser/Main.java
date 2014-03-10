@@ -20,13 +20,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package com.colofabrix.mathparser;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import org.apfloat.Apfloat;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
-import com.colofabrix.mathparser.org.*;
+import com.colofabrix.mathparser.org.ConfigException;
+import com.colofabrix.mathparser.org.ExpressionException;
 
 public class Main {
-
     public static void main( String[] args ) {
         MathParser mp;
 

@@ -20,9 +20,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package com.colofabrix.mathparser.lib;
 
-import org.apfloat.*;
+import org.apfloat.Apfloat;
+import org.apfloat.ApfloatMath;
 
 public final class ApfloatMore {
+    public static boolean isInteger( Apfloat arg0 ) {
+        return arg0.equals( arg0.floor() );
+    }
+
     public static Apfloat safeExp( Apfloat arg0 ) {
         return ApfloatMath.exp( arg0.precision( ApfloatConsts.EXP_PRECISION ) );
     }
@@ -30,9 +35,5 @@ public final class ApfloatMore {
     public static Apfloat safePow( Apfloat arg0, Apfloat arg1 ) {
         return ApfloatMath.pow( arg0.precision( ApfloatConsts.POW_PRECISION ),
                 arg1.precision( ApfloatConsts.POW_PRECISION ) );
-    }
-
-    public static boolean isInteger( Apfloat arg0 ) {
-        return arg0.equals( arg0.floor() );
     }
 }

@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package com.colofabrix.mathparser.tests;
 
-import static org.junit.Assert.*;
+import org.junit.Assert;
 import org.junit.Test;
 import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.expression.Operand;
@@ -38,26 +38,27 @@ public class MemoryTest {
         try {
             // Operator saving and retrival
             Operator a = new CosOperator();
-            memory.setValue( "test", a );
-            assertSame( "Check value get/set for object",
+            MemoryTest.memory.setValue( "test", a );
+            Assert.assertSame( "Check value get/set for object",
                     a,
-                    memory.getValue( "test" ) );
+                    MemoryTest.memory.getValue( "test" ) );
 
             // Test for null
-            memory.setValue( "test", null );
-            assertEquals( "Check get/set for default",
+            MemoryTest.memory.setValue( "test", null );
+            Assert.assertEquals( "Check get/set for default",
                     Memory.DEFAULT_VALUE.getNumericValue().doubleValue(),
-                    ((Operand)memory.getValueOrDefault( "test" )).getNumericValue().doubleValue(), 0 );
+                    ((Operand)MemoryTest.memory.getValueOrDefault( "test" )).getNumericValue().doubleValue(), 0 );
 
             // Test for non-existent value
-            memory.setValue( "non_existent_test", null );
-            assertEquals( "Check get/set for non-existent",
+            MemoryTest.memory.setValue( "non_existent_test", null );
+            Assert.assertEquals( "Check get/set for non-existent",
                     Memory.DEFAULT_VALUE.getNumericValue().doubleValue(),
-                    ((Operand)memory.getValueOrDefault( "non_existent_test" )).getNumericValue().doubleValue(), 0 );
+                    ((Operand)MemoryTest.memory.getValueOrDefault( "non_existent_test" )).getNumericValue()
+                            .doubleValue(), 0 );
         }
         catch( ExpressionException | ConfigException e ) {
             e.printStackTrace();
-            fail( e.getMessage().getClass().toString() );
+            Assert.fail( e.getMessage().getClass().toString() );
         }
     }
 }

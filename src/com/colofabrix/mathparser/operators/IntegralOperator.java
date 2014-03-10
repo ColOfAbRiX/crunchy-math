@@ -21,12 +21,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 package com.colofabrix.mathparser.operators;
 
 import java.util.Stack;
-import org.apache.commons.math3.analysis.*;
-import org.apache.commons.math3.analysis.integration.*;
+import org.apache.commons.math3.analysis.UnivariateFunction;
+import org.apache.commons.math3.analysis.integration.BaseAbstractUnivariateIntegrator;
+import org.apache.commons.math3.analysis.integration.SimpsonIntegrator;
 import org.apfloat.Apfloat;
 import com.colofabrix.mathparser.MathParser;
-import com.colofabrix.mathparser.Memory;
-import com.colofabrix.mathparser.Operators;
 import com.colofabrix.mathparser.expression.CmplxExpression;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
@@ -47,10 +46,10 @@ public class IntegralOperator extends Operator {
      */
     protected class WorkingExpression implements UnivariateFunction {
 
-        ExpressionEntry oldMemory;
-        ExpressionEntry expression;
-        Operand variable;
         private MathParser mp;
+        ExpressionEntry expression;
+        ExpressionEntry oldMemory;
+        Operand variable;
 
         /**
          * The constructor saves internally the expression to evaluate
@@ -70,6 +69,12 @@ public class IntegralOperator extends Operator {
             this.oldMemory = this.mp.getMemory().getValue( variable.getVariableName() );
         }
 
+        @Override
+        public void finalize() {
+            // Restore the old variable in memory
+            this.mp.getMemory().setValue( this.variable.getVariableName(), this.oldMemory );
+        }
+
         /**
          * Calculate the value of the function in a point
          */
@@ -80,16 +85,11 @@ public class IntegralOperator extends Operator {
                     new Operand( new Apfloat( arg0 ) ) );
 
             try {
-                return mp.ExecutePostfix( this.expression ).doubleValue();
+                return this.mp.ExecutePostfix( this.expression ).doubleValue();
             }
             catch( ExpressionException e ) {
                 throw new IllegalArgumentException();
             }
-        }
-
-        public void finalize() {
-            // Restore the old variable in memory
-            this.mp.getMemory().setValue( variable.getVariableName(), this.oldMemory );
         }
     }
 
@@ -103,17 +103,8 @@ public class IntegralOperator extends Operator {
         this.setCurrentOperands( 4 );
     }
 
-    /**
-     * Saves some information about from the caller
-     */
     @Override
-    public Operator executeParsing( CmplxExpression postfix, Stack<Operator> opstack, Operators operators, Memory memory ) throws ExpressionException {
-        this.parser = new MathParser( operators, memory );
-        return super.executeParsing( postfix, opstack, operators, memory );
-    }
-
-    @Override
-    public Operand executeOperation( Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
+    public Operand executeOperation( Stack<ExpressionEntry> operands ) throws ExpressionException {
         if( operands.size() < this.getCurrentOperands() )	// Start, End, Function, Variable, Precision
             throw new ExpressionException( "Wrong number of given parameters" );
 
@@ -128,6 +119,7 @@ public class IntegralOperator extends Operator {
 
         WorkingExpression function = new WorkingExpression( this.parser, expression, variable );
         BaseAbstractUnivariateIntegrator integrator = new SimpsonIntegrator();
+        function.finalize();
 
         Apfloat result = null;
         int maxEval = 10000, eval = 10, exp = 5;
@@ -143,5 +135,14 @@ public class IntegralOperator extends Operator {
         }
 
         return new Operand( result );
+    }
+
+    /**
+     * Saves some information about from the caller
+     */
+    @Override
+    public Operator executeParsing( CmplxExpression postfix, Stack<Operator> opstack ) throws ExpressionException {
+        this.parser = new MathParser( this.operators, this.memory );
+        return super.executeParsing( postfix, opstack );
     }
 }

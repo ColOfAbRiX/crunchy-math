@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package com.colofabrix.mathparser;
 
-import java.util.*;
+import java.util.Stack;
 import org.apfloat.Apfloat;
 import com.colofabrix.mathparser.expression.CmplxExpression;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
@@ -39,8 +39,19 @@ import com.colofabrix.mathparser.org.ExpressionException;
  */
 public class MathParser {
 
-    private Operators operators;
     private Memory memory;
+    private Operators operators;
+
+    /**
+     * Creates and initialize MathParser
+     * 
+     * @throws ConfigException
+     */
+    public MathParser() throws ConfigException {
+        Memory m = new Memory();
+        this.setMemory( m );
+        this.setOperators( new Operators( m ) );
+    }
 
     /**
      * Creates and initialize the MathParser
@@ -57,16 +68,6 @@ public class MathParser {
     }
 
     /**
-     * Creates and initialize MathParser
-     * 
-     * @throws ConfigException
-     */
-    public MathParser() throws ConfigException {
-        this.setOperators( new Operators() );
-        this.setMemory( new Memory() );
-    }
-
-    /**
      * Infix-to-postfix converter
      * 
      * @param input The mathematica expression to convert
@@ -76,7 +77,7 @@ public class MathParser {
      */
     public CmplxExpression ConvertToPostfix( String input ) throws ExpressionException, ConfigException {
 
-        CmplxExpression infix = CmplxExpression.fromExpression( input, getOperators(), getMemory() );
+        CmplxExpression infix = CmplxExpression.fromExpression( input, this.getOperators(), this.getMemory() );
         CmplxExpression postfix = new CmplxExpression();
         Stack<Operator> opstack = new Stack<>();
         ExpressionEntry lastEntry = null;
@@ -99,7 +100,7 @@ public class MathParser {
                         currentOp.setCurrentOperands( 1 );
 
                 // Execution of the custom parsing performed by the operators themselves
-                currentOp = currentOp.executeParsing( postfix, opstack, this.getOperators(), this.getMemory() );
+                currentOp = currentOp.executeParsing( postfix, opstack );
                 if( currentOp != null )
                     opstack.push( currentOp );
             }
@@ -115,7 +116,7 @@ public class MathParser {
         while( opstack.size() > 0 )
             postfix.add( opstack.pop() );
 
-        return CmplxExpression.fromExpression( postfix, getOperators(), getMemory() );
+        return CmplxExpression.fromExpression( postfix, this.getOperators(), this.getMemory() );
     }
 
     /**
@@ -182,24 +183,17 @@ public class MathParser {
     }
 
     /**
-     * @return the operators
-     */
-    public Operators getOperators() {
-        return operators;
-    }
-
-    /**
-     * @param operators the operators to set
-     */
-    protected void setOperators( Operators operators ) {
-        this.operators = operators;
-    }
-
-    /**
      * @return the memory
      */
     public Memory getMemory() {
-        return memory;
+        return this.memory;
+    }
+
+    /**
+     * @return the operators
+     */
+    public Operators getOperators() {
+        return this.operators;
     }
 
     /**
@@ -207,5 +201,12 @@ public class MathParser {
      */
     protected void setMemory( Memory memory ) {
         this.memory = memory;
+    }
+
+    /**
+     * @param operators the operators to set
+     */
+    protected void setOperators( Operators operators ) {
+        this.operators = operators;
     }
 }

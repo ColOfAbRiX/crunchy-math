@@ -17,7 +17,7 @@ Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public
 License along with Crunchy Math; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-*/
+ */
 package com.colofabrix.mathparser.org;
 
 /**
@@ -26,11 +26,11 @@ package com.colofabrix.mathparser.org;
  * @author Fabrizio Colonna
  */
 public class ExpressionException extends Exception {
-	private static final long serialVersionUID = -3138039955342178755L;
+    private static final long serialVersionUID = -3138039955342178755L;
 
-	public ExpressionException() {};
-	
-	public ExpressionException( String message ) {
-		super( message );
-	}
+    public ExpressionException() {};
+
+    public ExpressionException( String message ) {
+        super( message );
+    }
 }

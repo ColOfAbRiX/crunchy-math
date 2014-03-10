@@ -7,7 +7,6 @@ Features:
 
 Changes
  - Complete the Unit Testings
- - Change the methods executeOperation and executeParsing and remove the arguments operators and memory
  - Refactor the test MathParserTest.testConvertToPostfix to make use of parametrized tests
  
 Bugs:
@@ -18,6 +17,7 @@ Done
  - Add an exception handler to transform from Apfloat exception to internal exceptions
  - Add arbitrary rounding of results
    - This might imply the use of arbitrary precision math libraries
+ - Change the methods executeOperation and executeParsing and remove the arguments operators and memory
 
 Fixed
  - Two consecutive unary operators don't work (try "Round !5" or "Round 5!")

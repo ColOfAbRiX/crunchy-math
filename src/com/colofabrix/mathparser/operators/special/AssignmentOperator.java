@@ -21,7 +21,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 package com.colofabrix.mathparser.operators.special;
 
 import java.util.Stack;
-import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
@@ -49,13 +48,12 @@ public class AssignmentOperator extends Operator {
      * Set a memory variable with the value of the second operand
      * 
      * @param operands A stack containing the operands in reversed order
-     * @param memory A reference to the main math memory
      * @return It returns the value that has just set in memory
      * @throws ExpressionException If the second operand is not an object of type Operand
      * @throws ExpressionException If the first operand is not a variable name
      */
     @Override
-    public Operand executeOperation( Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
+    public Operand executeOperation( Stack<ExpressionEntry> operands ) throws ExpressionException {
         Operand variable, operand;
 
         if( operands.size() < this.getCurrentOperands() )
@@ -74,7 +72,7 @@ public class AssignmentOperator extends Operator {
         if( !variable.isVariable() )
             throw new ExpressionException( "Cannot assign to a number" );
 
-        return (Operand)memory.setValue(
+        return (Operand)this.memory.setValue(
                 variable.getVariableName(),
                 new Operand( operand.getNumericValue() ) );
     }

@@ -21,7 +21,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 package com.colofabrix.mathparser.operators.special;
 
 import java.util.Stack;
-import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
@@ -54,7 +53,7 @@ public class SetOperator extends Operator {
      * Sets the value of an option using the shared memory
      */
     @Override
-    public Operand executeOperation( Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
+    public Operand executeOperation( Stack<ExpressionEntry> operands ) throws ExpressionException {
         if( operands.size() < this.getCurrentOperands() )
             throw new ExpressionException( "Wrong number of given parameters" );
 
@@ -62,7 +61,7 @@ public class SetOperator extends Operator {
             Option option = (Option)operands.pop();
             ExpressionEntry value = operands.pop();
 
-            memory.setValue( option.getFullName(), value );
+            this.memory.setValue( option.getFullName(), value );
         }
         catch( ClassCastException e ) {
             throw new ExpressionException( "Wrong type of given parameters" );

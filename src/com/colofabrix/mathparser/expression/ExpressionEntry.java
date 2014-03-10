@@ -34,41 +34,6 @@ import com.colofabrix.mathparser.org.ExpressionException;
 public abstract class ExpressionEntry {
 
     /**
-     * Find the type of entry the object represents
-     * 
-     * <p>
-     * This method is used to identify the type of the object stored in the entry. It must be overridden by teh derived
-     * classes
-     * </p>
-     * 
-     * @return An integer wich uniquely identify the entry type
-     */
-    public abstract int getEntryType();
-
-    /**
-     * Get a string representation of the entry
-     * 
-     * <p>
-     * The string representation is commonly used to create output expressions
-     * </p>
-     * 
-     * @return A string containing a representation of the object.
-     */
-    @Override
-    public abstract String toString();
-
-    /**
-     * Checks if an expression is minimizable
-     * 
-     * <p>
-     * An expression is minimizable if it doesn't contain any variable
-     * </p>
-     * 
-     * @return <code>true</code> if the expression is minimizable</code>
-     */
-    public abstract boolean isMinimizable();
-
-    /**
      * Creates an instance of ExpressionEntry to hold an
      * 
      * <p>
@@ -101,4 +66,39 @@ public abstract class ExpressionEntry {
         else
             return null;
     }
+
+    /**
+     * Find the type of entry the object represents
+     * 
+     * <p>
+     * This method is used to identify the type of the object stored in the entry. It must be overridden by teh derived
+     * classes
+     * </p>
+     * 
+     * @return An integer wich uniquely identify the entry type
+     */
+    public abstract int getEntryType();
+
+    /**
+     * Checks if an expression is minimizable
+     * 
+     * <p>
+     * An expression is minimizable if it doesn't contain any variable
+     * </p>
+     * 
+     * @return <code>true</code> if the expression is minimizable</code>
+     */
+    public abstract boolean isMinimizable();
+
+    /**
+     * Get a string representation of the entry
+     * 
+     * <p>
+     * The string representation is commonly used to create output expressions
+     * </p>
+     * 
+     * @return A string containing a representation of the object.
+     */
+    @Override
+    public abstract String toString();
 }

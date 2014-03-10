@@ -24,16 +24,13 @@ import org.junit.Test;
 
 public class OperandTest {
 
-	@Test
-	public void testGetNumericValue() {
-	}
+    @Test
+    public void testGetNumericValue() {}
 
-	@Test
-	public void testGetVariableName() {
-	}
+    @Test
+    public void testGetVariableName() {}
 
-	@Test
-	public void testIsVariable() {
-	}
+    @Test
+    public void testIsVariable() {}
 
 }

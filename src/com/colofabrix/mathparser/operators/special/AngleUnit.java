@@ -32,14 +32,28 @@ public enum AngleUnit {
     DEGREES(1),
 
     /**
-     * Radians {@link <a href="http://en.wikipedia.org/wiki/Radian">Radians</a>}
-     */
-    RADIANS(2),
-
-    /**
      * Gradians {@link <a href="http://en.wikipedia.org/wiki/Gradian">Gradians</a>}
      */
-    GRADIANS(3);
+    GRADIANS(3),
+
+    /**
+     * Radians {@link <a href="http://en.wikipedia.org/wiki/Radian">Radians</a>}
+     */
+    RADIANS(2);
+
+    public static AngleUnit fromValue( int value ) {
+        switch( value ) {
+            case 1:
+                return DEGREES;
+
+            default:
+            case 2:
+                return RADIANS;
+
+            case 3:
+                return GRADIANS;
+        }
+    }
 
     private int value;
 
@@ -49,17 +63,5 @@ public enum AngleUnit {
 
     public int getValue() {
         return this.value;
-    }
-
-    public static AngleUnit fromValue( int value ) {
-        switch( value ) {
-            case 1:
-                return DEGREES;
-            default:
-            case 2:
-                return RADIANS;
-            case 3:
-                return GRADIANS;
-        }
     }
 }

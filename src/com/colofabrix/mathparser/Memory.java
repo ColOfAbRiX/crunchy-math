@@ -20,7 +20,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package com.colofabrix.mathparser;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 import org.apfloat.Apfloat;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
@@ -32,23 +33,45 @@ import com.colofabrix.mathparser.expression.Operand;
  */
 public class Memory {
 
-    private Map<String, ExpressionEntry> memory = new HashMap<>();
-
-    /**
-     * Default value for the non-defined variables
-     */
-    public static final Operand DEFAULT_VALUE = new Operand( new Apfloat( 0 ) );
-
     /**
      * Name of the variable containing the value of the previous calculation
      */
     public static final String ANSWER_VARIABLE = "Ans";
 
     /**
+     * Default value for the non-defined variables
+     */
+    public static final Operand DEFAULT_VALUE = new Operand( new Apfloat( 0 ) );
+
+    private Map<String, ExpressionEntry> memory = new HashMap<>();
+
+    /**
      * The constructor initializes the memory with only the ANSWER_VARIABLE variable with the value DEFAULT_VALUE
      */
     public Memory() {
         this.setValue( Memory.ANSWER_VARIABLE, Memory.DEFAULT_VALUE );
+    }
+
+    /**
+     * Gets a reference to the hashmap which stores the memory
+     * 
+     * @return A Map object containing the memory of the parser
+     */
+    public Map<String, ExpressionEntry> getDirectMemoryReference() {
+        return this.memory;
+    }
+
+    /**
+     * Gets the value of a memory address
+     * 
+     * @param address The name of the variable to get
+     * @return The value of the memory address corresponding to the variable or <code>null</code>
+     */
+    public ExpressionEntry getValue( String address ) {
+        if( !this.memory.containsKey( address ) )
+            return null;
+
+        return this.memory.get( address );
     }
 
     /**
@@ -68,19 +91,6 @@ public class Memory {
             return Memory.DEFAULT_VALUE;
 
         return tmp;
-    }
-
-    /**
-     * Gets the value of a memory address
-     * 
-     * @param address The name of the variable to get
-     * @return The value of the memory address corresponding to the variable or <code>null</code>
-     */
-    public ExpressionEntry getValue( String address ) {
-        if( !this.memory.containsKey( address ) )
-            return null;
-
-        return this.memory.get( address );
     }
 
     /**
@@ -106,14 +116,5 @@ public class Memory {
             this.memory.remove( address );
 
         return value;
-    }
-
-    /**
-     * Gets a reference to the hashmap which stores the memory
-     * 
-     * @return A Map object containing the memory of the parser
-     */
-    public Map<String, ExpressionEntry> getDirectMemoryReference() {
-        return this.memory;
     }
 }

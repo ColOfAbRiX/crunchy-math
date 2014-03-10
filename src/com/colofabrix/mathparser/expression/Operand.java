@@ -37,24 +37,18 @@ import com.colofabrix.mathparser.org.ExpressionException;
 public class Operand extends ExpressionEntry {
 
     /**
+     * Regular espression to match allowed numbers
+     */
+    public static final String NUMBER_REGEX = "-?[0-9]*\\.[0-9]+|[0-9]+";
+
+    /**
      * Code to identify the object type
      */
     public static final int OPERAND_CODE = 1;
-
-    private Memory memory;
-    private String varName = null;
-    // private Double value = null;
-    private Apfloat value;
-
     /**
      * Regular expression to match a variable name
      */
     public static final String VARIABLE_REGEX = "([a-zA-Z_]|[^0-9\\s][a-zA-Z_])[a-zA-Z0-9_]*";
-
-    /**
-     * Regular espression to match allowed numbers
-     */
-    public static final String NUMBER_REGEX = "-?[0-9]*\\.[0-9]+|[0-9]+";
 
     /**
      * Extract a number from an entry, if present
@@ -69,6 +63,22 @@ public class Operand extends ExpressionEntry {
             throw new ExpressionException( "The entry cannot be converted in a number" );
 
         return ((Operand)entry).getNumericValue();
+    }
+
+    private Memory memory;
+
+    // private Double value = null;
+    private Apfloat value;
+
+    private String varName = null;
+
+    /**
+     * This constructor creates an operand which contains a number
+     * 
+     * @param number The number to store
+     */
+    public Operand( Apfloat number ) {
+        this( null, null, false, number, null );
     }
 
     /**
@@ -93,15 +103,6 @@ public class Operand extends ExpressionEntry {
     }
 
     /**
-     * This constructor creates an operand which contains a number
-     * 
-     * @param number The number to store
-     */
-    public Operand( Apfloat number ) {
-        this( null, null, false, number, null );
-    }
-
-    /**
      * Generic constructor
      * 
      * @param varName Variable name
@@ -116,6 +117,43 @@ public class Operand extends ExpressionEntry {
 
         if( this.isVariable() && setVarValue )
             this.memory.setValue( this.varName, varValue );
+    }
+
+    /**
+     * Checks if the given object is the same as the current one
+     * 
+     * <p>
+     * Equality is implemented checking interal field values
+     * </p>
+     * <p>
+     * This version of the method accept an object of type Object and then make use of the other implemented version of
+     * this method.
+     * </p>
+     * 
+     * @param obj An Object object to be compared against the current instance.
+     * @return The value <b>zero</b> if the given object is equal to the current one
+     */
+    @Override
+    public boolean equals( Object obj ) {
+        if( !this.getClass().equals( obj.getClass() ) )
+            return false;
+
+        return this.equals( (Operand)obj );
+    }
+
+    /**
+     * Checks if the given object is the same as the current one
+     * 
+     * <p>
+     * Equality is implemented checking interal field values<br/>
+     * 
+     * @param obj An Object object to be compared against the current instance.
+     * @return The value <b>zero</b> if the given object is equal to the current one
+     */
+    public boolean equals( Operand obj ) {
+        return this.memory == obj.memory &&
+                (this.value == null && this.value == obj.value || this.value.equals( obj.value )) &&
+                (this.varName == null && this.varName == obj.varName || this.varName.equals( obj.varName ));
     }
 
     /**
@@ -163,6 +201,14 @@ public class Operand extends ExpressionEntry {
     }
 
     /**
+     * An operand is minimizable only if it is not a variable
+     */
+    @Override
+    public boolean isMinimizable() {
+        return !this.isVariable();
+    }
+
+    /**
      * Checks if the objects contains a variable
      * 
      * @return <code>true</code> if the object contain a variable and a valid memory reference
@@ -191,45 +237,5 @@ public class Operand extends ExpressionEntry {
         catch( ExpressionException e ) {
             return "";
         }
-    }
-
-    /**
-     * An operand is minimizable only if it is not a variable
-     */
-    @Override
-    public boolean isMinimizable() {
-        return !this.isVariable();
-    }
-    
-    /**
-     * Checks if the given object is the same as the current one
-     * 
-     * <p>Equality is implemented checking interal field values</p>
-     * <p>This version of the method accept an object of type Object and then make use of the other
-     * implemented version of this method.</p>
-     * 
-     * @param obj An Object object to be compared against the current instance.
-     * @return The value <b>zero</b> if the given object is equal to the current one 
-     */
-    @Override
-    public boolean equals( Object obj ) {
-        if( !this.getClass().equals( obj.getClass() ) )
-            return false;
-        
-        return this.equals( (Operand)obj );
-    }
-    
-    /**
-     * Checks if the given object is the same as the current one
-     * 
-     * <p>Equality is implemented checking interal field values<br/>
-     * 
-     * @param obj An Object object to be compared against the current instance.
-     * @return The value <b>zero</b> if the given object is equal to the current one 
-     */
-    public boolean equals( Operand obj ) {
-        return this.memory == obj.memory &&
-               (this.value == null && this.value == obj.value || this.value.equals( obj.value )) &&
-               (this.varName == null && this.varName == obj.varName || this.varName.equals( obj.varName ));
     }
 }

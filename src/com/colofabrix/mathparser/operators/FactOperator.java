@@ -21,10 +21,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 package com.colofabrix.mathparser.operators;
 
 import java.util.Stack;
+import org.apfloat.Apcomplex;
 import org.apfloat.Apfloat;
 import org.apfloat.ApfloatMath;
 import org.apfloat.ApintMath;
-import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
@@ -45,7 +45,7 @@ public class FactOperator extends Operator {
     }
 
     @Override
-    public Operand executeOperation( Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
+    public Operand executeOperation( Stack<ExpressionEntry> operands ) throws ExpressionException {
         if( operands.size() < this.getCurrentOperands() )
             throw new ExpressionException( "Wrong number of given parameters" );
 
@@ -68,6 +68,7 @@ public class FactOperator extends Operator {
      * @param x The argument of the gamma function
      * @return The result of Γ(x) using the Lanczos approximation
      */
+    @Deprecated
     protected Apfloat la_gamma( Apfloat x ) {
         // Rounded Lanczos coefficients g=7, n=9
         Apfloat[] p = {
@@ -131,6 +132,6 @@ public class FactOperator extends Operator {
                 .multiply( ApfloatMore.safeExp( t.negate() ) )
                 .multiply( a );									                // sqrt( 2 * PI ) * pow(t, x + 0.5) * exp(-t) * a;
 
-        return result.precision( Apfloat.INFINITE );
+        return result.precision( Apcomplex.INFINITE );
     }
 }

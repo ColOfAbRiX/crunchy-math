@@ -42,6 +42,7 @@ public class ClosingBracket extends GroupingOperator {
         this.setPriority( (short)0 );
     }
 
+    @Override
     public boolean isOpening() {
         return false;
     }

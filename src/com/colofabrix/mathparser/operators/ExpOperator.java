@@ -22,7 +22,6 @@ package com.colofabrix.mathparser.operators;
 
 import java.util.Stack;
 import org.apfloat.Apfloat;
-import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
@@ -41,7 +40,7 @@ public class ExpOperator extends Operator {
     }
 
     @Override
-    public Operand executeOperation( Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
+    public Operand executeOperation( Stack<ExpressionEntry> operands ) throws ExpressionException {
         if( operands.size() < this.getCurrentOperands() )
             throw new ExpressionException( "Wrong number of given parameters" );
 

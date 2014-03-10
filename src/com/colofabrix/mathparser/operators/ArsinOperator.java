@@ -23,7 +23,6 @@ package com.colofabrix.mathparser.operators;
 import java.util.Stack;
 import org.apfloat.Apfloat;
 import org.apfloat.ApfloatMath;
-import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.operators.special.TrigonometricOperator;
@@ -38,7 +37,7 @@ public class ArsinOperator extends TrigonometricOperator {
     }
 
     @Override
-    public Operand executeOperation( Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
+    public Operand executeOperation( Stack<ExpressionEntry> operands ) throws ExpressionException {
         if( operands.size() < this.getCurrentOperands() )
             throw new ExpressionException( "Wrong number of given parameters" );
 

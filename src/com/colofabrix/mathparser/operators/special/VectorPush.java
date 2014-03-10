@@ -21,7 +21,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 package com.colofabrix.mathparser.operators.special;
 
 import java.util.Stack;
-import com.colofabrix.mathparser.*;
 import com.colofabrix.mathparser.expression.CmplxExpression;
 import com.colofabrix.mathparser.expression.Operator;
 import com.colofabrix.mathparser.org.ConfigException;
@@ -53,8 +52,8 @@ public class VectorPush extends Vector {
      * </p>
      */
     @Override
-    public Operator executeParsing( CmplxExpression postfix, Stack<Operator> opstack, Operators operators, Memory memory ) throws ExpressionException {
-        CmplxExpression stack = (CmplxExpression)memory.getValue( Vector.STACK_NAME );
+    public Operator executeParsing( CmplxExpression postfix, Stack<Operator> opstack ) throws ExpressionException {
+        CmplxExpression stack = (CmplxExpression)this.memory.getValue( Vector.STACK_NAME );
 
         if( stack == null )
             throw new ExpressionException( "There is no previous vector to push into" );
@@ -63,10 +62,10 @@ public class VectorPush extends Vector {
             throw new ExpressionException( "Wrong number of given parameters" );
 
         // Save the operands to the stack
-        stack.push( this.prepareOperands( postfix, opstack, operators, memory ) );
+        stack.push( this.prepareOperands( postfix, opstack, this.operators, this.memory ) );
 
         // Save the private stack
-        memory.setValue( Vector.STACK_NAME, stack );
+        this.memory.setValue( Vector.STACK_NAME, stack );
 
         return this;
     }

@@ -49,7 +49,7 @@ public class MemoryOperator extends Operator {
      * Select the sub-function to call
      */
     @Override
-    public Operand executeOperation( Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
+    public Operand executeOperation( Stack<ExpressionEntry> operands ) throws ExpressionException {
         if( operands.size() < this.getCurrentOperands() )
             throw new ExpressionException( "Wrong number of given parameters" );
 
@@ -58,7 +58,7 @@ public class MemoryOperator extends Operator {
         switch( value1 ) {
             case 1:
                 // DISPLAY MEMORY DUMP
-                this.displayMemory( memory );
+                this.displayMemory( this.memory );
                 break;
         }
 

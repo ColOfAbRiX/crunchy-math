@@ -27,8 +27,6 @@ package com.colofabrix.mathparser.expression;
  */
 public class Option extends ExpressionEntry {
 
-    private String name;
-
     /**
      * Code to identify the object type
      */
@@ -49,6 +47,8 @@ public class Option extends ExpressionEntry {
      */
     public static final String STRING_VALUE = "\"(?:[^\"\\]|\\.)*\"";
 
+    private String name;
+
     /**
      * Constructor
      * 
@@ -56,24 +56,6 @@ public class Option extends ExpressionEntry {
      */
     public Option( String name ) {
         this.name = name.replaceAll( "^\\" + Option.OPTION_MARK, "" );
-    }
-
-    /**
-     * Gets the base name of the Option
-     * 
-     * @return The name of the option
-     */
-    public String getName() {
-        return this.name;
-    }
-
-    /**
-     * Gets the name of the Option comprehensive of the marker
-     * 
-     * @return The name of the option
-     */
-    public String getFullName() {
-        return Option.OPTION_MARK + this.getName();
     }
 
     /**
@@ -86,13 +68,32 @@ public class Option extends ExpressionEntry {
         return Option.OPTION_CODE;
     }
 
-    public String toString() {
-        return this.getFullName();
+    /**
+     * Gets the name of the Option comprehensive of the marker
+     * 
+     * @return The name of the option
+     */
+    public String getFullName() {
+        return Option.OPTION_MARK + this.getName();
+    }
+
+    /**
+     * Gets the base name of the Option
+     * 
+     * @return The name of the option
+     */
+    public String getName() {
+        return this.name;
     }
 
     @Override
     public boolean isMinimizable() {
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return this.getFullName();
     }
 
 }

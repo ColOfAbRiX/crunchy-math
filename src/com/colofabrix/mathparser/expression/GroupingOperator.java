@@ -43,18 +43,55 @@ public abstract class GroupingOperator extends Operator {
      * grouping to true
      */
     public GroupingOperator() {
-
-        this.setGrouping( true );
-        this.setOperandsLimit( 1, 1 );
-        this.setCurrentOperands( 1 );
+        super();
+        this.init();
     }
 
     /**
-     * It indicates if the class represents an opening grouping
-     * 
-     * @return <code>true</code> if the object is an opening grouping
+     * The constructor initialize the object setting the number of operands to 1 and the variable
+     * grouping to true
      */
-    public abstract boolean isOpening();
+    public GroupingOperator( Operators operators, Memory memory ) {
+        super( operators, memory );
+        this.init();
+    }
+
+    /**
+     * A grouping operator executes no mathematical operations
+     */
+    @Override
+    public Operand executeOperation( Stack<ExpressionEntry> operands ) throws ExpressionException {
+        return null;
+    }
+
+    /**
+     * Execute the parsing operation that the operator may require
+     * 
+     * <p>
+     * The parsing operation is an operation that is performed when the operator is fetched from the input string</br>
+     * The default implementation for a grouping operator divides the operation for the opening groping and the closing
+     * groping, calling the respective functions
+     * </p>
+     * 
+     * @see Operator#executeParsing
+     * @param postfix The full postfix stack, as it is build before the call to this method
+     * @param opstack The full operator stack, as it is constructed befor the call to this method
+     * @return An instance of the operator to be pushed at the end of the operators stack,
+     * @throws ExpressionException The exception is thrown when there is an evaluation problem
+     */
+    @Override
+    public Operator executeParsing( CmplxExpression postfix, Stack<Operator> opstack ) throws ExpressionException {
+        Operator result;
+
+        // Executes different parsing between opening and closing grouping
+        if( this.isOpening() )
+            result = this.executeParsingOpening( postfix, opstack, this.operators, this.memory );
+
+        else
+            result = this.executeParsingClosing( postfix, opstack, this.operators, this.memory );
+
+        return result;
+    }
 
     /**
      * Gets the absolute priority of the operand
@@ -71,6 +108,13 @@ public abstract class GroupingOperator extends Operator {
     };
 
     /**
+     * It indicates if the class represents an opening grouping
+     * 
+     * @return <code>true</code> if the object is an opening grouping
+     */
+    public abstract boolean isOpening();
+
+    /**
      * Sets the number of operands currently used
      * 
      * <p>
@@ -84,7 +128,7 @@ public abstract class GroupingOperator extends Operator {
     @Override
     public final void setCurrentOperands( int value ) {
         return;
-    }
+    };
 
     /**
      * Sets the limits of the number of operands allowed for the operator
@@ -100,65 +144,13 @@ public abstract class GroupingOperator extends Operator {
     @Override
     public final void setOperandsLimit( int min, int max ) {
         return;
-    };
-
-    /**
-     * A grouping operator executes no mathematical operations
-     */
-    @Override
-    public Operand executeOperation( Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
-        return null;
     }
 
-    /**
-     * Execute the parsing operation that the operator may require
-     * 
-     * <p>
-     * The parsing operation is an operation that is performed when the operator is fetched from the input string</br>
-     * The default implementation for a grouping operator divides the operation for the opening groping and the closing
-     * groping, calling the respective functions
-     * </p>
-     * 
-     * @see Operator#executeParsing
-     * @param postfix The full postfix stack, as it is build before the call to this method
-     * @param opstack The full operator stack, as it is constructed befor the call to this method
-     * @param memory A reference to the main math memory
-     * @return An instance of the operator to be pushed at the end of the operators stack,
-     * @throws ExpressionException The exception is thrown when there is an evaluation problem
-     */
-    @Override
-    public Operator executeParsing( CmplxExpression postfix, Stack<Operator> opstack, Operators operators, Memory memory ) throws ExpressionException {
-        Operator result;
-
-        // Executes different parsing between opening and closing grouping
-        if( this.isOpening() )
-            result = this.executeParsingOpening( postfix, opstack, operators, memory );
-
-        else
-            result = this.executeParsingClosing( postfix, opstack, operators, memory );
-
-        return result;
+    private void init() {
+        this.setGrouping( true );
+        this.setOperandsLimit( 1, 1 );
+        this.setCurrentOperands( 1 );
     };
-
-    /**
-     * Execute the parsing operation that the operator may require
-     * 
-     * <p>
-     * This function is called when an openining grouping is fetched from the input string
-     * </p>
-     * 
-     * @see Operator#executeParsing
-     * @param postfix The full postfix stack, as it is build before the call to this method
-     * @param opstack The full operator stack, as it is constructed befor the call to this method
-     * @param operators A reference to the operators manager
-     * @param memory A reference to the main math memory
-     * @return An instance of the operator to be pushed at the end of the operators stack,
-     * @throws ExpressionException The exception is thrown when there is an evaluation problem
-     */
-    protected Operator executeParsingOpening( ExpressionEntry postfix, Stack<Operator> opstack, Operators operators,
-            Memory memory ) throws ExpressionException {
-        return this;
-    }
 
     /**
      * Execute the parsing operation that the operator may require
@@ -196,5 +188,25 @@ public abstract class GroupingOperator extends Operator {
         }
 
         return null;
+    }
+
+    /**
+     * Execute the parsing operation that the operator may require
+     * 
+     * <p>
+     * This function is called when an openining grouping is fetched from the input string
+     * </p>
+     * 
+     * @see Operator#executeParsing
+     * @param postfix The full postfix stack, as it is build before the call to this method
+     * @param opstack The full operator stack, as it is constructed befor the call to this method
+     * @param operators A reference to the operators manager
+     * @param memory A reference to the main math memory
+     * @return An instance of the operator to be pushed at the end of the operators stack,
+     * @throws ExpressionException The exception is thrown when there is an evaluation problem
+     */
+    protected Operator executeParsingOpening( ExpressionEntry postfix, Stack<Operator> opstack, Operators operators,
+            Memory memory ) throws ExpressionException {
+        return this;
     }
 }

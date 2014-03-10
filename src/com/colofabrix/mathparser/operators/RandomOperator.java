@@ -22,8 +22,8 @@ package com.colofabrix.mathparser.operators;
 
 import java.util.Random;
 import java.util.Stack;
+import org.apfloat.Apcomplex;
 import org.apfloat.Apfloat;
-import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
@@ -41,7 +41,7 @@ public class RandomOperator extends Operator {
     }
 
     @Override
-    public Operand executeOperation( Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
+    public Operand executeOperation( Stack<ExpressionEntry> operands ) throws ExpressionException {
         if( operands.size() < this.getCurrentOperands() )
             throw new ExpressionException( "Wrong number of given parameters" );
 
@@ -49,6 +49,6 @@ public class RandomOperator extends Operator {
 
         Random rnd = new Random( value1.longValue() ^ System.nanoTime() );
 
-        return new Operand( new Apfloat( rnd.nextDouble(), Apfloat.INFINITE ) );
+        return new Operand( new Apfloat( rnd.nextDouble(), Apcomplex.INFINITE ) );
     }
 }

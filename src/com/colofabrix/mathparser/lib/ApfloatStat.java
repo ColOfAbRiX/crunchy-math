@@ -1,5 +1,5 @@
 /**
- * Original file: http://users.iit.uni-miskolc.hu/~piller/Distributions/NormalDist.java
+ * Original file: http://users.iit.uni-miskolc.hu/~piller/Distributions/ApfloatStat.java
  * 
  * Unfortunately I was unable to contact the author, as there is not a direct email address, nor a
  * person name and the website is in a language I do not understand. So I was unable to ask for
@@ -75,7 +75,7 @@ public class ApfloatStat {
                 backward_index = i - 1;
                 sum = ApfloatConsts.ZERO;
                 for( int j = 0; j < i; j++ ) {
-                    counter = coeff.get( j ).multiply( coeff.get( backward_index ) ); 
+                    counter = coeff.get( j ).multiply( coeff.get( backward_index ) );
                     sum = sum.add( counter.precision( ApfloatConsts.DIVIDE_PRECISION ).divide( coeff_div.get( j ) ) );
                     backward_index--;
                 }
@@ -99,6 +99,107 @@ public class ApfloatStat {
         }
 
         return sum;
+    }
+
+    // Gamma function with Lanczos approximation
+    // http://en.wikipedia.org/wiki/Lanczos_approximation
+    public static Apfloat gamma_Lanczos( Apfloat z ) {
+        if( z.compareTo( ApfloatConsts.HALF ) == -1 ) {
+            Apfloat divider = ApfloatMath.sin( ApfloatConsts.PI.multiply( z ) ).multiply(
+                    ApfloatConsts.ONE.subtract( z ) );
+            return ApfloatConsts.PI.divide( divider );
+        }
+        else {
+            z = z.subtract( ApfloatConsts.ONE );
+            Apfloat x = new Apfloat( ApfloatStat.LANCZOS_P[0] );
+            for( int i = 1; i < ApfloatStat.LANCZOS_G + 2; i++ ) {
+                x = x.add( new Apfloat( ApfloatStat.LANCZOS_P[i] ).divide( z.add( new Apfloat( i ) ) ) );
+            }
+            Apfloat t = z.add( new Apfloat( ApfloatStat.LANCZOS_G ) ).add( ApfloatConsts.HALF );
+            Apfloat a = ApfloatMath.sqrt( ApfloatConsts.TWO.multiply( ApfloatConsts.PI ) );
+            Apfloat b = ApfloatMath.pow( t, z.add( ApfloatConsts.HALF ) );
+            Apfloat c = ApfloatMath.exp( t.negate() ).multiply( x );
+            return a.multiply( b ).multiply( c );
+        }
+    }
+
+    // Gamma function with Spouge approximation
+    // http://en.wikipedia.org/wiki/Spouge%27s_approximation
+    // http://en.literateprograms.org/Gamma_function_with_Spouge%27s_formula_%28Mathematica%29
+    public static Apfloat gamma_Spouge( Apfloat z ) {
+        Apfloat k_power = ApfloatConsts.HALF;
+        Apfloat a_minus_k = new Apfloat( ApfloatStat.SPOUGE_A - 1 );
+        Apfloat divider_fact = ApfloatConsts.ONE;
+        Apfloat c_k;
+
+        Apfloat sum = ApfloatConsts.ZERO;
+
+        for( int k = 1; k < ApfloatStat.SPOUGE_A; k++ ) {
+            // Calculate c_k
+            c_k = ApfloatMath.pow( a_minus_k.precision( ApfloatConsts.POW_PRECISION ),
+                    k_power.precision( ApfloatConsts.POW_PRECISION ) ).multiply(
+                    ApfloatMath.exp( a_minus_k.precision( ApfloatConsts.EXP_PRECISION ) ) );
+            c_k = c_k.divide( divider_fact );
+
+            sum = sum.add( c_k.divide( z.add( new Apfloat( k ) ) ) );
+
+            c_k = c_k.negate();
+            k_power = k_power.add( ApfloatConsts.ONE );
+            a_minus_k = a_minus_k.subtract( ApfloatConsts.ONE );
+            divider_fact = divider_fact.multiply( new Apfloat( k, ApfloatConsts.DIVIDE_PRECISION ) );
+        }
+
+        sum = sum.add( ApfloatMath.sqrt( ApfloatConsts.TWO.multiply( ApfloatConsts.PI ) ) );
+        // System.out.println(">> "+ApfloatMath.sqrt(ApfloatConsts.TWO.multiply(ApfloatConsts.PI)));
+
+        Apfloat alpha = ApfloatMath.pow(
+                z.add( new Apfloat( ApfloatStat.SPOUGE_A ) ).precision( ApfloatConsts.POW_PRECISION ), z
+                        .add( ApfloatConsts.HALF ).precision( ApfloatConsts.POW_PRECISION ) );
+        // System.err.println("alpha = "+alpha);
+
+        Apfloat beta = ApfloatMath.exp( z.add( new Apfloat( ApfloatStat.SPOUGE_A ) ).negate()
+                .precision( ApfloatConsts.EXP_PRECISION ) );
+        // System.err.println("beta = "+beta);
+
+        return alpha.multiply( beta ).multiply( sum );
+    }
+
+    // Gamma function with Stirling approximation
+    // http://en.wikipedia.org/wiki/Stirling%27s_approximation
+    public static Apfloat gamma_Stirling( Apfloat z ) {
+        Apfloat a = ApfloatMath.sqrt( ApfloatConsts.TWO.multiply( ApfloatConsts.PI ).divide( z ) );
+        Apfloat b = ApfloatMath.sinh( ApfloatConsts.ONE.precision( ApfloatConsts.DIVIDE_PRECISION ).divide( z ) );
+        Apfloat c = b.multiply( z );
+        Apfloat d = ApfloatConsts.ONE.precision( ApfloatConsts.DIVIDE_PRECISION ).divide( ApfloatMath.pow( z, 6 ) )
+                .divide( new Apfloat( 810 ) );
+        Apfloat e = z.divide( ApfloatConsts.E );
+        Apfloat f = ApfloatMath.sqrt( c.add( d ) );
+        Apfloat g = ApfloatMath.pow( e.multiply( f ), z ).multiply( a );
+
+        return g;
+    }
+
+    // Normal probability cumulative distribution function
+    public static Apfloat normalCDF( Apfloat z ) {
+        Apfloat x = z.divide( ApfloatMath.sqrt( new Apfloat( 2, 1000 ) ) );
+        x = ApfloatStat.erf( x );
+        x = x.add( ApfloatConsts.ONE );
+        x = x.divide( ApfloatConsts.TWO );
+        return x;
+    }
+
+    public static String normalCDF( String x ) {
+        return ApfloatStat.normalCDF( new Apfloat( x, ApfloatConsts.PHI_PREC ) ).toString();
+    }
+
+    // Normal probability cumulative distribution function inverse
+    public static Apfloat normalCDF_inverse( Apfloat y ) {
+        return ApfloatMath.sqrt( ApfloatConsts.TWO.precision( ApfloatConsts.SQRT_PRECISION ) ).multiply(
+                ApfloatStat.erf_inverse( y.add( y ).subtract( ApfloatConsts.ONE ) ) );
+    }
+
+    public static String normalCDF_inverse( String x ) {
+        return ApfloatStat.normalCDF_inverse( new Apfloat( x, ApfloatConsts.PHI_PREC ) ).toString();
     }
 
     // Normal probability density function
@@ -247,7 +348,8 @@ public class ApfloatStat {
          */
 
         // ui = Math.sqrt(-2 * Math.log(ui)) - Math.sqrt(Math.log(4));
-        ui = ApfloatMath.sqrt( ApfloatConsts.TWO.multiply( ApfloatMath.log( ui.precision( ApfloatConsts.EXP_PRECISION ) ) )
+        ui = ApfloatMath.sqrt( ApfloatConsts.TWO.multiply(
+                ApfloatMath.log( ui.precision( ApfloatConsts.EXP_PRECISION ) ) )
                 .negate() );
         ui = ui.subtract( ApfloatMath.sqrt( ApfloatMath.log( new Apfloat( 4 ).precision( ApfloatConsts.EXP_PRECISION ) ) ) );
 
@@ -283,17 +385,17 @@ public class ApfloatStat {
         };
 
         // Calculate szi
-        Apfloat szi = new Apfloat( sziConst[0][intervalIndex], ApfloatConsts.CONST_PREC );
+        Apfloat szi = new Apfloat( sziConst[0][intervalIndex], ApfloatConsts.CONST_PRECISION );
         for( int i = 1; i <= 8; i++ ) {
             szi = szi.multiply( ui );
-            szi = szi.add( new Apfloat( sziConst[i][intervalIndex], ApfloatConsts.CONST_PREC ) );
+            szi = szi.add( new Apfloat( sziConst[i][intervalIndex], ApfloatConsts.CONST_PRECISION ) );
         }
 
         // Calculate ni
-        Apfloat ni = new Apfloat( niConst[0][intervalIndex], ApfloatConsts.CONST_PREC );
+        Apfloat ni = new Apfloat( niConst[0][intervalIndex], ApfloatConsts.CONST_PRECISION );
         for( int i = 1; i <= 7; i++ ) {
             ni = ni.multiply( ui );
-            ni = ni.add( new Apfloat( niConst[i][intervalIndex], ApfloatConsts.CONST_PREC ) );
+            ni = ni.add( new Apfloat( niConst[i][intervalIndex], ApfloatConsts.CONST_PRECISION ) );
         }
 
         // if(x < 0.5) szi = -szi;
@@ -304,105 +406,6 @@ public class ApfloatStat {
     }
 
     public static String Phi_inverse_ap( String x ) {
-        return Phi_inverse_ap( new Apfloat( x, ApfloatConsts.PHI_PREC ) ).toString();
-    }
-
-    // Normal probability cumulative distribution function
-    public static Apfloat normalCDF( Apfloat z ) {
-        Apfloat x = z.divide( ApfloatMath.sqrt( new Apfloat( 2, 1000 ) ) );
-        x = erf( x );
-        x = x.add( ApfloatConsts.ONE );
-        x = x.divide( ApfloatConsts.TWO );
-        return x;
-    }
-
-    public static String normalCDF( String x ) {
-        return normalCDF( new Apfloat( x, ApfloatConsts.PHI_PREC ) ).toString();
-    }
-
-    // Normal probability cumulative distribution function inverse
-    public static Apfloat normalCDF_inverse( Apfloat y ) {
-        return ApfloatMath.sqrt( ApfloatConsts.TWO.precision( ApfloatConsts.SQRT_PRECISION ) ).multiply(
-                erf_inverse( y.add( y ).subtract( ApfloatConsts.ONE ) ) );
-    }
-
-    public static String normalCDF_inverse( String x ) {
-        return normalCDF_inverse( new Apfloat( x, ApfloatConsts.PHI_PREC ) ).toString();
-    }
-
-    // Gamma function with Stirling approximation
-    // http://en.wikipedia.org/wiki/Stirling%27s_approximation
-    public static Apfloat gamma_Stirling( Apfloat z ) {
-        Apfloat a = ApfloatMath.sqrt( ApfloatConsts.TWO.multiply( ApfloatConsts.PI ).divide( z ) );
-        Apfloat b = ApfloatMath.sinh( ApfloatConsts.ONE.precision( ApfloatConsts.DIVIDE_PRECISION ).divide( z ) );
-        Apfloat c = b.multiply( z );
-        Apfloat d = ApfloatConsts.ONE.precision( ApfloatConsts.DIVIDE_PRECISION ).divide( ApfloatMath.pow( z, 6 ) )
-                .divide( new Apfloat( 810 ) );
-        Apfloat e = z.divide( ApfloatConsts.E );
-        Apfloat f = ApfloatMath.sqrt( c.add( d ) );
-        Apfloat g = ApfloatMath.pow( e.multiply( f ), z ).multiply( a );
-
-        return g;
-    }
-
-    // Gamma function with Lanczos approximation
-    // http://en.wikipedia.org/wiki/Lanczos_approximation
-    public static Apfloat gamma_Lanczos( Apfloat z ) {
-        if( z.compareTo( ApfloatConsts.HALF ) == -1 ) {
-            Apfloat divider = ApfloatMath.sin( ApfloatConsts.PI.multiply( z ) ).multiply(
-                    ApfloatConsts.ONE.subtract( z ) );
-            return ApfloatConsts.PI.divide( divider );
-        }
-        else {
-            z = z.subtract( ApfloatConsts.ONE );
-            Apfloat x = new Apfloat( LANCZOS_P[0] );
-            for( int i = 1; i < LANCZOS_G + 2; i++ ) {
-                x = x.add( new Apfloat( LANCZOS_P[i] ).divide( z.add( new Apfloat( i ) ) ) );
-            }
-            Apfloat t = z.add( new Apfloat( LANCZOS_G ) ).add( ApfloatConsts.HALF );
-            Apfloat a = ApfloatMath.sqrt( ApfloatConsts.TWO.multiply( ApfloatConsts.PI ) );
-            Apfloat b = ApfloatMath.pow( t, z.add( ApfloatConsts.HALF ) );
-            Apfloat c = ApfloatMath.exp( t.negate() ).multiply( x );
-            return a.multiply( b ).multiply( c );
-        }
-    }
-
-    // Gamma function with Spouge approximation
-    // http://en.wikipedia.org/wiki/Spouge%27s_approximation
-    // http://en.literateprograms.org/Gamma_function_with_Spouge%27s_formula_%28Mathematica%29
-    public static Apfloat gamma_Spouge( Apfloat z ) {
-        Apfloat k_power = ApfloatConsts.HALF;
-        Apfloat a_minus_k = new Apfloat( SPOUGE_A - 1 );
-        Apfloat divider_fact = ApfloatConsts.ONE;
-        Apfloat c_k;
-
-        Apfloat sum = ApfloatConsts.ZERO;
-
-        for( int k = 1; k < SPOUGE_A; k++ ) {
-            // Calculate c_k
-            c_k = ApfloatMath.pow( a_minus_k.precision( ApfloatConsts.POW_PRECISION ),
-                    k_power.precision( ApfloatConsts.POW_PRECISION ) ).multiply(
-                    ApfloatMath.exp( a_minus_k.precision( ApfloatConsts.EXP_PRECISION ) ) );
-            c_k = c_k.divide( divider_fact );
-
-            sum = sum.add( c_k.divide( z.add( new Apfloat( k ) ) ) );
-
-            c_k = c_k.negate();
-            k_power = k_power.add( ApfloatConsts.ONE );
-            a_minus_k = a_minus_k.subtract( ApfloatConsts.ONE );
-            divider_fact = divider_fact.multiply( new Apfloat( k, ApfloatConsts.DIVIDE_PRECISION ) );
-        }
-
-        sum = sum.add( ApfloatMath.sqrt( ApfloatConsts.TWO.multiply( ApfloatConsts.PI ) ) );
-        // System.out.println(">> "+ApfloatMath.sqrt(ApfloatConsts.TWO.multiply(ApfloatConsts.PI)));
-
-        Apfloat alpha = ApfloatMath.pow( z.add( new Apfloat( SPOUGE_A ) ).precision( ApfloatConsts.POW_PRECISION ), z
-                .add( ApfloatConsts.HALF ).precision( ApfloatConsts.POW_PRECISION ) );
-        // System.err.println("alpha = "+alpha);
-
-        Apfloat beta = ApfloatMath.exp( z.add( new Apfloat( SPOUGE_A ) ).negate().precision( ApfloatConsts.EXP_PRECISION ) );
-        // System.err.println("beta = "+beta);
-
-        return alpha.multiply( beta ).multiply( sum );
+        return ApfloatStat.Phi_inverse_ap( new Apfloat( x, ApfloatConsts.PHI_PREC ) ).toString();
     }
 }

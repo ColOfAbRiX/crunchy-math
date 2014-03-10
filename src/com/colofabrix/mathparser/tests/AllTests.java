@@ -17,24 +17,24 @@ Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public
 License along with Crunchy Math; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-*/
+ */
 package com.colofabrix.mathparser.tests;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-@RunWith(Suite.class)
+@RunWith( Suite.class )
 @SuiteClasses( {
-	MathParserTest.class,
-	MemoryTest.class,
-	OperatorsTest.class,
-	TrigonometricOperatorTest.class,
-	CmplxExpressionTest.class,
-	OperandTest.class,
-	OperatorTest.class,
-	VectorTest.class})
+        MathParserTest.class,
+        MemoryTest.class,
+        OperatorsTest.class,
+        TrigonometricOperatorTest.class,
+        CmplxExpressionTest.class,
+        OperandTest.class,
+        OperatorTest.class,
+        VectorTest.class } )
 public class AllTests {
     public static long PRECISION_DIGITS = 6;
-	public static double PRECISION_ERROR_ALLOWED = Math.pow( 10, -PRECISION_DIGITS );
+    public static double PRECISION_ERROR_ALLOWED = Math.pow( 10, -AllTests.PRECISION_DIGITS );
 }

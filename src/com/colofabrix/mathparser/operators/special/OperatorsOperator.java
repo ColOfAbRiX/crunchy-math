@@ -22,7 +22,6 @@ package com.colofabrix.mathparser.operators.special;
 
 import java.util.Stack;
 import org.apfloat.Apfloat;
-import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.Operators;
 import com.colofabrix.mathparser.expression.CmplxExpression;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
@@ -49,20 +48,11 @@ public class OperatorsOperator extends Operator {
     }
 
     /**
-     * This method is used to save the operators information locally
-     */
-    @Override
-    public Operator executeParsing( CmplxExpression postfix, Stack<Operator> opstack, Operators operators, Memory memory ) throws ExpressionException {
-        this.ops = operators;
-        return super.executeParsing( postfix, opstack, operators, memory );
-    };
-
-    /**
      * Select the sub-function to call
      * 1 = Display all operators
      */
     @Override
-    public Operand executeOperation( Stack<ExpressionEntry> operands, Memory memory ) throws ExpressionException {
+    public Operand executeOperation( Stack<ExpressionEntry> operands ) throws ExpressionException {
         if( operands.size() < this.getCurrentOperands() )
             throw new ExpressionException( "Wrong number of given parameters" );
 
@@ -76,6 +66,15 @@ public class OperatorsOperator extends Operator {
         }
 
         return new Operand( new Apfloat( 0 ) );
+    };
+
+    /**
+     * This method is used to save the operators information locally
+     */
+    @Override
+    public Operator executeParsing( CmplxExpression postfix, Stack<Operator> opstack ) throws ExpressionException {
+        this.ops = this.operators;
+        return super.executeParsing( postfix, opstack );
     }
 
     private void displayOperators( Operators ops ) {
