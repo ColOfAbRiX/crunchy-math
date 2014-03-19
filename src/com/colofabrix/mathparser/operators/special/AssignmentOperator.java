@@ -24,8 +24,8 @@ import java.util.Stack;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
-import com.colofabrix.mathparser.org.ConfigException;
-import com.colofabrix.mathparser.org.ExpressionException;
+import com.colofabrix.mathparser.struct.ConfigException;
+import com.colofabrix.mathparser.struct.ExpressionException;
 
 /**
  * Assignment operator
@@ -72,7 +72,7 @@ public class AssignmentOperator extends Operator {
         if( !variable.isVariable() )
             throw new ExpressionException( "Cannot assign to a number" );
 
-        return (Operand)this.memory.setValue(
+        return (Operand)this.getContext().getMemory().setValue(
                 variable.getVariableName(),
                 new Operand( operand.getNumericValue() ) );
     }

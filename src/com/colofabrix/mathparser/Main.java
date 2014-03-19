@@ -25,8 +25,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import org.apfloat.Apfloat;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
-import com.colofabrix.mathparser.org.ConfigException;
-import com.colofabrix.mathparser.org.ExpressionException;
+import com.colofabrix.mathparser.struct.ConfigException;
+import com.colofabrix.mathparser.struct.ExpressionException;
 
 public class Main {
     public static void main( String[] args ) {

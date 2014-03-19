@@ -26,8 +26,8 @@ import org.apfloat.ApfloatMath;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.operators.special.TrigonometricOperator;
-import com.colofabrix.mathparser.org.ConfigException;
-import com.colofabrix.mathparser.org.ExpressionException;
+import com.colofabrix.mathparser.struct.ConfigException;
+import com.colofabrix.mathparser.struct.ExpressionException;
 
 public class TanOperator extends TrigonometricOperator {
 
@@ -42,7 +42,7 @@ public class TanOperator extends TrigonometricOperator {
             throw new ExpressionException( "Wrong number of given parameters" );
 
         Apfloat value1 = Operand.extractNumber( operands.pop() );
-        Apfloat radians = this.getRadians( value1 );
+        Apfloat radians = this.toRadians( value1 );
 
         return new Operand( ApfloatMath.tan( radians ) );
     }

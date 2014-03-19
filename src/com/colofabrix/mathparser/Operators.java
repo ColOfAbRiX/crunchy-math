@@ -27,46 +27,7 @@ import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
 import com.colofabrix.mathparser.expression.Option;
-import com.colofabrix.mathparser.operators.AbsOperator;
-import com.colofabrix.mathparser.operators.ArcosOperator;
-import com.colofabrix.mathparser.operators.ArsinOperator;
-import com.colofabrix.mathparser.operators.ArtanOperator;
-import com.colofabrix.mathparser.operators.CeilOperator;
-import com.colofabrix.mathparser.operators.CosOperator;
-import com.colofabrix.mathparser.operators.CoshOperator;
-import com.colofabrix.mathparser.operators.DivideOperator;
-import com.colofabrix.mathparser.operators.ExpOperator;
-import com.colofabrix.mathparser.operators.FactOperator;
-import com.colofabrix.mathparser.operators.FloorOperator;
-import com.colofabrix.mathparser.operators.IntegralOperator;
-import com.colofabrix.mathparser.operators.LnOperator;
-import com.colofabrix.mathparser.operators.LogOperator;
-import com.colofabrix.mathparser.operators.MaxOperator;
-import com.colofabrix.mathparser.operators.MinOperator;
-import com.colofabrix.mathparser.operators.MinusOperator;
-import com.colofabrix.mathparser.operators.MultiplyOperator;
-import com.colofabrix.mathparser.operators.PowerOperator;
-import com.colofabrix.mathparser.operators.RandomOperator;
-import com.colofabrix.mathparser.operators.RootOperator;
-import com.colofabrix.mathparser.operators.RoundOperator;
-import com.colofabrix.mathparser.operators.SinOperator;
-import com.colofabrix.mathparser.operators.SinhOperator;
-import com.colofabrix.mathparser.operators.SumOperator;
-import com.colofabrix.mathparser.operators.TanOperator;
-import com.colofabrix.mathparser.operators.TanhOperator;
-import com.colofabrix.mathparser.operators.special.AssignmentOperator;
-import com.colofabrix.mathparser.operators.special.ClosingBracket;
-import com.colofabrix.mathparser.operators.special.GetOperator;
-import com.colofabrix.mathparser.operators.special.MemoryOperator;
-import com.colofabrix.mathparser.operators.special.OpeningBracket;
-import com.colofabrix.mathparser.operators.special.OperatorsOperator;
-import com.colofabrix.mathparser.operators.special.SetOperator;
-import com.colofabrix.mathparser.operators.special.VectorClosing;
-import com.colofabrix.mathparser.operators.special.VectorOpening;
-import com.colofabrix.mathparser.operators.special.VectorPush;
-import com.colofabrix.mathparser.org.ConfigException;
-import com.colofabrix.mathparser.org.ExpressionException;
-import com.colofabrix.mathparser.org.OpBuilder;
+import com.colofabrix.mathparser.struct.ExpressionException;
 
 /**
  * This class manage the collection of the supported operators in MathParser
@@ -75,67 +36,6 @@ import com.colofabrix.mathparser.org.OpBuilder;
  */
 public class Operators extends java.util.Vector<Operator> {
     private static final long serialVersionUID = 9039898627558124444L;
-
-    /**
-     * The constructor initializes the operators that are recognized by the Math Parser
-     * 
-     * @throws ConfigException
-     */
-    public Operators( Memory memory ) throws ConfigException {
-        OpBuilder.setOperators( this );
-        OpBuilder.setMemory( memory );
-
-        // Algebraic operators
-        this.add( OpBuilder.createOperator( SumOperator.class ) );
-        this.add( OpBuilder.createOperator( MinusOperator.class ) );
-        this.add( OpBuilder.createOperator( MultiplyOperator.class ) );
-        this.add( OpBuilder.createOperator( DivideOperator.class ) );
-        this.add( OpBuilder.createOperator( PowerOperator.class ) );
-        this.add( OpBuilder.createOperator( RootOperator.class ) );
-        this.add( OpBuilder.createOperator( FactOperator.class ) );
-
-        // Trigonometric operators
-        this.add( OpBuilder.createOperator( SinOperator.class ) );
-        this.add( OpBuilder.createOperator( CosOperator.class ) );
-        this.add( OpBuilder.createOperator( TanOperator.class ) );
-        this.add( OpBuilder.createOperator( ArcosOperator.class ) );
-        this.add( OpBuilder.createOperator( ArsinOperator.class ) );
-        this.add( OpBuilder.createOperator( ArtanOperator.class ) );
-        this.add( OpBuilder.createOperator( SinhOperator.class ) );
-        this.add( OpBuilder.createOperator( CoshOperator.class ) );
-        this.add( OpBuilder.createOperator( TanhOperator.class ) );
-
-        // Exponentiation operators
-        this.add( OpBuilder.createOperator( ExpOperator.class ) );
-        this.add( OpBuilder.createOperator( LogOperator.class ) );
-        this.add( OpBuilder.createOperator( LnOperator.class ) );
-
-        // Rounding operators
-        this.add( OpBuilder.createOperator( CeilOperator.class ) );
-        this.add( OpBuilder.createOperator( FloorOperator.class ) );
-        this.add( OpBuilder.createOperator( RoundOperator.class ) );
-        this.add( OpBuilder.createOperator( MinOperator.class ) );
-        this.add( OpBuilder.createOperator( MaxOperator.class ) );
-
-        // Structural operators
-        this.add( OpBuilder.createOperator( AssignmentOperator.class ) );
-        this.add( OpBuilder.createOperator( OpeningBracket.class ) );
-        this.add( OpBuilder.createOperator( ClosingBracket.class ) );
-        this.add( OpBuilder.createOperator( VectorOpening.class ) );
-        this.add( OpBuilder.createOperator( VectorPush.class ) );
-        this.add( OpBuilder.createOperator( VectorClosing.class ) );
-
-        // Mixed operators
-        this.add( OpBuilder.createOperator( RandomOperator.class ) );
-        this.add( OpBuilder.createOperator( AbsOperator.class ) );
-        this.add( OpBuilder.createOperator( IntegralOperator.class ) );
-
-        // Management operators
-        this.add( OpBuilder.createOperator( MemoryOperator.class ) );
-        this.add( OpBuilder.createOperator( OperatorsOperator.class ) );
-        this.add( OpBuilder.createOperator( SetOperator.class ) );
-        this.add( OpBuilder.createOperator( GetOperator.class ) );
-    }
 
     /**
      * It executes the operation performed by the operator

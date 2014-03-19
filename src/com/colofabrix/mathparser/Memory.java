@@ -22,10 +22,12 @@ package com.colofabrix.mathparser;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.apfloat.Apfloat;
+import java.util.Map.Entry;
+import java.util.Set;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
-import com.colofabrix.mathparser.org.ExpressionException;
+import com.colofabrix.mathparser.lib.ApfloatConsts;
+import com.colofabrix.mathparser.struct.ExpressionException;
 
 /**
  * It represents the memory containing the variables that the parser uses
@@ -103,7 +105,7 @@ public class Memory {
     /**
      * Default value for the non-defined variables
      */
-    public static final Operand DEFAULT_VALUE = new Operand( new Apfloat( 0 ) );
+    public static final Operand DEFAULT_VALUE = new Operand( ApfloatConsts.ZERO );
 
     private final Map<String, MemoryCell> memory = new HashMap<>();
 
@@ -123,10 +125,21 @@ public class Memory {
      * 
      * @return A Map object containing the memory of the parser
      */
-    public Map<String, MemoryCell> getDirectMemoryReference() {
+    protected Map<String, MemoryCell> getMemory() {
         return this.memory;
     }
 
+    /**
+     * Returns an object used to iterate through the variables.
+     * 
+     * <p>This method was added to not expose a direct reference to memory</p>
+     * 
+     * @return
+     */
+    public Set<Entry<String, MemoryCell>> getSet() {
+        return this.memory.entrySet();
+    }
+    
     /**
      * Gets the value of a memory address
      * 
@@ -162,7 +175,7 @@ public class Memory {
      * 
      * <p>
      * If the value that is going to be set is <code>null</code> the corresponding memory address will be removed from
-     * the memory
+     * the memory, also if the memory cell is read-only
      * </p>
      * 
      * @param address The name of the variable to set
@@ -171,12 +184,12 @@ public class Memory {
      * @throws ExpressionException When a read-only cell is about to be written 
      */
     public ExpressionEntry setValue( String address, ExpressionEntry value, boolean isReadOnly ) throws ExpressionException {
-        // Check if we are trying to write over a read-only variable
-        if( this.memory.containsKey( address ) )
-            if( this.memory.get( address ).isReadonly() )
-                throw new ExpressionException( "Attemp to write a read-only variable" );
-        
         if( value != null ) {
+            // Check if we are trying to write over a read-only variable
+            if( this.memory.containsKey( address ) )
+                if( this.memory.get( address ).isReadonly() )
+                    throw new ExpressionException( "Attemp to write a read-only variable" );
+            
             // Assign a non-null value
             this.memory.put( address, new MemoryCell( value, isReadOnly ) );
         }

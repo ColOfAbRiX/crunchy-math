@@ -26,12 +26,13 @@ import org.apache.commons.math3.analysis.integration.BaseAbstractUnivariateInteg
 import org.apache.commons.math3.analysis.integration.SimpsonIntegrator;
 import org.apfloat.Apfloat;
 import com.colofabrix.mathparser.MathParser;
+import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.expression.CmplxExpression;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
-import com.colofabrix.mathparser.org.ConfigException;
-import com.colofabrix.mathparser.org.ExpressionException;
+import com.colofabrix.mathparser.struct.ConfigException;
+import com.colofabrix.mathparser.struct.ExpressionException;
 
 /**
  * 
@@ -47,6 +48,7 @@ public class IntegralOperator extends Operator {
     protected class WorkingExpression implements UnivariateFunction {
 
         private final MathParser mp;
+        private final Memory mem;
         ExpressionEntry expression;
         ExpressionEntry oldMemory;
         Operand variable;
@@ -61,15 +63,16 @@ public class IntegralOperator extends Operator {
          */
         protected WorkingExpression( MathParser mp, ExpressionEntry expression, Operand variable ) throws ExpressionException {
             this.mp = mp;
+            this.mem = this.mp.getContext().getMemory();
             this.expression = expression;
             this.variable = variable;
 
             // Save the value of a possible old variable
             // NOTE: Here the main memory is used and not a new one because there may be memory references in the
             // variables inside the expression to evaluate
-            this.oldMemory = this.mp.getMemory().getValue( variable.getVariableName() );
+            this.oldMemory = this.mem.getValue( variable.getVariableName() );
             // Check for read-only
-            this.mp.getMemory().setValue( this.variable.getVariableName(), this.oldMemory );            
+            this.mem.setValue( this.variable.getVariableName(), this.oldMemory );            
         }
 
         @Override
@@ -77,7 +80,7 @@ public class IntegralOperator extends Operator {
             // I checked in the constructor that the variable is not readonly
             try {
                 // Restore the old variable in memory
-                this.mp.getMemory().setValue( this.variable.getVariableName(), this.oldMemory );
+                this.mem.setValue( this.variable.getVariableName(), this.oldMemory );
             }
             catch( ExpressionException e ) {}
         }
@@ -87,9 +90,9 @@ public class IntegralOperator extends Operator {
          */
         @Override
         public double value( double arg0 ) {
-            // I checked in the constructor that the variable is not readonly
+            // I have already checked in the constructor that the variable is not readonly
             try {
-                this.mp.getMemory().setValue(
+                this.mem.setValue(
                         this.variable.getVariableName(),
                         new Operand( new Apfloat( arg0 ) ) );
 
@@ -150,7 +153,7 @@ public class IntegralOperator extends Operator {
      */
     @Override
     public Operator executeParsing( CmplxExpression postfix, Stack<Operator> opstack ) throws ExpressionException {
-        this.parser = new MathParser( this.operators, this.memory );
+        this.parser = new MathParser( this.getContext() );
         return super.executeParsing( postfix, opstack );
     }
 }

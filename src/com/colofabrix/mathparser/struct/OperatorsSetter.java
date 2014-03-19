@@ -18,19 +18,28 @@ You should have received a copy of the GNU Lesser General Public
 License along with Crunchy Math; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package com.colofabrix.mathparser.org;
+package com.colofabrix.mathparser.struct;
 
 /**
- * Exception to represent any generic configuration error
+ * Represents an Operator Worker
+ * 
+ * <p>Its purpose is to add the default operators</p>
  * 
  * @author Fabrizio Colonna
  */
-public class ConfigException extends Exception {
-    private static final long serialVersionUID = -8014580873208037612L;
+public interface OperatorsSetter {
+    
+    /**
+     * Initialize the Operators manager with a default set of operators
+     * 
+     * @param context
+     */
+    public abstract void initOperators( Context context );
 
-    public ConfigException() {};
-
-    public ConfigException( String message ) {
-        super( message );
-    }
+    /**
+     * Disposes the operators set during initialization from the Operators manager
+     * 
+     * @param context
+     */
+    public abstract void disposeOperators( Context context );
 }

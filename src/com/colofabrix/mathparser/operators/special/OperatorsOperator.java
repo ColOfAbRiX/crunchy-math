@@ -27,8 +27,8 @@ import com.colofabrix.mathparser.expression.CmplxExpression;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
-import com.colofabrix.mathparser.org.ConfigException;
-import com.colofabrix.mathparser.org.ExpressionException;
+import com.colofabrix.mathparser.struct.ConfigException;
+import com.colofabrix.mathparser.struct.ExpressionException;
 
 /**
  * Displays operators information
@@ -73,7 +73,7 @@ public class OperatorsOperator extends Operator {
      */
     @Override
     public Operator executeParsing( CmplxExpression postfix, Stack<Operator> opstack ) throws ExpressionException {
-        this.ops = this.operators;
+        this.ops = this.getContext().getOperators();
         return super.executeParsing( postfix, opstack );
     }
 

@@ -31,8 +31,8 @@ import com.colofabrix.mathparser.expression.Operator;
 import com.colofabrix.mathparser.lib.ApfloatConsts;
 import com.colofabrix.mathparser.lib.ApfloatMore;
 import com.colofabrix.mathparser.lib.ApfloatStat;
-import com.colofabrix.mathparser.org.ConfigException;
-import com.colofabrix.mathparser.org.ExpressionException;
+import com.colofabrix.mathparser.struct.ConfigException;
+import com.colofabrix.mathparser.struct.ExpressionException;
 
 public class FactOperator extends Operator {
 

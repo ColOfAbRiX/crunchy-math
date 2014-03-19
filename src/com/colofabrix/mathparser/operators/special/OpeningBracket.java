@@ -21,7 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 package com.colofabrix.mathparser.operators.special;
 
 import com.colofabrix.mathparser.expression.GroupingOperator;
-import com.colofabrix.mathparser.org.ConfigException;
+import com.colofabrix.mathparser.struct.ConfigException;
 
 /**
  * An opening bracket operator

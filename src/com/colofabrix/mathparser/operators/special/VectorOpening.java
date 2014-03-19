@@ -23,8 +23,9 @@ package com.colofabrix.mathparser.operators.special;
 import java.util.Stack;
 import com.colofabrix.mathparser.expression.CmplxExpression;
 import com.colofabrix.mathparser.expression.Operator;
-import com.colofabrix.mathparser.org.ConfigException;
-import com.colofabrix.mathparser.org.ExpressionException;
+import com.colofabrix.mathparser.expression.Vector;
+import com.colofabrix.mathparser.struct.ConfigException;
+import com.colofabrix.mathparser.struct.ExpressionException;
 
 /**
  * An opening vector operator
@@ -48,7 +49,7 @@ public class VectorOpening extends Vector {
      */
     @Override
     public Operator executeParsing( CmplxExpression postfix, Stack<Operator> opstack ) throws ExpressionException {
-        this.memory.setValue( Vector.STACK_NAME, new CmplxExpression() );
+        this.getContext().getMemory().setValue( Vector.STACK_NAME, new CmplxExpression() );
         postfix.push( this );
         return this;
     }

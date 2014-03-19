@@ -23,10 +23,9 @@ package com.colofabrix.mathparser.expression;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import com.colofabrix.mathparser.Memory;
-import com.colofabrix.mathparser.Operators;
-import com.colofabrix.mathparser.org.ConfigException;
-import com.colofabrix.mathparser.org.ExpressionException;
+import com.colofabrix.mathparser.struct.ConfigException;
+import com.colofabrix.mathparser.struct.Context;
+import com.colofabrix.mathparser.struct.ExpressionException;
 
 /**
  * This class represent a mathematical operator
@@ -78,21 +77,18 @@ public abstract class Operator extends ExpressionEntry implements Comparable<Ope
         return Integer.valueOf( m.group( 1 ) );
     }
 
+    private Context context;
     private boolean grouping = false;
     private int maxOperands = 2;
     private int minOperands = 2;
     private String name;
     private int opCount = 2;
-
     private int priority = 0;
-
-    protected Memory memory;
-    protected Operators operators;
 
     public Operator() {}
 
-    public Operator( Operators operators, Memory memory ) {
-        this.setContext( operators, memory );
+    public Operator( Context context ) {
+        this.setContext( context );
     }
 
     /**
@@ -110,8 +106,7 @@ public abstract class Operator extends ExpressionEntry implements Comparable<Ope
             newOp.name = this.name;
             newOp.opCount = this.opCount;
             newOp.priority = this.priority;
-            newOp.memory = this.memory;
-            newOp.operators = this.operators;
+            newOp.context = this.context;
 
             return newOp;
         }
@@ -256,6 +251,10 @@ public abstract class Operator extends ExpressionEntry implements Comparable<Ope
         return this.name;
     }
 
+    public Context getContext() {
+        return this.context;
+    }
+
     /**
      * Gets the number of operands currently used
      * 
@@ -391,9 +390,13 @@ public abstract class Operator extends ExpressionEntry implements Comparable<Ope
         this.name = name;
     }
 
-    public void setContext( Operators operators, Memory memory ) {
-        this.operators = operators;
-        this.memory = memory;
+    /**
+     * Sets the context for the operators
+     * 
+     * @param context The context to use for the operator
+     */
+    public void setContext( Context context ) {
+        this.context = context;
     }
 
     /**

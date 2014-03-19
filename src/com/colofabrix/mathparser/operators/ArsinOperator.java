@@ -26,8 +26,8 @@ import org.apfloat.ApfloatMath;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.operators.special.TrigonometricOperator;
-import com.colofabrix.mathparser.org.ConfigException;
-import com.colofabrix.mathparser.org.ExpressionException;
+import com.colofabrix.mathparser.struct.ConfigException;
+import com.colofabrix.mathparser.struct.ExpressionException;
 
 public class ArsinOperator extends TrigonometricOperator {
 
@@ -44,6 +44,6 @@ public class ArsinOperator extends TrigonometricOperator {
         Apfloat value1 = Operand.extractNumber( operands.pop() );
         Apfloat result = ApfloatMath.asin( value1 );
 
-        return new Operand( this.getCurrent( result ) );
+        return new Operand( this.toCurrentUnit( result ) );
     }
 }

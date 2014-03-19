@@ -26,8 +26,9 @@ import org.apfloat.ApfloatMath;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
-import com.colofabrix.mathparser.org.ConfigException;
-import com.colofabrix.mathparser.org.ExpressionException;
+import com.colofabrix.mathparser.lib.ApfloatConsts;
+import com.colofabrix.mathparser.struct.ConfigException;
+import com.colofabrix.mathparser.struct.ExpressionException;
 
 public class RootOperator extends Operator {
 
@@ -45,6 +46,6 @@ public class RootOperator extends Operator {
         Apfloat value1 = Operand.extractNumber( operands.pop() );
         Apfloat value2 = Operand.extractNumber( operands.pop() );
 
-        return new Operand( ApfloatMath.pow( value1, new Apfloat( 1 ).divide( value2 ) ) );
+        return new Operand( ApfloatMath.pow( value1, ApfloatConsts.ONE.divide( value2 ) ) );
     }
 }

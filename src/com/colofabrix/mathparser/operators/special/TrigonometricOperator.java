@@ -27,8 +27,8 @@ import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
 import com.colofabrix.mathparser.lib.ApfloatConsts;
-import com.colofabrix.mathparser.org.ConfigException;
-import com.colofabrix.mathparser.org.ExpressionException;
+import com.colofabrix.mathparser.struct.ConfigException;
+import com.colofabrix.mathparser.struct.ExpressionException;
 
 /**
  * Represents a trigonometric operator
@@ -91,7 +91,7 @@ public abstract class TrigonometricOperator extends Operator {
      * @return The converted degrees expressed as the unit of measurement set in the object
      * @throws ExpressionException
      */
-    public Apfloat getCurrent( Apfloat radians ) throws ExpressionException {
+    public Apfloat toCurrentUnit( Apfloat radians ) throws ExpressionException {
         switch( this.getSelectedUnit() ) {
             default:
             case RADIANS:
@@ -117,7 +117,7 @@ public abstract class TrigonometricOperator extends Operator {
      * @return The converted degrees expressed in radians
      * @throws ExpressionException
      */
-    public Apfloat getRadians( Apfloat value ) throws ExpressionException {
+    public Apfloat toRadians( Apfloat value ) throws ExpressionException {
         switch( this.getSelectedUnit() ) {
             default:
             case RADIANS:
@@ -138,10 +138,10 @@ public abstract class TrigonometricOperator extends Operator {
      * @throws ExpressionException
      */
     public AngleUnit getSelectedUnit() throws ExpressionException {
-        if( this.memory == null )
+        if( this.getContext() == null )
             return AngleUnit.RADIANS;
 
-        ExpressionEntry value = this.memory.getValue( TrigonometricOperator.OPTION_UNITS );
+        ExpressionEntry value = this.getContext().getMemory().getValue( TrigonometricOperator.OPTION_UNITS );
 
         if( value == null || value.getEntryType() != Operand.OPERAND_CODE ) {
             return AngleUnit.RADIANS;
@@ -156,13 +156,13 @@ public abstract class TrigonometricOperator extends Operator {
      * @param selectedUnit A code from {@link AngleUnit} representing the currently selected unit of measurement
      */
     public void setSelectedUnit( AngleUnit selectedUnit ) {
-        if( this.memory == null )
+        if( this.getContext() == null )
             return;
 
         // The option is managed internally by this class, so I know it is never read-only 
         try {
             // TODO: This is not the best way to save an option value
-            this.memory.setValue( TrigonometricOperator.OPTION_UNITS, new Operand( new Apfloat( selectedUnit.getValue() ) ) );
+            this.getContext().getMemory().setValue( TrigonometricOperator.OPTION_UNITS, new Operand( new Apfloat( selectedUnit.getValue() ) ) );
         }
         catch( ExpressionException e ) {
         }

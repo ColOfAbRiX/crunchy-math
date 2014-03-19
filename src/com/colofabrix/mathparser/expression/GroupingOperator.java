@@ -21,9 +21,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 package com.colofabrix.mathparser.expression;
 
 import java.util.Stack;
-import com.colofabrix.mathparser.Memory;
-import com.colofabrix.mathparser.Operators;
-import com.colofabrix.mathparser.org.ExpressionException;
+import com.colofabrix.mathparser.struct.Context;
+import com.colofabrix.mathparser.struct.ExpressionException;
 
 /**
  * Represent a grouping operators
@@ -51,8 +50,8 @@ public abstract class GroupingOperator extends Operator {
      * The constructor initialize the object setting the number of operands to 1 and the variable
      * grouping to true
      */
-    public GroupingOperator( Operators operators, Memory memory ) {
-        super( operators, memory );
+    public GroupingOperator( Context context ) {
+        super( context );
         this.init();
     }
 
@@ -85,10 +84,10 @@ public abstract class GroupingOperator extends Operator {
 
         // Executes different parsing between opening and closing grouping
         if( this.isOpening() )
-            result = this.executeParsingOpening( postfix, opstack, this.operators, this.memory );
+            result = this.executeParsingOpening( postfix, opstack, this.getContext() );
 
         else
-            result = this.executeParsingClosing( postfix, opstack, this.operators, this.memory );
+            result = this.executeParsingClosing( postfix, opstack, this.getContext() );
 
         return result;
     }
@@ -167,8 +166,7 @@ public abstract class GroupingOperator extends Operator {
      * @return An instance of the operator to be pushed at the end of the operators stack,
      * @throws ExpressionException The exception is thrown when there is an evaluation problem
      */
-    protected Operator executeParsingClosing( CmplxExpression postfix, Stack<Operator> opstack, Operators operators,
-            Memory memory ) throws ExpressionException {
+    protected Operator executeParsingClosing( CmplxExpression postfix, Stack<Operator> opstack, Context context ) throws ExpressionException {
         // Pop all the previous operators from the stack and push them in the postfix string until I find an opening
         // grouping
         while( opstack.size() > 0 ) {
@@ -205,8 +203,7 @@ public abstract class GroupingOperator extends Operator {
      * @return An instance of the operator to be pushed at the end of the operators stack,
      * @throws ExpressionException The exception is thrown when there is an evaluation problem
      */
-    protected Operator executeParsingOpening( ExpressionEntry postfix, Stack<Operator> opstack, Operators operators,
-            Memory memory ) throws ExpressionException {
+    protected Operator executeParsingOpening( ExpressionEntry postfix, Stack<Operator> opstack, Context context ) throws ExpressionException {
         return this;
     }
 }

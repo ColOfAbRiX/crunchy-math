@@ -24,7 +24,8 @@ import org.apfloat.Apfloat;
 import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.Operators;
 import com.colofabrix.mathparser.lib.ApfloatConsts;
-import com.colofabrix.mathparser.org.ExpressionException;
+import com.colofabrix.mathparser.struct.Context;
+import com.colofabrix.mathparser.struct.ExpressionException;
 
 /**
  * This is the holder of the expression
@@ -34,7 +35,7 @@ import com.colofabrix.mathparser.org.ExpressionException;
 public abstract class ExpressionEntry {
 
     /**
-     * Creates an instance of ExpressionEntry to hold an
+     * Creates an instance of ExpressionEntry to hold an entry
      * 
      * <p>
      * This builder starts from a single string entry, a single token like a number or an operator, and creates the
@@ -45,7 +46,10 @@ public abstract class ExpressionEntry {
      * @return A new ExpressionEntry to hold the specified variable or number
      * @throws ExpressionException
      */
-    public static ExpressionEntry fromStringEntry( String word, Operators operators, Memory memory ) throws ExpressionException {
+    public static ExpressionEntry fromStringEntry( String word, Context context ) throws ExpressionException {
+        Operators operators = context.getOperators();
+        Memory memory = context.getMemory();
+        
         // Creates an operator
         if( operators != null && operators.isOperator( word ) )
             return (ExpressionEntry)operators.fromName( word ).clone();

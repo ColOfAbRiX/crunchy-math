@@ -26,8 +26,8 @@ import org.apfloat.ApfloatMath;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.operators.special.TrigonometricOperator;
-import com.colofabrix.mathparser.org.ConfigException;
-import com.colofabrix.mathparser.org.ExpressionException;
+import com.colofabrix.mathparser.struct.ConfigException;
+import com.colofabrix.mathparser.struct.ExpressionException;
 
 public class ArtanhOperator extends TrigonometricOperator {
 
@@ -45,6 +45,6 @@ public class ArtanhOperator extends TrigonometricOperator {
         Apfloat result = ApfloatMath.log( value1.add( new Apfloat( 1 ).divide( value1.subtract( new Apfloat( 1 ) ) ) )
                 .multiply( new Apfloat( 0.5 ) ) );
 
-        return new Operand( this.getCurrent( result ) );
+        return new Operand( this.toCurrentUnit( result ) );
     }
 }

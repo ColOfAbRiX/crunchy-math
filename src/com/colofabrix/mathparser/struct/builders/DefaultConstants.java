@@ -1,22 +1,41 @@
-package com.colofabrix.mathparser.org;
+/*
+Crunchy Math, Version 1.0, February 2014
+Copyright (C) 2014 Fabrizio Colonna <colofabrix@gmail.com>
 
+This file is part of Crunchy Math.
+
+Crunchy Math is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License as published by the Free Software Foundation; either
+version 2.1 of the License, or (at your option) any later version.
+
+Crunchy Math is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public
+License along with Crunchy Math; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+package com.colofabrix.mathparser.struct.builders;
+
+import java.util.Map;
 import org.apfloat.Apfloat;
 import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.lib.ApfloatConsts;
 import com.colofabrix.mathparser.lib.ApfloatMore;
+import com.colofabrix.mathparser.struct.Context;
+import com.colofabrix.mathparser.struct.ExpressionException;
+import com.colofabrix.mathparser.struct.MemorySetter;
 
-public class CommonConstants implements MathConstant {
+public class DefaultConstants extends Memory implements MemorySetter {
     
-    private Memory memory;
-    
-    /* (non-Javadoc)
-     * @see com.colofabrix.mathparser.org.MathConstant#init(com.colofabrix.mathparser.Memory)
+    /**
+     * Constructor
      */
-    @Override
-    public void init( Memory memory ) {
-        this.memory = memory;
-        
+    public DefaultConstants() {
         // Mathematical constants
         this.addNew( "PI", ApfloatConsts.PI );              // pi-greek (pure number)
         this.addNew( "E", ApfloatConsts.E );                // e (pure number)
@@ -54,6 +73,50 @@ public class CommonConstants implements MathConstant {
         this.addNew( "µN", uN );                            // Nuclear magneton (J/T)
     }
     
+    /**
+     * Initialize the memory with constants
+     * 
+     * @param memory The memory to initialize
+     */
+    @Override
+    public void initMemory( Context context ) {
+        try {
+            // Adds all the local constants to the main memory
+            for( Map.Entry<String, Memory.MemoryCell> entry: this.getMemory().entrySet() )
+                context.getMemory().setValue(
+                        entry.getKey(),
+                        entry.getValue().getValue(),
+                        entry.getValue().isReadonly() );
+        }
+        catch( ExpressionException e ) {
+        }
+    }
+
+    /**
+     * Dispose the constants that were initialized previously
+     * 
+     * @param memory The memory where the constants are
+     */
+    @Override
+    public void disposeMemory( Context context ) {
+        try {
+            // Removes all the local constants to the main memory
+            for( Map.Entry<String, Memory.MemoryCell> entry: this.getMemory().entrySet() ) {
+                context.getMemory().setValue( entry.getKey(), null );
+            }
+        }
+        catch( ExpressionException e ) {
+        }
+    }
+
+    private void addNew( String name, Apfloat value ) {
+        try {
+            this.setValue( name, new Operand(value), true );
+        }
+        catch( ExpressionException e ) {
+        }
+    }
+    
     @SuppressWarnings( "unused" )
     private void addNew( String name, String value ) {
         this.addNew( name, new Apfloat( value ) );
@@ -62,13 +125,5 @@ public class CommonConstants implements MathConstant {
     @SuppressWarnings( "unused" )
     private void addNew( String name, double value ) {
         this.addNew( name, new Apfloat( value ) );
-    }
-    
-    private void addNew( String name, Apfloat value ) {
-        try {
-            memory.setValue( name, new Operand(value), true );
-        }
-        catch( ExpressionException e ) {
-        }
     }
 }

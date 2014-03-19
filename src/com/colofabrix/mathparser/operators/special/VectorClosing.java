@@ -23,8 +23,9 @@ package com.colofabrix.mathparser.operators.special;
 import java.util.Stack;
 import com.colofabrix.mathparser.expression.CmplxExpression;
 import com.colofabrix.mathparser.expression.Operator;
-import com.colofabrix.mathparser.org.ConfigException;
-import com.colofabrix.mathparser.org.ExpressionException;
+import com.colofabrix.mathparser.expression.Vector;
+import com.colofabrix.mathparser.struct.ConfigException;
+import com.colofabrix.mathparser.struct.ExpressionException;
 
 /**
  * A closing vector operator
@@ -53,7 +54,7 @@ public class VectorClosing extends Vector {
      */
     @Override
     public Operator executeParsing( CmplxExpression postfix, Stack<Operator> opstack ) throws ExpressionException {
-        CmplxExpression stack = (CmplxExpression)this.memory.getValue( Vector.STACK_NAME );
+        CmplxExpression stack = (CmplxExpression)this.getContext().getMemory().getValue( Vector.STACK_NAME );
 
         if( stack == null )
             throw new ExpressionException( "There is no previous vector to push into" );
@@ -65,8 +66,8 @@ public class VectorClosing extends Vector {
         stack.push( this.prepareOperands( postfix, opstack ) );
 
         // Transfer the working variable to another variable
-        this.memory.setValue( Vector.STACK_NAME, null );
-        this.memory.setValue( Vector.OUTPUT_NAME, stack );
+        this.getContext().getMemory().setValue( Vector.STACK_NAME, null );
+        this.getContext().getMemory().setValue( Vector.OUTPUT_NAME, stack );
 
         // Add all the fetched operands in the postfix string
         postfix.pop();

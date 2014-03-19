@@ -25,8 +25,8 @@ import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
 import com.colofabrix.mathparser.expression.Option;
-import com.colofabrix.mathparser.org.ConfigException;
-import com.colofabrix.mathparser.org.ExpressionException;
+import com.colofabrix.mathparser.struct.ConfigException;
+import com.colofabrix.mathparser.struct.ExpressionException;
 
 /**
  * Set an option value
@@ -56,7 +56,7 @@ public class GetOperator extends Operator {
 
         try {
             Option option = (Option)operands.pop();
-            ExpressionEntry value = this.memory.getValue( option.getFullName() );
+            ExpressionEntry value = this.getContext().getMemory().getValue( option.getFullName() );
 
             if( value.getEntryType() == Operand.OPERAND_CODE )
                 return((Operand)value);

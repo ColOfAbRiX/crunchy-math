@@ -22,13 +22,12 @@ package com.colofabrix.mathparser.operators;
 
 import java.util.Random;
 import java.util.Stack;
-import org.apfloat.Apcomplex;
 import org.apfloat.Apfloat;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
-import com.colofabrix.mathparser.org.ConfigException;
-import com.colofabrix.mathparser.org.ExpressionException;
+import com.colofabrix.mathparser.struct.ConfigException;
+import com.colofabrix.mathparser.struct.ExpressionException;
 
 public class RandomOperator extends Operator {
 
@@ -49,6 +48,6 @@ public class RandomOperator extends Operator {
 
         Random rnd = new Random( value1.longValue() ^ System.nanoTime() );
 
-        return new Operand( new Apfloat( rnd.nextDouble(), Apcomplex.INFINITE ) );
+        return new Operand( rnd.nextDouble() );
     }
 }

@@ -28,8 +28,8 @@ import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
-import com.colofabrix.mathparser.org.ConfigException;
-import com.colofabrix.mathparser.org.ExpressionException;
+import com.colofabrix.mathparser.struct.ConfigException;
+import com.colofabrix.mathparser.struct.ExpressionException;
 
 /**
  * Displays operators information
@@ -59,7 +59,7 @@ public class MemoryOperator extends Operator {
         switch( value1 ) {
             case 1:
                 // DISPLAY MEMORY DUMP
-                this.displayMemory( this.memory );
+                this.displayMemory( this.getContext().getMemory() );
                 break;
         }
 
@@ -73,7 +73,7 @@ public class MemoryOperator extends Operator {
         System.out.println( "Name\t\tRO\t\tPrec\t\tValue" );
         System.out.println( "----------------------------------------------------------------------------" );
 
-        for( Map.Entry<String, Memory.MemoryCell> entry: mem.getDirectMemoryReference().entrySet() ) {
+        for( Map.Entry<String, Memory.MemoryCell> entry: mem.getSet() ) {
             String name = entry.getKey();
             Memory.MemoryCell cell = entry.getValue();
             

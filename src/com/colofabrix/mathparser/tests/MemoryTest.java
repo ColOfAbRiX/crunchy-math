@@ -27,8 +27,8 @@ import org.junit.Test;
 import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.expression.Operator;
 import com.colofabrix.mathparser.operators.SumOperator;
-import com.colofabrix.mathparser.org.ConfigException;
-import com.colofabrix.mathparser.org.ExpressionException;
+import com.colofabrix.mathparser.struct.ConfigException;
+import com.colofabrix.mathparser.struct.ExpressionException;
 
 public class MemoryTest {
 

@@ -31,9 +31,9 @@ import com.colofabrix.mathparser.operators.MinusOperator;
 import com.colofabrix.mathparser.operators.MultiplyOperator;
 import com.colofabrix.mathparser.operators.special.ClosingBracket;
 import com.colofabrix.mathparser.operators.special.OpeningBracket;
-import com.colofabrix.mathparser.org.ConfigException;
-import com.colofabrix.mathparser.org.ExpressionException;
-import com.colofabrix.mathparser.org.OpBuilder;
+import com.colofabrix.mathparser.struct.ConfigException;
+import com.colofabrix.mathparser.struct.ExpressionException;
+import com.colofabrix.mathparser.struct.builders.ContextBuilder;
 
 /**
  * @author Fabrizio Colonna
@@ -59,9 +59,7 @@ public class CmplxExpressionTest extends CmplxExpression {
             reference.add( new ClosingBracket() );
 
             // Method testing
-            OpBuilder.newContext();
-            CmplxExpression test =
-                    CmplxExpression.fromExpression( "3 * (2 - 1)", OpBuilder.getOperators(), OpBuilder.getMemory() );
+            CmplxExpression test = CmplxExpression.fromExpression( "3 * (2 - 1)", ContextBuilder.createDefault() );
 
             Assert.assertEquals( "Conversion - Operand count test", reference.size(), test.size() );
             Assert.assertEquals( "Conversion - String test", reference.toString(), test.toString() );
@@ -75,8 +73,7 @@ public class CmplxExpressionTest extends CmplxExpression {
     @Test
     public void testIsMinimizable() {
         try {
-            OpBuilder.newContext();
-            MathParser mp = new MathParser( OpBuilder.getOperators(), OpBuilder.getMemory() );
+            MathParser mp = new MathParser();
 
             Assert.assertEquals( "Not minimizable", false, mp.ConvertToPostfix( "x * Sin x" ).isMinimizable() );
             Assert.assertEquals( "Not minimizable", false, mp.ConvertToPostfix( "x ^ 2 * Sin x" ).isMinimizable() );

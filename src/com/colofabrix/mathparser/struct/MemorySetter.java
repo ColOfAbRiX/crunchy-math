@@ -18,32 +18,29 @@ You should have received a copy of the GNU Lesser General Public
 License along with Crunchy Math; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package com.colofabrix.mathparser.operators.special;
+package com.colofabrix.mathparser.struct;
 
-import com.colofabrix.mathparser.expression.GroupingOperator;
-import com.colofabrix.mathparser.struct.ConfigException;
 
 /**
- * A closing bracket operator
+ * Represents a Memory Worker
  * 
- * <p>
- * Brackets are used to give priority to some section of expressions.<br/>
- * A closing bracket serves to say that a subexpression is finished and to push all the operands and operators to the
- * correct stack. The push is performed by the parent class {@link GroupingOperator}, this class is only used to define
- * a name and a priority
- * </p>
+ * <p>Its purpose is to add some constants to memory</p>
  * 
  * @author Fabrizio Colonna
  */
-public class ClosingBracket extends GroupingOperator {
-    public ClosingBracket() throws ConfigException {
-        super();
-        this.setBaseName( ")" );
-        this.setPriority( (short)0 );
-    }
+public interface MemorySetter {
 
-    @Override
-    public boolean isOpening() {
-        return false;
-    }
+    /**
+     * Initialize the memory with constants
+     * 
+     * @param memory The memory to initialize
+     */
+    public abstract void initMemory( Context context );
+
+    /**
+     * Dispose the constants that were initialized previously
+     * 
+     * @param memory The memory where the constants are
+     */
+    public abstract void disposeMemory( Context context );
 }

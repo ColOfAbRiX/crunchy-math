@@ -28,8 +28,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import com.colofabrix.mathparser.MathParser;
-import com.colofabrix.mathparser.org.ConfigException;
-import com.colofabrix.mathparser.org.OpBuilder;
+import com.colofabrix.mathparser.struct.ConfigException;
 
 /**
  * @author Fabrizio Colonna
@@ -60,15 +59,14 @@ public class MathParserTest extends MathParser {
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
-        OpBuilder.newContext();
         MathParserTest.tests = new ArrayList<MathParserTest.TestEntry>();
-        MathParserTest.mp = new MathParser( OpBuilder.getOperators(), OpBuilder.getMemory() );
+        MathParserTest.mp = new MathParser();
 
         // SIMPLE EXPRESSION TESTING
         MathParserTest.tests.add( new TestEntry( "Basic expression with brackets",
                 "3 * (2 + 1)",				// Input infix string
-                "3 2 1 + *",			// Output postfix string
-                9 ) );					// Numeric result
+                "3 2 1 + *",			    // Output postfix string
+                9 ) );					    // Numeric result
 
         MathParserTest.tests.add( new TestEntry( "Assignment",
                 "x = " + Math.PI,

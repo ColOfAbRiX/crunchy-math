@@ -33,8 +33,9 @@ import com.colofabrix.mathparser.operators.ArsinOperator;
 import com.colofabrix.mathparser.operators.SinOperator;
 import com.colofabrix.mathparser.operators.special.AngleUnit;
 import com.colofabrix.mathparser.operators.special.TrigonometricOperator;
-import com.colofabrix.mathparser.org.ExpressionException;
-import com.colofabrix.mathparser.org.OpBuilder;
+import com.colofabrix.mathparser.struct.ExpressionException;
+import com.colofabrix.mathparser.struct.builders.ContextBuilder;
+import com.colofabrix.mathparser.struct.builders.OpBuilder;
 
 public class TrigonometricOperatorTest {
 
@@ -44,8 +45,8 @@ public class TrigonometricOperatorTest {
         Apfloat result;
 
         try {
-            OpBuilder.newContext();
-            TrigonometricOperator test = (TrigonometricOperator)OpBuilder.createOperator( ArsinOperator.class );
+            OpBuilder builder = new OpBuilder( ContextBuilder.createDefault() );
+            TrigonometricOperator test = (TrigonometricOperator)builder.create( ArsinOperator.class );
             test.executeParsing( new CmplxExpression(), new Stack<Operator>() );
 
             // Radians test
@@ -88,8 +89,8 @@ public class TrigonometricOperatorTest {
         Operand result;
 
         try {
-            OpBuilder.newContext();
-            TrigonometricOperator test = (TrigonometricOperator)OpBuilder.createOperator( SinOperator.class );
+            OpBuilder builder = new OpBuilder( ContextBuilder.createDefault() );
+            TrigonometricOperator test = (TrigonometricOperator)builder.create( SinOperator.class );
             test.executeParsing( new CmplxExpression(), new Stack<Operator>() );
 
             // Radians test

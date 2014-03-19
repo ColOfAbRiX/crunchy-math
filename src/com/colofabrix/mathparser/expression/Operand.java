@@ -22,8 +22,8 @@ package com.colofabrix.mathparser.expression;
 
 import org.apfloat.Apfloat;
 import com.colofabrix.mathparser.Memory;
-import com.colofabrix.mathparser.org.ConfigException;
-import com.colofabrix.mathparser.org.ExpressionException;
+import com.colofabrix.mathparser.struct.ConfigException;
+import com.colofabrix.mathparser.struct.ExpressionException;
 
 /**
  * It represents an operand in an expression
@@ -82,6 +82,15 @@ public class Operand extends ExpressionEntry {
     }
 
     /**
+     * This constructor creates an operand which contains a number
+     * 
+     * @param number The number to store
+     */
+    public Operand( double number ) {
+        this( null, null, false, new Apfloat( number ), null );
+    }
+
+    /**
      * This constructor creates an operand which contains a variable
      * 
      * <p>If the variable it is trying to access/create is a read-only (and already alive) variable,
@@ -97,7 +106,7 @@ public class Operand extends ExpressionEntry {
     }
 
     /**
-     * This constructor creates an operand which contains a variable
+     * This constructor creates an operand which contains an empty variable
      * 
      * @param varName Variable name
      * @param memory Reference to the memory
@@ -109,13 +118,11 @@ public class Operand extends ExpressionEntry {
     /**
      * Generic constructor
      * 
-     * @deprecated
      * @param varName Variable name
      * @param varValue Variable value
      * @param number The number to store
      * @param memory Reference to the memory
      */
-    @Deprecated
     protected Operand( String varName, ExpressionEntry varValue, boolean setVarValue, Apfloat number, Memory memory ) {
         this.value = number;
         this.varName = varName;

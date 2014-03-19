@@ -18,16 +18,11 @@ You should have received a copy of the GNU Lesser General Public
 License along with Crunchy Math; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package com.colofabrix.mathparser.operators.special;
+package com.colofabrix.mathparser.expression;
 
 import java.util.Stack;
 import com.colofabrix.mathparser.MathParser;
-import com.colofabrix.mathparser.expression.CmplxExpression;
-import com.colofabrix.mathparser.expression.ExpressionEntry;
-import com.colofabrix.mathparser.expression.GroupingOperator;
-import com.colofabrix.mathparser.expression.Operand;
-import com.colofabrix.mathparser.expression.Operator;
-import com.colofabrix.mathparser.org.ExpressionException;
+import com.colofabrix.mathparser.struct.ExpressionException;
 
 /**
  * Represent the basic type to implement the operators to work with Vectors
@@ -68,11 +63,11 @@ public abstract class Vector extends GroupingOperator {
      * @throws ExpressionException If no parameters are given to the function
      */
     protected ExpressionEntry prepareOperands( CmplxExpression postfix, Stack<Operator> opstack ) throws ExpressionException {
-        MathParser mp = new MathParser( this.operators, this.memory );
+        MathParser mp = new MathParser( this.getContext() );
         CmplxExpression local = new CmplxExpression();
 
         // Call basic constructor. It ensures that the postfix stack is filled with all the operands and operators
-        super.executeParsingClosing( postfix, opstack, operators, memory );
+        super.executeParsingClosing( postfix, opstack, this.getContext() );
 
         // Move all the values pushed previously to the saved stack until the previous OpeningFunction is found.
 

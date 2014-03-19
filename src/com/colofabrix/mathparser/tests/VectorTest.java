@@ -27,7 +27,7 @@ import com.colofabrix.mathparser.MathParser;
 import com.colofabrix.mathparser.expression.CmplxExpression;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
-import com.colofabrix.mathparser.operators.special.Vector;
+import com.colofabrix.mathparser.expression.Vector;
 
 public class VectorTest {
 
@@ -55,10 +55,10 @@ public class VectorTest {
             CmplxExpression reference = new CmplxExpression();
             reference.add( new Operand( new Apfloat( 1 ) ) );
             reference.add( new Operand( new Apfloat( -1 ) ) );
-            reference.add( CmplxExpression.fromExpression( "x #Sin", mp.getOperators(), mp.getMemory() ) );
+            reference.add( CmplxExpression.fromExpression( "x #Sin", mp.getContext() ) );
 
             CmplxExpression parsed = mp.ConvertToPostfix( "[1, 1 - 2, Sin x]" );
-            ExpressionEntry result = mp.getMemory().getValue( Vector.OUTPUT_NAME );
+            ExpressionEntry result = mp.getContext().getMemory().getValue( Vector.OUTPUT_NAME );
 
             // Check of the output postfix string
             Assert.assertEquals( "Parsed vector output", parsed.toString(), reference.toString() );

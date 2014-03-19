@@ -26,8 +26,8 @@ import org.apfloat.ApfloatMath;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.operators.special.TrigonometricOperator;
-import com.colofabrix.mathparser.org.ConfigException;
-import com.colofabrix.mathparser.org.ExpressionException;
+import com.colofabrix.mathparser.struct.ConfigException;
+import com.colofabrix.mathparser.struct.ExpressionException;
 
 public class ArcoshOperator extends TrigonometricOperator {
 
@@ -45,6 +45,6 @@ public class ArcoshOperator extends TrigonometricOperator {
         Apfloat result = ApfloatMath.log( value1.add( ApfloatMath.sqrt( ApfloatMath.pow( value1, new Apfloat( 2 ) )
                 .subtract( new Apfloat( 1 ) ) ) ) );
 
-        return new Operand( this.getCurrent( result ) );
+        return new Operand( this.toCurrentUnit( result ) );
     }
 }

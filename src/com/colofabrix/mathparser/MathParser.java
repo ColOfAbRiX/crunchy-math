@@ -27,10 +27,11 @@ import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.GroupingOperator;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
-import com.colofabrix.mathparser.org.ConfigException;
-import com.colofabrix.mathparser.org.ExpressionException;
-import com.colofabrix.mathparser.org.MathConstant;
-import com.colofabrix.mathparser.org.OpBuilder;
+import com.colofabrix.mathparser.struct.ConfigException;
+import com.colofabrix.mathparser.struct.Context;
+import com.colofabrix.mathparser.struct.ExpressionException;
+import com.colofabrix.mathparser.struct.builders.ContextBuilder;
+import com.colofabrix.mathparser.struct.builders.OpBuilder;
 
 /**
  * Mathemathical Expression Parser
@@ -41,8 +42,7 @@ import com.colofabrix.mathparser.org.OpBuilder;
  */
 public class MathParser {
 
-    private Memory memory;
-    private Operators operators;
+    private Context context;
 
     /**
      * Creates and initialize MathParser
@@ -50,9 +50,7 @@ public class MathParser {
      * <p>It uses {@link OpBuilder} to create a default context</p>
      */
     public MathParser() {
-        OpBuilder.newContext();
-        this.setMemory( OpBuilder.getMemory() );
-        this.setOperators( OpBuilder.getOperators() );
+        this( ContextBuilder.createDefault() );
     }
 
     /**
@@ -65,25 +63,8 @@ public class MathParser {
      * @param manager The choosen Operators Manager, which contains a collection of supported operators.
      * @param memory The object to use as memory
      */
-    public MathParser( Operators manager, Memory memory ) {
-        this.setOperators( manager );
-        this.setMemory( memory );
-    }
-    
-    /**
-     * Creates and initialize the MathParser
-     * 
-     * <p>
-     * This constructor allow to specify a custom operators manager and memory manager
-     * </p>
-     * 
-     * @param manager The choosen Operators Manager, which contains a collection of supported operators.
-     * @param memory The object to use as memory
-     * @param consts The object used to initialize in memory the mathematical constants
-     */
-    public MathParser( Operators manager, Memory memory, MathConstant consts ) {
-        this( manager, memory );
-        consts.init(  memory );
+    public MathParser( Context context ) {
+        this.setContext( context );
     }
 
     /**
@@ -96,7 +77,7 @@ public class MathParser {
      */
     public CmplxExpression ConvertToPostfix( String input ) throws ExpressionException, ConfigException {
 
-        CmplxExpression infix = CmplxExpression.fromExpression( input, this.getOperators(), this.getMemory() );
+        CmplxExpression infix = CmplxExpression.fromExpression( input, this.getContext() );
         CmplxExpression postfix = new CmplxExpression();
         Stack<Operator> opstack = new Stack<>();
         ExpressionEntry lastEntry = null;
@@ -135,7 +116,7 @@ public class MathParser {
         while( opstack.size() > 0 )
             postfix.add( opstack.pop() );
 
-        return CmplxExpression.fromExpression( postfix, this.getOperators(), this.getMemory() );
+        return CmplxExpression.fromExpression( postfix, this.getContext() );
     }
 
     /**
@@ -165,7 +146,8 @@ public class MathParser {
                     localOperands.push( localStack.pop() );
 
                 // Operator execution
-                Operand result = this.getOperators().executeExpression( currentOp, localOperands, this.getMemory() );
+                Operand result = this.getContext().getOperators()
+                        .executeExpression( currentOp, localOperands, this.getContext().getMemory() );
                 if( result != null )
                     localStack.push( result );
             }
@@ -173,8 +155,6 @@ public class MathParser {
                 localStack.push( entry );
         }
 
-        // FIXME: It returns null...
-        // Check for correct execution - the result must be 1 number or variable
         if( localStack.size() != 1 || localStack.lastElement().getEntryType() != Operand.OPERAND_CODE )
             return null;
 
@@ -202,30 +182,16 @@ public class MathParser {
     }
 
     /**
-     * @return the memory
+     * @return the context
      */
-    public Memory getMemory() {
-        return this.memory;
+    public Context getContext() {
+        return context;
     }
 
     /**
-     * @return the operators
+     * @param context the context to set
      */
-    public Operators getOperators() {
-        return this.operators;
-    }
-
-    /**
-     * @param memory the memory to set
-     */
-    protected void setMemory( Memory memory ) {
-        this.memory = memory;
-    }
-
-    /**
-     * @param operators the operators to set
-     */
-    protected void setOperators( Operators operators ) {
-        this.operators = operators;
+    private void setContext( Context context ) {
+        this.context = context;
     }
 }

@@ -26,9 +26,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.regex.Matcher;
-import com.colofabrix.mathparser.Memory;
-import com.colofabrix.mathparser.Operators;
-import com.colofabrix.mathparser.org.ExpressionException;
+import com.colofabrix.mathparser.struct.Context;
+import com.colofabrix.mathparser.struct.ExpressionException;
 
 /**
  * A composite expression represents an expression that is made by sub entries
@@ -47,7 +46,7 @@ public class CmplxExpression extends ExpressionEntry implements List<ExpressionE
     public static final int COMPOSITE_CODE = 3;
 
     /**
-     * Creates a CmplxExpression starting from a string
+     * Creates a CmplxExpression starting from a list of ExpressionEntry
      * 
      * <p>
      * The method splits the string in its component and create an appropriate ExpressionEntry for every token.
@@ -59,7 +58,7 @@ public class CmplxExpression extends ExpressionEntry implements List<ExpressionE
      * @return A CmplxExpression object containing the added CmplxExpression(s)
      * @throws ExpressionException
      */
-    public static CmplxExpression fromExpression( List<ExpressionEntry> stack, Operators operators, Memory memory ) throws ExpressionException {
+    public static CmplxExpression fromExpression( List<ExpressionEntry> stack, Context context ) throws ExpressionException {
         CmplxExpression composite = new CmplxExpression();
         composite.addAll( stack );
         return composite;
@@ -78,14 +77,14 @@ public class CmplxExpression extends ExpressionEntry implements List<ExpressionE
      * @return A CmplxExpression object containing the translated string expression
      * @throws ExpressionException
      */
-    public static CmplxExpression fromExpression( String expression, Operators operators, Memory memory ) throws ExpressionException {
+    public static CmplxExpression fromExpression( String expression, Context context ) throws ExpressionException {
         // The input string is split in its forming components and translated in object-form
-        Matcher m = operators.getParsingRegex().matcher( expression );
+        Matcher m = context.getOperators().getParsingRegex().matcher( expression );
         CmplxExpression composite = new CmplxExpression();
 
         // Saves all matches in a list
         while( m.find() )
-            composite.add( ExpressionEntry.fromStringEntry( m.group(), operators, memory ) );
+            composite.add( ExpressionEntry.fromStringEntry( m.group(), context ) );
 
         return composite;
     }
