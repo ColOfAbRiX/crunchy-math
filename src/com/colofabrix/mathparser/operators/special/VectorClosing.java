@@ -62,7 +62,7 @@ public class VectorClosing extends Vector {
             throw new ExpressionException( "Wrong number of given parameters" );
 
         // Save the operands to the stack
-        stack.push( this.prepareOperands( postfix, opstack, this.operators, this.memory ) );
+        stack.push( this.prepareOperands( postfix, opstack ) );
 
         // Transfer the working variable to another variable
         this.memory.setValue( Vector.STACK_NAME, null );

@@ -35,6 +35,7 @@ import com.colofabrix.mathparser.expression.Operator;
  * @author Fabrizio Colonna
  */
 public final class OpBuilder {
+    private static MathConstant constants;
     private static Memory memory;
     private static Operators operators;
 
@@ -101,6 +102,8 @@ public final class OpBuilder {
         try {
             OpBuilder.memory = new Memory();
             OpBuilder.operators = new Operators( OpBuilder.memory );
+            OpBuilder.constants = new CommonConstants();
+            OpBuilder.constants.init( OpBuilder.memory );
         }
         catch( Exception e ) {
             OpBuilder.memory = oldMemory;
@@ -124,9 +127,17 @@ public final class OpBuilder {
     /**
      * Sets the current operator manager
      * 
-     * @param memory
+     * @param operators
      */
     public static void setOperators( Operators operators ) {
         OpBuilder.operators = operators;
+    }
+    
+    public static MathConstant getConstants() {
+        return constants;
+    }
+
+    public static void setConstants( MathConstant constants ) {
+        OpBuilder.constants = constants;
     }
 }

@@ -46,7 +46,7 @@ public class IntegralOperator extends Operator {
      */
     protected class WorkingExpression implements UnivariateFunction {
 
-        private MathParser mp;
+        private final MathParser mp;
         ExpressionEntry expression;
         ExpressionEntry oldMemory;
         Operand variable;
@@ -57,8 +57,9 @@ public class IntegralOperator extends Operator {
          * @param mp A math parser to execute the expression
          * @param expression The expression to evaluate
          * @param variable The integration variable
+         * @throws ExpressionException 
          */
-        protected WorkingExpression( MathParser mp, ExpressionEntry expression, Operand variable ) {
+        protected WorkingExpression( MathParser mp, ExpressionEntry expression, Operand variable ) throws ExpressionException {
             this.mp = mp;
             this.expression = expression;
             this.variable = variable;
@@ -67,12 +68,18 @@ public class IntegralOperator extends Operator {
             // NOTE: Here the main memory is used and not a new one because there may be memory references in the
             // variables inside the expression to evaluate
             this.oldMemory = this.mp.getMemory().getValue( variable.getVariableName() );
+            // Check for read-only
+            this.mp.getMemory().setValue( this.variable.getVariableName(), this.oldMemory );            
         }
 
         @Override
         public void finalize() {
-            // Restore the old variable in memory
-            this.mp.getMemory().setValue( this.variable.getVariableName(), this.oldMemory );
+            // I checked in the constructor that the variable is not readonly
+            try {
+                // Restore the old variable in memory
+                this.mp.getMemory().setValue( this.variable.getVariableName(), this.oldMemory );
+            }
+            catch( ExpressionException e ) {}
         }
 
         /**
@@ -80,11 +87,12 @@ public class IntegralOperator extends Operator {
          */
         @Override
         public double value( double arg0 ) {
-            this.mp.getMemory().setValue(
-                    this.variable.getVariableName(),
-                    new Operand( new Apfloat( arg0 ) ) );
-
+            // I checked in the constructor that the variable is not readonly
             try {
+                this.mp.getMemory().setValue(
+                        this.variable.getVariableName(),
+                        new Operand( new Apfloat( arg0 ) ) );
+
                 return this.mp.ExecutePostfix( this.expression ).doubleValue();
             }
             catch( ExpressionException e ) {

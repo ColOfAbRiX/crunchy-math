@@ -62,7 +62,7 @@ public class VectorPush extends Vector {
             throw new ExpressionException( "Wrong number of given parameters" );
 
         // Save the operands to the stack
-        stack.push( this.prepareOperands( postfix, opstack, this.operators, this.memory ) );
+        stack.push( this.prepareOperands( postfix, opstack ) );
 
         // Save the private stack
         this.memory.setValue( Vector.STACK_NAME, stack );

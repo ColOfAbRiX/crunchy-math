@@ -4,7 +4,10 @@ Features:
  - Add list of all the options available
  - Add a library of constants
  - Add selection of integration algorithms
-
+ - Add options to control precision
+ - Permit a variable number of operands for operators (using vectors)
+   - Now vector-parameters are passed like normal parameters. Allow true-vector parameters
+ 
 Changes
  - Complete the Unit Testings
  - Refactor the test MathParserTest.testConvertToPostfix to make use of parametrized tests

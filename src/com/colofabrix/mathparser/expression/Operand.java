@@ -65,10 +65,10 @@ public class Operand extends ExpressionEntry {
         return ((Operand)entry).getNumericValue();
     }
 
-    private Memory memory;
+    private final Memory memory;
 
     // private Double value = null;
-    private Apfloat value;
+    private final Apfloat value;
 
     private String varName = null;
 
@@ -83,6 +83,10 @@ public class Operand extends ExpressionEntry {
 
     /**
      * This constructor creates an operand which contains a variable
+     * 
+     * <p>If the variable it is trying to access/create is a read-only (and already alive) variable,
+     * it will use that variable as it is, without overwriting. Any further attempt to write over that
+     * variable will cause exceptions</p>
      * 
      * @param varName Variable name
      * @param varValue Variable value
@@ -105,18 +109,25 @@ public class Operand extends ExpressionEntry {
     /**
      * Generic constructor
      * 
+     * @deprecated
      * @param varName Variable name
      * @param varValue Variable value
      * @param number The number to store
      * @param memory Reference to the memory
      */
+    @Deprecated
     protected Operand( String varName, ExpressionEntry varValue, boolean setVarValue, Apfloat number, Memory memory ) {
         this.value = number;
         this.varName = varName;
         this.memory = memory;
 
         if( this.isVariable() && setVarValue )
-            this.memory.setValue( this.varName, varValue );
+            // If the operand refers to a read-only variable that is already assigned it's ok: I will not overwrite the variable and continue
+            try {
+                this.memory.setValue( this.varName, varValue );
+            }
+            catch( ExpressionException e ) {
+            }
     }
 
     /**

@@ -23,6 +23,7 @@ package com.colofabrix.mathparser.operators.special;
 import java.util.Map;
 import java.util.Stack;
 import org.apfloat.Apfloat;
+import org.apfloat.ApfloatRuntimeException;
 import com.colofabrix.mathparser.Memory;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
@@ -68,14 +69,39 @@ public class MemoryOperator extends Operator {
     private void displayMemory( Memory mem ) {
         System.out.println();
         System.out.println( "Print memory dump" );
-        System.out.println( "--------------------------------------" );
+        System.out.println( "----------------------------------------------------------------------------" );
+        System.out.println( "Name\t\tRO\t\tPrec\t\tValue" );
+        System.out.println( "----------------------------------------------------------------------------" );
 
-        for( Map.Entry<String, ExpressionEntry> entry: mem.getDirectMemoryReference().entrySet() ) {
-            System.out.print( entry.getKey() );
+        for( Map.Entry<String, Memory.MemoryCell> entry: mem.getDirectMemoryReference().entrySet() ) {
+            String name = entry.getKey();
+            Memory.MemoryCell cell = entry.getValue();
+            
+            System.out.print( name );
             System.out.print( "\t\t" );
-            System.out.println( entry.getValue().toString() );
+            
+            System.out.print( cell.isReadonly() );
+            System.out.print( "\t\t" );
+
+            if( cell.getValue().getEntryType() == Operand.OPERAND_CODE ) {
+                try {
+                    Operand operand = (Operand)cell.getValue();
+                
+                    System.out.print( operand.getNumericValue().precision() );
+                    System.out.print( "\t\t" );
+                    
+                    System.out.println( operand.getNumericValue() );
+                }
+                catch( ApfloatRuntimeException | ExpressionException e ) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+            else {
+                System.out.println( "Not-printable" );
+            }
         }
 
-        System.out.println( "--------------------------------------" );
+        System.out.println( "----------------------------------------------------------------------------" );
     }
 }

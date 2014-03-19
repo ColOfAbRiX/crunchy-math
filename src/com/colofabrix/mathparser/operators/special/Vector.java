@@ -22,8 +22,6 @@ package com.colofabrix.mathparser.operators.special;
 
 import java.util.Stack;
 import com.colofabrix.mathparser.MathParser;
-import com.colofabrix.mathparser.Memory;
-import com.colofabrix.mathparser.Operators;
 import com.colofabrix.mathparser.expression.CmplxExpression;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.GroupingOperator;
@@ -66,14 +64,11 @@ public abstract class Vector extends GroupingOperator {
      * 
      * @param postfix The full postfix stack, as it is build before the call to this method
      * @param opstack The full operator stack, as it is constructed befor the call to this method
-     * @param operators A reference to the operators manager
-     * @param memory A reference to the main math memory
      * @return An ExpressionEntry found since the last OpeningVector or PushVector
      * @throws ExpressionException If no parameters are given to the function
      */
-    protected ExpressionEntry prepareOperands( CmplxExpression postfix, Stack<Operator> opstack, Operators operators,
-            Memory memory ) throws ExpressionException {
-        MathParser mp = new MathParser( operators, memory );
+    protected ExpressionEntry prepareOperands( CmplxExpression postfix, Stack<Operator> opstack ) throws ExpressionException {
+        MathParser mp = new MathParser( this.operators, this.memory );
         CmplxExpression local = new CmplxExpression();
 
         // Call basic constructor. It ensures that the postfix stack is filled with all the operands and operators
@@ -105,5 +100,4 @@ public abstract class Vector extends GroupingOperator {
         else
             throw new ExpressionException( "There must be at least one parameter" );
     }
-
 }

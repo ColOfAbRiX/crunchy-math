@@ -25,6 +25,7 @@ import java.util.Map;
 import org.apfloat.Apfloat;
 import com.colofabrix.mathparser.expression.ExpressionEntry;
 import com.colofabrix.mathparser.expression.Operand;
+import com.colofabrix.mathparser.org.ExpressionException;
 
 /**
  * It represents the memory containing the variables that the parser uses
@@ -33,6 +34,67 @@ import com.colofabrix.mathparser.expression.Operand;
  */
 public class Memory {
 
+    public class MemoryCell {
+        
+        private ExpressionEntry value;
+        private boolean readonly;
+        
+        /**
+         * 
+         * @param value Value to insert in the cell
+         * @param isReadOnly Read-only attribute
+         */
+        public MemoryCell( ExpressionEntry value, boolean isReadOnly ) {
+            this.setValue( value );
+            this.setReadonly( isReadOnly );
+        }
+        
+        /**
+         * Constructor
+         * 
+         * @param value Value to insert in the cell
+         */
+        public MemoryCell( ExpressionEntry value ) {
+            this( value, false );
+        }
+        
+        /**
+         * Gets the value of the cell
+         * 
+         * @return the value
+         */
+        public ExpressionEntry getValue() {
+            return value;
+        }
+        
+        /**
+         * Sets the value of the cell
+         * 
+         * @param value the value to set
+         */
+        private void setValue( ExpressionEntry value ) {
+            this.value = value;
+        }
+        
+        /**
+         * Indicates if the cell is read-only
+         * @return the readonly
+         */
+        public boolean isReadonly() {
+            return readonly;
+        }
+        
+        /**
+         * Sets the read-only attribute of the cell
+         * 
+         * @param readonly the readonly to set
+         */
+        private void setReadonly( boolean readonly ) {
+            this.readonly = readonly;
+        }
+        
+    }
+    
     /**
      * Name of the variable containing the value of the previous calculation
      */
@@ -43,13 +105,17 @@ public class Memory {
      */
     public static final Operand DEFAULT_VALUE = new Operand( new Apfloat( 0 ) );
 
-    private Map<String, ExpressionEntry> memory = new HashMap<>();
+    private final Map<String, MemoryCell> memory = new HashMap<>();
 
     /**
      * The constructor initializes the memory with only the ANSWER_VARIABLE variable with the value DEFAULT_VALUE
      */
     public Memory() {
-        this.setValue( Memory.ANSWER_VARIABLE, Memory.DEFAULT_VALUE );
+        try {
+            // The answer variable never raise an exception
+            this.setValue( Memory.ANSWER_VARIABLE, Memory.DEFAULT_VALUE );
+        }
+        catch( ExpressionException e ) {}
     }
 
     /**
@@ -57,7 +123,7 @@ public class Memory {
      * 
      * @return A Map object containing the memory of the parser
      */
-    public Map<String, ExpressionEntry> getDirectMemoryReference() {
+    public Map<String, MemoryCell> getDirectMemoryReference() {
         return this.memory;
     }
 
@@ -71,26 +137,7 @@ public class Memory {
         if( !this.memory.containsKey( address ) )
             return null;
 
-        return this.memory.get( address );
-    }
-
-    /**
-     * Gets the value of a memory address or the default value
-     * 
-     * @param address The name of the variable to get
-     * @return The value of the memory address corresponding to the variable or DEFAULT_VALUE
-     * @see Memory#DEFAULT_VALUE
-     */
-    public ExpressionEntry getValueOrDefault( String address ) {
-        if( !this.memory.containsKey( address ) )
-            return Memory.DEFAULT_VALUE;
-
-        ExpressionEntry tmp = this.getValue( address );
-
-        if( tmp == null )
-            return Memory.DEFAULT_VALUE;
-
-        return tmp;
+        return this.memory.get( address ).getValue();
     }
 
     /**
@@ -104,16 +151,44 @@ public class Memory {
      * @param address The name of the variable to set
      * @param value The value to be set. If <code>null</code> the memory address will be deleted
      * @return The value that has been assigned
+     * @throws ExpressionException When a read-only cell is about to be written 
      */
-    public ExpressionEntry setValue( String address, ExpressionEntry value ) {
-        if( value != null )
-            this.memory.put( address, value );
+    public ExpressionEntry setValue( String address, ExpressionEntry value ) throws ExpressionException {
+        return this.setValue( address, value, false );
+    }
+    
+    /**
+     * Sets a value of a memory address
+     * 
+     * <p>
+     * If the value that is going to be set is <code>null</code> the corresponding memory address will be removed from
+     * the memory
+     * </p>
+     * 
+     * @param address The name of the variable to set
+     * @param value The value to be set. If <code>null</code> the memory address will be deleted
+     * @return The value that has been assigned
+     * @throws ExpressionException When a read-only cell is about to be written 
+     */
+    public ExpressionEntry setValue( String address, ExpressionEntry value, boolean isReadOnly ) throws ExpressionException {
+        // Check if we are trying to write over a read-only variable
+        if( this.memory.containsKey( address ) )
+            if( this.memory.get( address ).isReadonly() )
+                throw new ExpressionException( "Attemp to write a read-only variable" );
+        
+        if( value != null ) {
+            // Assign a non-null value
+            this.memory.put( address, new MemoryCell( value, isReadOnly ) );
+        }
+        else {
+            if( address.equals( Memory.ANSWER_VARIABLE ) )
+                // Assign the default for Answer
+                this.memory.put( Memory.ANSWER_VARIABLE, new MemoryCell( Memory.DEFAULT_VALUE, false ) );
 
-        else if( address.equals( Memory.ANSWER_VARIABLE ) )
-            this.memory.put( Memory.ANSWER_VARIABLE, Memory.DEFAULT_VALUE );
-
-        else
-            this.memory.remove( address );
+            else
+                // Remove any other variable
+                this.memory.remove( address );
+        }
 
         return value;
     }

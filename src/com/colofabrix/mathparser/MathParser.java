@@ -29,6 +29,8 @@ import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
 import com.colofabrix.mathparser.org.ConfigException;
 import com.colofabrix.mathparser.org.ExpressionException;
+import com.colofabrix.mathparser.org.MathConstant;
+import com.colofabrix.mathparser.org.OpBuilder;
 
 /**
  * Mathemathical Expression Parser
@@ -45,12 +47,12 @@ public class MathParser {
     /**
      * Creates and initialize MathParser
      * 
-     * @throws ConfigException
+     * <p>It uses {@link OpBuilder} to create a default context</p>
      */
-    public MathParser() throws ConfigException {
-        Memory m = new Memory();
-        this.setMemory( m );
-        this.setOperators( new Operators( m ) );
+    public MathParser() {
+        OpBuilder.newContext();
+        this.setMemory( OpBuilder.getMemory() );
+        this.setOperators( OpBuilder.getOperators() );
     }
 
     /**
@@ -61,10 +63,27 @@ public class MathParser {
      * </p>
      * 
      * @param manager The choosen Operators Manager, which contains a collection of supported operators.
+     * @param memory The object to use as memory
      */
     public MathParser( Operators manager, Memory memory ) {
         this.setOperators( manager );
         this.setMemory( memory );
+    }
+    
+    /**
+     * Creates and initialize the MathParser
+     * 
+     * <p>
+     * This constructor allow to specify a custom operators manager and memory manager
+     * </p>
+     * 
+     * @param manager The choosen Operators Manager, which contains a collection of supported operators.
+     * @param memory The object to use as memory
+     * @param consts The object used to initialize in memory the mathematical constants
+     */
+    public MathParser( Operators manager, Memory memory, MathConstant consts ) {
+        this( manager, memory );
+        consts.init(  memory );
     }
 
     /**

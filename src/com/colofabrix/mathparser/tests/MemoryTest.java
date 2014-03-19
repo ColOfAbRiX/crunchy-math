@@ -20,12 +20,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package com.colofabrix.mathparser.tests;
 
-import org.junit.Assert;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
 import org.junit.Test;
 import com.colofabrix.mathparser.Memory;
-import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
-import com.colofabrix.mathparser.operators.CosOperator;
+import com.colofabrix.mathparser.operators.SumOperator;
 import com.colofabrix.mathparser.org.ConfigException;
 import com.colofabrix.mathparser.org.ExpressionException;
 
@@ -37,28 +38,38 @@ public class MemoryTest {
     public void testGetValueOrDefault() {
         try {
             // Operator saving and retrival
-            Operator a = new CosOperator();
+            Operator a = new SumOperator();
             MemoryTest.memory.setValue( "test", a );
-            Assert.assertSame( "Check value get/set for object",
+            assertSame( "Check value get/set for object",
                     a,
                     MemoryTest.memory.getValue( "test" ) );
 
             // Test for null
             MemoryTest.memory.setValue( "test", null );
-            Assert.assertEquals( "Check get/set for default",
-                    Memory.DEFAULT_VALUE.getNumericValue().doubleValue(),
-                    ((Operand)MemoryTest.memory.getValueOrDefault( "test" )).getNumericValue().doubleValue(), 0 );
+            assertNull( "Check get/set for default",
+                    MemoryTest.memory.getValue( "test" ) );
 
-            // Test for non-existent value
-            MemoryTest.memory.setValue( "non_existent_test", null );
-            Assert.assertEquals( "Check get/set for non-existent",
-                    Memory.DEFAULT_VALUE.getNumericValue().doubleValue(),
-                    ((Operand)MemoryTest.memory.getValueOrDefault( "non_existent_test" )).getNumericValue()
-                            .doubleValue(), 0 );
+            // Test for read-only variable
+            try {
+                MemoryTest.memory.setValue( "this_is_readonly", a, true );
+                MemoryTest.memory.setValue( "this_is_readonly", a, true );
+                fail( "Read-only test: the variable was overwritten" );
+            }
+            catch( ExpressionException e ) {
+            }
+
+            // Test for read-only variable
+            try {
+                MemoryTest.memory.setValue( "this_is_readonly_but_null", null, true );
+                MemoryTest.memory.setValue( "this_is_readonly_but_null", null, true );
+            }
+            catch( ExpressionException e ) {
+                fail( "Read-only test with null: the variable was not overwritten" );
+            }
         }
         catch( ExpressionException | ConfigException e ) {
             e.printStackTrace();
-            Assert.fail( e.getMessage().getClass().toString() );
+            fail( e.getMessage().getClass().toString() );
         }
     }
 }

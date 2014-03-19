@@ -159,9 +159,13 @@ public abstract class TrigonometricOperator extends Operator {
         if( this.memory == null )
             return;
 
-        // TODO: This is not the best way to save an option value
-        this.memory
-                .setValue( TrigonometricOperator.OPTION_UNITS, new Operand( new Apfloat( selectedUnit.getValue() ) ) );
+        // The option is managed internally by this class, so I know it is never read-only 
+        try {
+            // TODO: This is not the best way to save an option value
+            this.memory.setValue( TrigonometricOperator.OPTION_UNITS, new Operand( new Apfloat( selectedUnit.getValue() ) ) );
+        }
+        catch( ExpressionException e ) {
+        }
     }
 
     /**

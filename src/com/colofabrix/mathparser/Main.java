@@ -30,15 +30,7 @@ import com.colofabrix.mathparser.org.ExpressionException;
 
 public class Main {
     public static void main( String[] args ) {
-        MathParser mp;
-
-        try {
-            mp = new MathParser();
-        }
-        catch( ConfigException e ) {
-            e.printStackTrace();
-            return;
-        }
+        MathParser mp = new MathParser();
 
         while( true ) {
             try {
@@ -62,7 +54,7 @@ public class Main {
                 System.out.println();
             }
             catch( ExpressionException | ConfigException | IOException e ) {
-                System.out.println( "Exception during the evaluation" );
+                System.out.println( "Exception during the evaluation: " + e.getMessage() );
             }
         }
     }
