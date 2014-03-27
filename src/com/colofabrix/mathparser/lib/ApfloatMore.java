@@ -29,11 +29,10 @@ public final class ApfloatMore {
     }
 
     public static Apfloat safeExp( Apfloat arg0 ) {
-        return ApfloatMath.exp( arg0.precision( ApfloatConsts.EXP_PRECISION ) );
+        return ApfloatMath.exp( arg0.precision( ApfConsts.EXP_PRECISION ) );
     }
 
     public static Apfloat safePow( Apfloat arg0, Apfloat arg1 ) {
-        return ApfloatMath.pow( arg0.precision( ApfloatConsts.POW_PRECISION ),
-                arg1.precision( ApfloatConsts.POW_PRECISION ) );
+        return ApfloatMath.pow( arg0.precision( ApfConsts.POW_PRECISION ), arg1.precision( ApfConsts.POW_PRECISION ) );
     }
 }

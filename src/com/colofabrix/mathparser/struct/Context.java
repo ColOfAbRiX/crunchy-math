@@ -26,43 +26,48 @@ import com.colofabrix.mathparser.Operators;
 /**
  * Represents a MathParser Context
  * 
- * <p>A context is a set of information that differentiate a parser from another. Usually is made of
- * an Operators Manager and a Memory Manager as the set of the supported operator and the set of 
- * variables define a frame where a MathParser operates<?p>
+ * <p>
+ * A context is a set of information that differentiate a parser from another. Usually is made of an Operators Manager
+ * and a Memory Manager as the set of the supported operator and the set of variables define a frame where a MathParser
+ * operates
+ * </p>
  * 
  * @author Fabrizio Colonna
  */
 public class Context {
-    
+
     private Operators operators;
     private Memory memory;
-    
+
     public Context( Operators operators, Memory memory ) {
         this.setMemory( memory );
         this.setOperators( operators );
     }
-    
-    /**
-     * @return the operators
-     */
-    public Operators getOperators() {
-        return operators;
+
+    @Override
+    public boolean equals( Object obj ) {
+        if( obj instanceof Context ) {
+            Context ctx = (Context)obj;
+            return this.memory.equals( ctx.memory ) && this.operators.equals( ctx.operators );
+        }
+        else
+            return super.equals( obj );
     }
-    
-    /**
-     * @param operators the operators to set
-     */
-    private void setOperators( Operators operators ) {
-        this.operators = operators;
-    }
-    
+
     /**
      * @return the memory
      */
     public Memory getMemory() {
-        return memory;
+        return this.memory;
     }
-    
+
+    /**
+     * @return the operators
+     */
+    public Operators getOperators() {
+        return this.operators;
+    }
+
     /**
      * @param memory the memory to set
      */
@@ -70,14 +75,10 @@ public class Context {
         this.memory = memory;
     }
 
-    @Override
-    public boolean equals( Object obj ) {
-        if( obj instanceof Context ) {
-            Context ctx = (Context)obj;
-            return this.memory.equals( ctx.memory ) &&
-                    this.operators.equals( ctx.operators );
-        }
-        else
-            return super.equals( obj );
+    /**
+     * @param operators the operators to set
+     */
+    private void setOperators( Operators operators ) {
+        this.operators = operators;
     }
 }

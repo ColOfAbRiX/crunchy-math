@@ -20,12 +20,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package com.colofabrix.mathparser.tests;
 
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.fail;
+import org.junit.Assert;
 import org.junit.Test;
 import com.colofabrix.mathparser.Memory;
-import com.colofabrix.mathparser.expression.Operator;
+import com.colofabrix.mathparser.expression.Expression;
 import com.colofabrix.mathparser.operators.SumOperator;
 import com.colofabrix.mathparser.struct.ConfigException;
 import com.colofabrix.mathparser.struct.ExpressionException;
@@ -35,41 +33,49 @@ public class MemoryTest {
     private static Memory memory = new Memory();
 
     @Test
-    public void testGetValueOrDefault() {
+    public void testGetValue() {
         try {
-            // Operator saving and retrival
-            Operator a = new SumOperator();
+            // Operator saving and retrieval
+            Expression a = new SumOperator();
             MemoryTest.memory.setValue( "test", a );
-            assertSame( "Check value get/set for object",
-                    a,
-                    MemoryTest.memory.getValue( "test" ) );
+            Assert.assertSame( "Check value get/set for object", a, MemoryTest.memory.getValue( "test" ) );
 
             // Test for null
             MemoryTest.memory.setValue( "test", null );
-            assertNull( "Check get/set for default",
-                    MemoryTest.memory.getValue( "test" ) );
-
-            // Test for read-only variable
-            try {
-                MemoryTest.memory.setValue( "this_is_readonly", a, true );
-                MemoryTest.memory.setValue( "this_is_readonly", a, true );
-                fail( "Read-only test: the variable was overwritten" );
-            }
-            catch( ExpressionException e ) {
-            }
-
-            // Test for read-only variable
-            try {
-                MemoryTest.memory.setValue( "this_is_readonly_but_null", null, true );
-                MemoryTest.memory.setValue( "this_is_readonly_but_null", null, true );
-            }
-            catch( ExpressionException e ) {
-                fail( "Read-only test with null: the variable was not overwritten" );
-            }
+            Assert.assertNull( "Check get/set for default", MemoryTest.memory.getValue( "test" ) );
         }
         catch( ExpressionException | ConfigException e ) {
             e.printStackTrace();
-            fail( e.getMessage().getClass().toString() );
+            Assert.fail( e.getMessage().getClass().toString() );
+        }
+    }
+
+    @Test
+    public void testReadOnly() {
+        try {
+            Expression a = new SumOperator();
+
+            // Test for read-only variable
+            try {
+                MemoryTest.memory.setValue( "this_is_readonly", a, true );
+                MemoryTest.memory.setValue( "this_is_readonly", a, true );
+                Assert.fail( "Read-only test: the variable was overwritten" );
+            }
+            catch( ExpressionException e ) {
+            }
+
+            // Test for read-only variable
+            try {
+                MemoryTest.memory.setValue( "this_is_readonly_but_null", null, true );
+                MemoryTest.memory.setValue( "this_is_readonly_but_null", null, true );
+            }
+            catch( ExpressionException e ) {
+                Assert.fail( "Read-only test with null: the variable was not overwritten" );
+            }
+        }
+        catch( ConfigException e ) {
+            e.printStackTrace();
+            Assert.fail( e.getMessage().getClass().toString() );
         }
     }
 }

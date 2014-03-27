@@ -129,20 +129,20 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>org.apfloat.Apfloat</code></td>
-<td class="colLast"><span class="strong">MathParser.</span><code><strong><a href="../../../../../com/colofabrix/mathparser/MathParser.html#ExecutePostfix(com.colofabrix.mathparser.expression.ExpressionEntry)">ExecutePostfix</a></strong>(<a href="../../../../../com/colofabrix/mathparser/expression/ExpressionEntry.html" title="class in com.colofabrix.mathparser.expression">ExpressionEntry</a>&nbsp;input)</code>
+<td class="colLast"><span class="strong">MathParser.</span><code><strong><a href="../../../../../com/colofabrix/mathparser/MathParser.html#ExecutePostfix(com.colofabrix.mathparser.expression.Expression)">ExecutePostfix</a></strong>(<a href="../../../../../com/colofabrix/mathparser/expression/ExpressionEntry.html" title="class in com.colofabrix.mathparser.expression">ExpressionEntry</a>&nbsp;input)</code>
 <div class="block">Executes an postfix-notation mathematical expression</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../com/colofabrix/mathparser/expression/ExpressionEntry.html" title="class in com.colofabrix.mathparser.expression">ExpressionEntry</a></code></td>
-<td class="colLast"><span class="strong">Memory.</span><code><strong><a href="../../../../../com/colofabrix/mathparser/Memory.html#setValue(java.lang.String, com.colofabrix.mathparser.expression.ExpressionEntry)">setValue</a></strong>(java.lang.String&nbsp;address,
+<td class="colLast"><span class="strong">Memory.</span><code><strong><a href="../../../../../com/colofabrix/mathparser/Memory.html#setValue(java.lang.String, com.colofabrix.mathparser.expression.Expression)">setValue</a></strong>(java.lang.String&nbsp;address,
         <a href="../../../../../com/colofabrix/mathparser/expression/ExpressionEntry.html" title="class in com.colofabrix.mathparser.expression">ExpressionEntry</a>&nbsp;value)</code>
 <div class="block">Sets a value of a memory address</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../com/colofabrix/mathparser/expression/ExpressionEntry.html" title="class in com.colofabrix.mathparser.expression">ExpressionEntry</a></code></td>
-<td class="colLast"><span class="strong">Memory.</span><code><strong><a href="../../../../../com/colofabrix/mathparser/Memory.html#setValue(java.lang.String, com.colofabrix.mathparser.expression.ExpressionEntry, boolean)">setValue</a></strong>(java.lang.String&nbsp;address,
+<td class="colLast"><span class="strong">Memory.</span><code><strong><a href="../../../../../com/colofabrix/mathparser/Memory.html#setValue(java.lang.String, com.colofabrix.mathparser.expression.Expression, boolean)">setValue</a></strong>(java.lang.String&nbsp;address,
         <a href="../../../../../com/colofabrix/mathparser/expression/ExpressionEntry.html" title="class in com.colofabrix.mathparser.expression">ExpressionEntry</a>&nbsp;value,
         boolean&nbsp;isReadOnly)</code>
 <div class="block">Sets a value of a memory address</div>
@@ -199,7 +199,7 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../com/colofabrix/mathparser/expression/Operator.html" title="class in com.colofabrix.mathparser.expression">Operator</a></code></td>
-<td class="colLast"><span class="strong">GroupingOperator.</span><code><strong><a href="../../../../../com/colofabrix/mathparser/expression/GroupingOperator.html#executeParsingOpening(com.colofabrix.mathparser.expression.ExpressionEntry, java.util.Stack, com.colofabrix.mathparser.Operators, com.colofabrix.mathparser.Memory)">executeParsingOpening</a></strong>(<a href="../../../../../com/colofabrix/mathparser/expression/ExpressionEntry.html" title="class in com.colofabrix.mathparser.expression">ExpressionEntry</a>&nbsp;postfix,
+<td class="colLast"><span class="strong">GroupingOperator.</span><code><strong><a href="../../../../../com/colofabrix/mathparser/expression/GroupingOperator.html#executeParsingOpening(com.colofabrix.mathparser.expression.Expression, java.util.Stack, com.colofabrix.mathparser.Operators, com.colofabrix.mathparser.Memory)">executeParsingOpening</a></strong>(<a href="../../../../../com/colofabrix/mathparser/expression/ExpressionEntry.html" title="class in com.colofabrix.mathparser.expression">ExpressionEntry</a>&nbsp;postfix,
                      java.util.Stack&lt;<a href="../../../../../com/colofabrix/mathparser/expression/Operator.html" title="class in com.colofabrix.mathparser.expression">Operator</a>&gt;&nbsp;opstack,
                      <a href="../../../../../com/colofabrix/mathparser/Operators.html" title="class in com.colofabrix.mathparser">Operators</a>&nbsp;operators,
                      <a href="../../../../../com/colofabrix/mathparser/Memory.html" title="class in com.colofabrix.mathparser">Memory</a>&nbsp;memory)</code>
@@ -208,7 +208,7 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static org.apfloat.Apfloat</code></td>
-<td class="colLast"><span class="strong">Operand.</span><code><strong><a href="../../../../../com/colofabrix/mathparser/expression/Operand.html#extractNumber(com.colofabrix.mathparser.expression.ExpressionEntry)">extractNumber</a></strong>(<a href="../../../../../com/colofabrix/mathparser/expression/ExpressionEntry.html" title="class in com.colofabrix.mathparser.expression">ExpressionEntry</a>&nbsp;entry)</code>
+<td class="colLast"><span class="strong">Operand.</span><code><strong><a href="../../../../../com/colofabrix/mathparser/expression/Operand.html#extractNumber(com.colofabrix.mathparser.expression.Expression)">extractNumber</a></strong>(<a href="../../../../../com/colofabrix/mathparser/expression/ExpressionEntry.html" title="class in com.colofabrix.mathparser.expression">ExpressionEntry</a>&nbsp;entry)</code>
 <div class="block">Extract a number from an entry, if present</div>
 </td>
 </tr>
@@ -396,7 +396,7 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colLast"><code><strong><a href="../../../../../com/colofabrix/mathparser/operators/IntegralOperator.WorkingExpression.html#IntegralOperator.WorkingExpression(com.colofabrix.mathparser.MathParser, com.colofabrix.mathparser.expression.ExpressionEntry, com.colofabrix.mathparser.expression.Operand)">IntegralOperator.WorkingExpression</a></strong>(<a href="../../../../../com/colofabrix/mathparser/MathParser.html" title="class in com.colofabrix.mathparser">MathParser</a>&nbsp;mp,
+<td class="colLast"><code><strong><a href="../../../../../com/colofabrix/mathparser/operators/IntegralOperator.WorkingExpression.html#IntegralOperator.WorkingExpression(com.colofabrix.mathparser.MathParser, com.colofabrix.mathparser.expression.Expression, com.colofabrix.mathparser.expression.Operand)">IntegralOperator.WorkingExpression</a></strong>(<a href="../../../../../com/colofabrix/mathparser/MathParser.html" title="class in com.colofabrix.mathparser">MathParser</a>&nbsp;mp,
                                   <a href="../../../../../com/colofabrix/mathparser/expression/ExpressionEntry.html" title="class in com.colofabrix.mathparser.expression">ExpressionEntry</a>&nbsp;expression,
                                   <a href="../../../../../com/colofabrix/mathparser/expression/Operand.html" title="class in com.colofabrix.mathparser.expression">Operand</a>&nbsp;variable)</code>
 <div class="block">The constructor saves internally the expression to evaluate</div>

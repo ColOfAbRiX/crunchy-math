@@ -23,10 +23,9 @@ package com.colofabrix.mathparser.operators.special;
 import java.util.Stack;
 import org.apfloat.Apfloat;
 import com.colofabrix.mathparser.expression.CmplxExpression;
-import com.colofabrix.mathparser.expression.ExpressionEntry;
-import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
-import com.colofabrix.mathparser.lib.ApfloatConsts;
+import com.colofabrix.mathparser.expression.Option;
+import com.colofabrix.mathparser.lib.ApfConsts;
 import com.colofabrix.mathparser.struct.ConfigException;
 import com.colofabrix.mathparser.struct.ExpressionException;
 
@@ -34,21 +33,21 @@ import com.colofabrix.mathparser.struct.ExpressionException;
  * Represents a trigonometric operator
  * 
  * <p>
- * This class is used to define common option and methods for all the trigonometri operators
+ * This class is used to define common option and methods for all the trigonometric operators
  * </p>
  * 
  * @author Fabrizio Colonna
  */
 public abstract class TrigonometricOperator extends Operator {
 
-    protected static final String OPTION_UNITS = "$degrees";
+    protected static final Option OPTION_UNITS = new Option( "$degrees" );
     protected static final int PI_PRECISION = 200;
 
     /**
      * Default constructor
      * 
      * <p>
-     * It initialize the object with RADIANS as unit of measurement
+     * It initialise the object with RADIANS as unit of measurement
      * </p>
      * 
      * @throws ConfigException
@@ -80,7 +79,28 @@ public abstract class TrigonometricOperator extends Operator {
     }
 
     /**
-     * Converts a degrees value from radians to the currend unit
+     * Gets the current degrees unit of measurement
+     * 
+     * @return A code from {@link AngleUnit} representing the currently selected unit of measurement
+     * @throws ExpressionException
+     */
+    public AngleUnit getSelectedUnit() throws ExpressionException {
+        final AngleUnit radians = AngleUnit.RADIANS;
+        int selected = this.getOption( TrigonometricOperator.OPTION_UNITS, radians.getValue() );
+        return AngleUnit.fromValue( selected );
+    }
+
+    /**
+     * Sets the current degrees unit of measurement
+     * 
+     * @param selectedUnit A code from {@link AngleUnit} representing the currently selected unit of measurement
+     */
+    public void setSelectedUnit( AngleUnit selectedUnit ) {
+        this.setOption( TrigonometricOperator.OPTION_UNITS, selectedUnit.getValue() );
+    }
+
+    /**
+     * Converts a degrees value from radians to the current unit
      * 
      * <p>
      * The unit of measurement of the output value is the one that is set in the object. See
@@ -132,50 +152,13 @@ public abstract class TrigonometricOperator extends Operator {
     }
 
     /**
-     * Gets the current degrees unit of measurement
-     * 
-     * @return A code from {@link AngleUnit} representing the currently selected unit of measurement
-     * @throws ExpressionException
-     */
-    public AngleUnit getSelectedUnit() throws ExpressionException {
-        if( this.getContext() == null )
-            return AngleUnit.RADIANS;
-
-        ExpressionEntry value = this.getContext().getMemory().getValue( TrigonometricOperator.OPTION_UNITS );
-
-        if( value == null || value.getEntryType() != Operand.OPERAND_CODE ) {
-            return AngleUnit.RADIANS;
-        }
-
-        return AngleUnit.fromValue( ((Operand)value).getNumericValue().intValue() );
-    }
-
-    /**
-     * Sets the current degrees unit of measurement
-     * 
-     * @param selectedUnit A code from {@link AngleUnit} representing the currently selected unit of measurement
-     */
-    public void setSelectedUnit( AngleUnit selectedUnit ) {
-        if( this.getContext() == null )
-            return;
-
-        // The option is managed internally by this class, so I know it is never read-only 
-        try {
-            // TODO: This is not the best way to save an option value
-            this.getContext().getMemory().setValue( TrigonometricOperator.OPTION_UNITS, new Operand( new Apfloat( selectedUnit.getValue() ) ) );
-        }
-        catch( ExpressionException e ) {
-        }
-    }
-
-    /**
      * Converts a degrees value from common degrees to radians
      * 
      * @param degrees The degrees to convert, expressed in degrees
      * @return The converted degrees expressed in radians
      */
     protected Apfloat degreesToRadians( Apfloat degrees ) {
-        return degrees.multiply( ApfloatConsts.PI.divide( ApfloatConsts.Angular.DEG_180 ) );
+        return degrees.multiply( ApfConsts.PI.divide( ApfConsts.Angular.DEG_180 ) );
     }
 
     /**
@@ -185,7 +168,7 @@ public abstract class TrigonometricOperator extends Operator {
      * @return The converted degrees expressed in radians
      */
     protected Apfloat gradiansToRadians( Apfloat gradians ) {
-        return gradians.multiply( ApfloatConsts.PI.divide( ApfloatConsts.Angular.GRAD_200 ) );
+        return gradians.multiply( ApfConsts.PI.divide( ApfConsts.Angular.GRAD_200 ) );
     }
 
     /**
@@ -195,7 +178,7 @@ public abstract class TrigonometricOperator extends Operator {
      * @return The converted degrees expressed in common degrees
      */
     protected Apfloat radiansToDegrees( Apfloat radians ) {
-        return radians.multiply( ApfloatConsts.Angular.DEG_180.divide( ApfloatConsts.PI ) );
+        return radians.multiply( ApfConsts.Angular.DEG_180.divide( ApfConsts.PI ) );
     }
 
     /**
@@ -205,6 +188,6 @@ public abstract class TrigonometricOperator extends Operator {
      * @return The converted degrees expressed in common radians
      */
     protected Apfloat radiansToGradians( Apfloat radians ) {
-        return radians.multiply( ApfloatConsts.Angular.GRAD_200.divide( ApfloatConsts.PI ) );
+        return radians.multiply( ApfConsts.Angular.GRAD_200.divide( ApfConsts.PI ) );
     }
 }

@@ -24,7 +24,7 @@ import java.util.Stack;
 import org.apfloat.Apfloat;
 import com.colofabrix.mathparser.Operators;
 import com.colofabrix.mathparser.expression.CmplxExpression;
-import com.colofabrix.mathparser.expression.ExpressionEntry;
+import com.colofabrix.mathparser.expression.Expression;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
 import com.colofabrix.mathparser.struct.ConfigException;
@@ -52,9 +52,10 @@ public class OperatorsOperator extends Operator {
      * 1 = Display all operators
      */
     @Override
-    public Operand executeOperation( Stack<ExpressionEntry> operands ) throws ExpressionException {
-        if( operands.size() < this.getCurrentOperands() )
+    public Operand executeOperation( Stack<Expression> operands ) throws ExpressionException {
+        if( operands.size() < this.getCurrentOperands() ) {
             throw new ExpressionException( "Wrong number of given parameters" );
+        }
 
         int value1 = Operand.extractNumber( operands.pop() ).intValue();
 

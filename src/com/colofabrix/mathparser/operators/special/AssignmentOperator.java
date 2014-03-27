@@ -21,7 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 package com.colofabrix.mathparser.operators.special;
 
 import java.util.Stack;
-import com.colofabrix.mathparser.expression.ExpressionEntry;
+import com.colofabrix.mathparser.expression.Expression;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
 import com.colofabrix.mathparser.struct.ConfigException;
@@ -53,7 +53,7 @@ public class AssignmentOperator extends Operator {
      * @throws ExpressionException If the first operand is not a variable name
      */
     @Override
-    public Operand executeOperation( Stack<ExpressionEntry> operands ) throws ExpressionException {
+    public Operand executeOperation( Stack<Expression> operands ) throws ExpressionException {
         Operand variable, operand;
 
         if( operands.size() < this.getCurrentOperands() )
@@ -72,8 +72,6 @@ public class AssignmentOperator extends Operator {
         if( !variable.isVariable() )
             throw new ExpressionException( "Cannot assign to a number" );
 
-        return (Operand)this.getContext().getMemory().setValue(
-                variable.getVariableName(),
-                new Operand( operand.getNumericValue() ) );
+        return (Operand)this.getContext().getMemory().setValue( variable.getVariableName(), new Operand( operand.toNumber( ) ) );
     }
 }

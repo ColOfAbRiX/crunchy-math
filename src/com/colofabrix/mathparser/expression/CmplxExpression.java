@@ -25,89 +25,41 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.regex.Matcher;
-import com.colofabrix.mathparser.struct.Context;
-import com.colofabrix.mathparser.struct.ExpressionException;
 
 /**
  * A composite expression represents an expression that is made by sub entries
- * 
  * <p>
  * An example of composite expression is "1 + 2", which is made by two Operands and one Operator.
  * </p>
  * 
  * @author Fabrizio Colonna
  */
-public class CmplxExpression extends ExpressionEntry implements List<ExpressionEntry> {
+public class CmplxExpression implements Expression, List<Expression> {
 
     /**
      * Code to identify the object type
      */
-    public static final int COMPOSITE_CODE = 3;
+    public static final int COMPOSITE_CODE = 4;
 
-    /**
-     * Creates a CmplxExpression starting from a list of ExpressionEntry
-     * 
-     * <p>
-     * The method splits the string in its component and create an appropriate ExpressionEntry for every token.
-     * </p>
-     * 
-     * @param stack A stack of ExpressionEntry to add in a new CmplxExpression
-     * @param operators A reference to the operators in use
-     * @param memory A reference to the memory in use
-     * @return A CmplxExpression object containing the added CmplxExpression(s)
-     * @throws ExpressionException
-     */
-    public static CmplxExpression fromExpression( List<ExpressionEntry> stack, Context context ) throws ExpressionException {
-        CmplxExpression composite = new CmplxExpression();
-        composite.addAll( stack );
-        return composite;
-    }
-
-    /**
-     * Creates a CmplxExpression starting from a string
-     * 
-     * <p>
-     * The method splits the string in its component and create an appropriate ExpressionEntry for every token.
-     * </p>
-     * 
-     * @param expression The expression to converts
-     * @param operators A reference to the operators in use
-     * @param memory A reference to the memory in use
-     * @return A CmplxExpression object containing the translated string expression
-     * @throws ExpressionException
-     */
-    public static CmplxExpression fromExpression( String expression, Context context ) throws ExpressionException {
-        // The input string is split in its forming components and translated in object-form
-        Matcher m = context.getOperators().getParsingRegex().matcher( expression );
-        CmplxExpression composite = new CmplxExpression();
-
-        // Saves all matches in a list
-        while( m.find() )
-            composite.add( ExpressionEntry.fromStringEntry( m.group(), context ) );
-
-        return composite;
-    }
-
-    ArrayList<ExpressionEntry> subExpressions = new ArrayList<>();
+    ArrayList<Expression> subExpressions = new ArrayList<>();
 
     @Override
-    public boolean add( ExpressionEntry e ) {
+    public boolean add( Expression e ) {
         return this.subExpressions.add( e );
     }
 
     @Override
-    public void add( int index, ExpressionEntry element ) {
+    public void add( int index, Expression element ) {
         this.subExpressions.add( index, element );
     }
 
     @Override
-    public boolean addAll( Collection<? extends ExpressionEntry> c ) {
+    public boolean addAll( Collection<? extends Expression> c ) {
         return this.subExpressions.addAll( c );
     }
 
     @Override
-    public boolean addAll( int index, Collection<? extends ExpressionEntry> c ) {
+    public boolean addAll( int index, Collection<? extends Expression> c ) {
         return this.subExpressions.addAll( index, c );
     }
 
@@ -128,28 +80,29 @@ public class CmplxExpression extends ExpressionEntry implements List<ExpressionE
 
     /**
      * Checks if the given object is the same as the current one
-     * 
      * <p>
      * Equality is implemented iterating through the component of this object and check if every one is also equals.
      * <br/>
      * 
      * @param obj An Object object to be compared against the current instance.
-     * @return The value <b>zero</b> if the given object is equal to the current one
+     * @return <code>true</code> if the given object is equal to the current one, <code>false</code> otherwise
      */
     public boolean equals( CmplxExpression obj ) {
-        if( this.size() != obj.size() )
+        if( this.size() != obj.size() ) {
             return false;
+        }
 
-        for( int i = 0; i < this.size(); i++ )
-            if( !this.get( i ).equals( obj.get( i ) ) )
+        for( int i = this.size() - 1; i >= 0; i-- ) {
+            if( !this.get( i ).equals( obj.get( i ) ) ) {
                 return false;
+            }
+        }
 
         return true;
     }
 
     /**
      * Checks if the given object is the same as the current one
-     * 
      * <p>
      * Equality is implemented iterating through the component of this object and check if every one is also equals.
      * </p>
@@ -159,36 +112,37 @@ public class CmplxExpression extends ExpressionEntry implements List<ExpressionE
      * </p>
      * 
      * @param obj An Object object to be compared against the current instance.
-     * @return The value <b>zero</b> if the given object is equal to the current one
+     * @return <code>true</code> if the given object is equal to the current one, <code>false</code> otherwise
      */
     @Override
     public boolean equals( Object obj ) {
-        if( !this.getClass().equals( obj.getClass() ) )
-            return false;
+        if( obj instanceof CmplxExpression ) {
+            return this.equals( (CmplxExpression)obj );
+        }
 
-        return this.equals( (CmplxExpression)obj );
+        return false;
     }
 
     /**
      * Gets the first element of the expression
      * 
-     * @return An ExpressionEntry at the beginning of the expression or <code>null</code> if the list is empty
+     * @return An Expression at the beginning of the expression or <code>null</code> if the list is empty
      */
-    public ExpressionEntry firstElement() {
-        if( this.subExpressions.size() == 0 )
+    public Expression firstElement() {
+        if( this.subExpressions.size() == 0 ) {
             return null;
+        }
 
         return this.subExpressions.get( 0 );
     }
 
     @Override
-    public ExpressionEntry get( int index ) {
+    public Expression get( int index ) {
         return this.subExpressions.get( index );
     }
 
     /**
      * Find the type of entry the object represents
-     * 
      * <p>
      * This method is used to identify the type of the object stored in the entry. It must be overridden by teh derived
      * classes
@@ -213,35 +167,81 @@ public class CmplxExpression extends ExpressionEntry implements List<ExpressionE
 
     /**
      * Checks if an expression is minimizable
-     * 
      * <p>
-     * An expression is minimizable if it doesn't contain any variable
+     * An expression is minimizable if any of it subexpression is minimizable. E.g. "[1, 2 * 3, 4]" is minimizable as
+     * the middle element is, but "[1, 2, 3]" is not.<br/>
+     * The check is performed looking for at least one executable operator, then if its operands are minimizable and,
+     * last, recursively checking the subexpressions.
      * </p>
      * 
      * @return <code>true</code> if the expression is minimizable</code>
      */
     @Override
     public boolean isMinimizable() {
-        for( ExpressionEntry entry: this )
-            if( !entry.isMinimizable() )
-                return false;
+        // If there is only one element...
+        if( this.size() == 1 ) {
+            return this.firstElement().isMinimizable();
+        }
 
-        return true;
+        CmplxExpression operands = new CmplxExpression();
+        for( Expression entry: this ) {
+            // Check if the operator is executable (mean that has all the operands it needs)
+            if( entry.getEntryType() == Operator.OPERATOR_CODE ) {
+
+                // If the n. of operands does not match I skip this operator
+                if( operands.size() < ((Operator)entry).getCurrentOperands() ) {
+                    // I put a placeholder in behalf of the evaluated expression
+                    operands = new CmplxExpression();
+                    operands.push( null );
+                    break;
+                }
+
+                boolean opsMinimizables = true;
+
+                // I check if there is a minimizable operand
+                for( int i = ((Operator)entry).getCurrentOperands(); i > 0; i-- ) {
+                    Expression current = operands.pop();
+                    if( current == null || !current.isMinimizable() ) {
+                        opsMinimizables = false;
+                    }
+                }
+
+                // If all the operands are minimizable so it is the operation they belong
+                if( opsMinimizables ) {
+                    return true;
+                }
+
+                // I put a placeholder in behalf of the evaluated expression
+                operands.push( null );
+            }
+            else {
+                // If the non-operator is a CmplxExpression I return true if it is itself minimizable
+                if( entry.getEntryType() == CmplxExpression.COMPOSITE_CODE && entry.isMinimizable() ) {
+                    return true;
+                }
+
+                // I memorise the Expression as an operand
+                operands.push( entry );
+            }
+        }
+
+        return false;
     }
 
     @Override
-    public Iterator<ExpressionEntry> iterator() {
+    public Iterator<Expression> iterator() {
         return this.subExpressions.iterator();
     }
 
     /**
      * Gets the last element of the expression
      * 
-     * @return An ExpressionEntry at the end of the expression or <code>null</code> if the list is empty
+     * @return An Expression at the end of the expression or <code>null</code> if the list is empty
      */
-    public ExpressionEntry lastElement() {
-        if( this.size() == 0 )
+    public Expression lastElement() {
+        if( this.size() == 0 ) {
             return null;
+        }
 
         return this.subExpressions.get( this.size() - 1 );
     }
@@ -252,37 +252,37 @@ public class CmplxExpression extends ExpressionEntry implements List<ExpressionE
     }
 
     @Override
-    public ListIterator<ExpressionEntry> listIterator() {
+    public ListIterator<Expression> listIterator() {
         return this.subExpressions.listIterator();
     }
 
     @Override
-    public ListIterator<ExpressionEntry> listIterator( int index ) {
+    public ListIterator<Expression> listIterator( int index ) {
         return this.subExpressions.listIterator( index );
     }
 
     /**
      * Gets the last element of the expression and remove it from the list
      * 
-     * @return An ExpressionEntry at the end of the expression or <code>null</code> if the list is empty
+     * @return An Expression at the end of the expression or <code>null</code> if the list is empty
      */
-    public ExpressionEntry pop() {
-        ExpressionEntry temp = this.lastElement();
+    public Expression pop() {
+        Expression temp = this.lastElement();
         this.remove( this.size() - 1 );
         return temp;
     }
 
     /**
-     * Add an ExpressionEntry at the end of the expression
+     * Add an Expression at the end of the expression
      * 
-     * @param e The ExpressionEntry to add
+     * @param e The Expression to add
      */
-    public void push( ExpressionEntry e ) {
+    public void push( Expression e ) {
         this.add( this.size(), e );
     }
 
     @Override
-    public ExpressionEntry remove( int index ) {
+    public Expression remove( int index ) {
         return this.subExpressions.remove( index );
     }
 
@@ -302,8 +302,8 @@ public class CmplxExpression extends ExpressionEntry implements List<ExpressionE
     }
 
     @Override
-    public ExpressionEntry set( int index, ExpressionEntry element ) {
-        return this.set( index, element );
+    public Expression set( int index, Expression element ) {
+        return this.subExpressions.set( index, element );
     }
 
     @Override
@@ -312,7 +312,7 @@ public class CmplxExpression extends ExpressionEntry implements List<ExpressionE
     }
 
     @Override
-    public List<ExpressionEntry> subList( int fromIndex, int toIndex ) {
+    public List<Expression> subList( int fromIndex, int toIndex ) {
         return this.subExpressions.subList( fromIndex, toIndex );
     }
 
@@ -328,7 +328,6 @@ public class CmplxExpression extends ExpressionEntry implements List<ExpressionE
 
     /**
      * Get a string representation of the entry
-     * 
      * <p>
      * The string representation is commonly used to create output expressions
      * </p>
@@ -340,9 +339,11 @@ public class CmplxExpression extends ExpressionEntry implements List<ExpressionE
         String output = "";
 
         // Recursively calls the method toString() of the subentries
-        for( ExpressionEntry entry: this.subExpressions )
+        for( Expression entry: this.subExpressions ) {
             output += entry.toString() + " ";
+        }
 
         return output.replaceFirst( "\\s$", "" );
     }
+
 }

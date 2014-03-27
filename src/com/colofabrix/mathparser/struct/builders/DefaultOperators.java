@@ -31,6 +31,7 @@ import com.colofabrix.mathparser.operators.CeilOperator;
 import com.colofabrix.mathparser.operators.CosOperator;
 import com.colofabrix.mathparser.operators.CoshOperator;
 import com.colofabrix.mathparser.operators.DivideOperator;
+import com.colofabrix.mathparser.operators.EvalOperator;
 import com.colofabrix.mathparser.operators.ExpOperator;
 import com.colofabrix.mathparser.operators.FactOperator;
 import com.colofabrix.mathparser.operators.FloorOperator;
@@ -66,10 +67,10 @@ import com.colofabrix.mathparser.struct.OperatorsSetter;
 public class DefaultOperators implements OperatorsSetter {
 
     private final List<Operator> localOps = new ArrayList<Operator>();
-    
+
     public DefaultOperators() {
         OpBuilder builder = new OpBuilder();
-        
+
         // Algebraic operators
         this.localOps.add( builder.create( SumOperator.class ) );
         this.localOps.add( builder.create( MinusOperator.class ) );
@@ -114,6 +115,7 @@ public class DefaultOperators implements OperatorsSetter {
         this.localOps.add( builder.create( RandomOperator.class ) );
         this.localOps.add( builder.create( AbsOperator.class ) );
         this.localOps.add( builder.create( IntegralOperator.class ) );
+        this.localOps.add( builder.create( EvalOperator.class ) );
 
         // Management operators
         this.localOps.add( builder.create( MemoryOperator.class ) );
@@ -121,19 +123,10 @@ public class DefaultOperators implements OperatorsSetter {
         this.localOps.add( builder.create( SetOperator.class ) );
         this.localOps.add( builder.create( GetOperator.class ) );
     }
-    
-    /* (non-Javadoc)
-     * @see com.colofabrix.mathparser.org.OperatorsSetter#initOperators(com.colofabrix.mathparser.org.MathContext)
-     */
-    @Override
-    public void initOperators( Context context ) {
-        for( Operator op: this.localOps ) {
-            op.setContext( context );
-            context.getOperators().add( op );
-        }
-    }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see com.colofabrix.mathparser.org.OperatorsSetter#disposeOperators(com.colofabrix.mathparser.org.MathContext)
      */
     @Override
@@ -141,6 +134,19 @@ public class DefaultOperators implements OperatorsSetter {
         for( Operator op: this.localOps ) {
             context.getOperators().remove( op );
             op.setContext( null );
+        }
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.colofabrix.mathparser.org.OperatorsSetter#initOperators(com.colofabrix.mathparser.org.MathContext)
+     */
+    @Override
+    public void initOperators( Context context ) {
+        for( Operator op: this.localOps ) {
+            op.setContext( context );
+            context.getOperators().add( op );
         }
     }
 }

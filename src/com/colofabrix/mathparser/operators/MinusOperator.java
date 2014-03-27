@@ -22,7 +22,7 @@ package com.colofabrix.mathparser.operators;
 
 import java.util.Stack;
 import org.apfloat.Apfloat;
-import com.colofabrix.mathparser.expression.ExpressionEntry;
+import com.colofabrix.mathparser.expression.Expression;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
 import com.colofabrix.mathparser.struct.ConfigException;
@@ -38,7 +38,7 @@ public class MinusOperator extends Operator {
     }
 
     @Override
-    public Operand executeOperation( Stack<ExpressionEntry> operands ) throws ExpressionException {
+    public Operand executeOperation( Stack<Expression> operands ) throws ExpressionException {
         Apfloat value1, value2;
 
         if( operands.size() < this.getCurrentOperands() )

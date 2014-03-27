@@ -23,8 +23,8 @@ package com.colofabrix.mathparser;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import org.apfloat.Apfloat;
-import com.colofabrix.mathparser.expression.ExpressionEntry;
+import com.colofabrix.mathparser.expression.Expression;
+import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.struct.ConfigException;
 import com.colofabrix.mathparser.struct.ExpressionException;
 
@@ -39,17 +39,20 @@ public class Main {
                 BufferedReader in = new BufferedReader( new InputStreamReader( System.in ) );
                 String input = in.readLine();
 
-                if( input.isEmpty() )
+                if( input.isEmpty() ) {
                     break;
+                }
 
-                ExpressionEntry ce = mp.ConvertToPostfix( input );
-                Apfloat result = mp.ExecutePostfix( ce );
+                Expression ce = mp.toPostfix( input );
+                Expression result = mp.executePostfix( ce );
 
                 System.out.println( "    Convertex expression: " + ce.toString() );
-                if( result != null )
-                    System.out.println( "    The result is: " + result );
-                else
-                    System.out.println( "    No numerical result given" );
+                if( result.getEntryType() == Operand.OPERAND_CODE ) {
+                    System.out.println( "    The result is: " + Operand.extractNumber( result ) );
+                }
+                else {
+                    System.out.println( "    The result is: " + mp.minimise( result ) );
+                }
 
                 System.out.println();
             }

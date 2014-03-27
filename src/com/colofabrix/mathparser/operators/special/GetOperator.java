@@ -21,7 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 package com.colofabrix.mathparser.operators.special;
 
 import java.util.Stack;
-import com.colofabrix.mathparser.expression.ExpressionEntry;
+import com.colofabrix.mathparser.expression.Expression;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
 import com.colofabrix.mathparser.expression.Option;
@@ -34,7 +34,7 @@ import com.colofabrix.mathparser.struct.ExpressionException;
  * <p>
  * Options are configuration parameters that the various parts of the parser can use as they prefer. There are no rules
  * on options, options are simply memory variable with a name that starts with a marker {@link Option#OPTION_MARK} and
- * they contain a generic {@link ExpressionEntry} value.
+ * they contain a generic {@link Expression} value.
  * </p>
  * 
  * @author Fabrizio Colonna
@@ -50,13 +50,13 @@ public class GetOperator extends Operator {
     }
 
     @Override
-    public Operand executeOperation( Stack<ExpressionEntry> operands ) throws ExpressionException {
+    public Operand executeOperation( Stack<Expression> operands ) throws ExpressionException {
         if( operands.size() < this.getCurrentOperands() )
             throw new ExpressionException( "Wrong number of given parameters" );
 
         try {
             Option option = (Option)operands.pop();
-            ExpressionEntry value = this.getContext().getMemory().getValue( option.getFullName() );
+            Expression value = this.getContext().getMemory().getValue( option.getFullName() );
 
             if( value.getEntryType() == Operand.OPERAND_CODE )
                 return((Operand)value);

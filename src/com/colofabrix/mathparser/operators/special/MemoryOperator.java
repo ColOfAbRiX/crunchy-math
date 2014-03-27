@@ -25,7 +25,7 @@ import java.util.Stack;
 import org.apfloat.Apfloat;
 import org.apfloat.ApfloatRuntimeException;
 import com.colofabrix.mathparser.Memory;
-import com.colofabrix.mathparser.expression.ExpressionEntry;
+import com.colofabrix.mathparser.expression.Expression;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
 import com.colofabrix.mathparser.struct.ConfigException;
@@ -50,7 +50,7 @@ public class MemoryOperator extends Operator {
      * Select the sub-function to call
      */
     @Override
-    public Operand executeOperation( Stack<ExpressionEntry> operands ) throws ExpressionException {
+    public Operand executeOperation( Stack<Expression> operands ) throws ExpressionException {
         if( operands.size() < this.getCurrentOperands() )
             throw new ExpressionException( "Wrong number of given parameters" );
 
@@ -76,21 +76,21 @@ public class MemoryOperator extends Operator {
         for( Map.Entry<String, Memory.MemoryCell> entry: mem.getSet() ) {
             String name = entry.getKey();
             Memory.MemoryCell cell = entry.getValue();
-            
+
             System.out.print( name );
             System.out.print( "\t\t" );
-            
+
             System.out.print( cell.isReadonly() );
             System.out.print( "\t\t" );
 
             if( cell.getValue().getEntryType() == Operand.OPERAND_CODE ) {
                 try {
                     Operand operand = (Operand)cell.getValue();
-                
-                    System.out.print( operand.getNumericValue().precision() );
+
+                    System.out.print( operand.toNumber( ).precision() );
                     System.out.print( "\t\t" );
-                    
-                    System.out.println( operand.getNumericValue() );
+
+                    System.out.println( operand.toNumber( ) );
                 }
                 catch( ApfloatRuntimeException | ExpressionException e ) {
                     // TODO Auto-generated catch block

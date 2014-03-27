@@ -20,27 +20,28 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package com.colofabrix.mathparser.struct;
 
-
 /**
  * Represents a Memory Worker
  * 
- * <p>Its purpose is to add some constants to memory</p>
+ * <p>
+ * Its purpose is to add some constants to memory
+ * </p>
  * 
  * @author Fabrizio Colonna
  */
 public interface MemorySetter {
 
     /**
-     * Initialize the memory with constants
+     * Dispose the constants that were initialised previously
      * 
-     * @param memory The memory to initialize
-     */
-    public abstract void initMemory( Context context );
-
-    /**
-     * Dispose the constants that were initialized previously
-     * 
-     * @param memory The memory where the constants are
+     * @param context The context associated, where the memory resides
      */
     public abstract void disposeMemory( Context context );
+
+    /**
+     * Initialise the memory with constants
+     * 
+     * @param context The context associated, where the memory resides
+     */
+    public abstract void initMemory( Context context );
 }

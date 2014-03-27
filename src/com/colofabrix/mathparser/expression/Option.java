@@ -25,12 +25,12 @@ package com.colofabrix.mathparser.expression;
  * 
  * @author Fabrizio Colonna
  */
-public class Option extends ExpressionEntry {
+public class Option implements Expression {
 
     /**
      * Code to identify the object type
      */
-    public static final int OPTION_CODE = 4;
+    public static final int OPTION_CODE = 3;
 
     /**
      * Marker to identify an option
@@ -47,7 +47,7 @@ public class Option extends ExpressionEntry {
      */
     public static final String STRING_VALUE = "\"(?:[^\"\\]|\\.)*\"";
 
-    private String name;
+    private final String name;
 
     /**
      * Constructor
@@ -56,6 +56,37 @@ public class Option extends ExpressionEntry {
      */
     public Option( String name ) {
         this.name = name.replaceAll( "^\\" + Option.OPTION_MARK, "" );
+    }
+
+    /**
+     * Checks if the given object is the same as the current one
+     * <p>
+     * The check is performed against the Option name
+     * </p>
+     * 
+     * @param obj An Object object to be compared against the current instance.
+     * @return <code>true</code> if the given object is equal to the current one, <code>false</code> otherwise
+     */
+    @Override
+    public boolean equals( Object obj ) {
+        if( obj instanceof Option ) {
+            return this.equals( (Option)obj );
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks if the given object is the same as the current one
+     * <p>
+     * The check is performed against the Option name
+     * </p>
+     * 
+     * @param obj An Object object to be compared against the current instance.
+     * @return <code>true</code> if the given object is equal to the current one, <code>false</code> otherwise
+     */
+    public boolean equals( Option obj ) {
+        return this.name.equals( obj.name );
     }
 
     /**
@@ -95,5 +126,4 @@ public class Option extends ExpressionEntry {
     public String toString() {
         return this.getFullName();
     }
-
 }

@@ -27,17 +27,16 @@ import com.colofabrix.mathparser.struct.ExpressionException;
 
 /**
  * It represents an operand in an expression
- * 
  * <p>
  * An operand can be a number or a variable name
  * </p>
  * 
  * @author Fabrizio Colonna
  */
-public class Operand extends ExpressionEntry {
+public class Operand implements Expression {
 
     /**
-     * Regular espression to match allowed numbers
+     * Regular expression to match allowed numbers
      */
     public static final String NUMBER_REGEX = "-?[0-9]*\\.[0-9]+|[0-9]+";
 
@@ -58,11 +57,12 @@ public class Operand extends ExpressionEntry {
      * @throws ExpressionException When the entry cannot be converted in a number
      * @throws ConfigException
      */
-    public static Apfloat extractNumber( ExpressionEntry entry ) throws ExpressionException {
-        if( entry.getEntryType() != Operand.OPERAND_CODE )
+    public static Apfloat extractNumber( Expression entry ) throws ExpressionException {
+        if( entry.getEntryType() != Operand.OPERAND_CODE ) {
             throw new ExpressionException( "The entry cannot be converted in a number" );
+        }
 
-        return ((Operand)entry).getNumericValue();
+        return ((Operand)entry).toNumber();
     }
 
     private final Memory memory;
@@ -92,16 +92,16 @@ public class Operand extends ExpressionEntry {
 
     /**
      * This constructor creates an operand which contains a variable
-     * 
-     * <p>If the variable it is trying to access/create is a read-only (and already alive) variable,
-     * it will use that variable as it is, without overwriting. Any further attempt to write over that
-     * variable will cause exceptions</p>
+     * <p>
+     * If the variable it is trying to access/create is a read-only (and already alive) variable, it will use that
+     * variable as it is, without overwriting. Any further attempt to write over that variable will cause exceptions
+     * </p>
      * 
      * @param varName Variable name
      * @param varValue Variable value
      * @param memory Reference to the memory
      */
-    public Operand( String varName, ExpressionEntry varValue, Memory memory ) {
+    public Operand( String varName, Expression varValue, Memory memory ) {
         this( varName, varValue, true, null, memory );
     }
 
@@ -123,23 +123,24 @@ public class Operand extends ExpressionEntry {
      * @param number The number to store
      * @param memory Reference to the memory
      */
-    protected Operand( String varName, ExpressionEntry varValue, boolean setVarValue, Apfloat number, Memory memory ) {
+    protected Operand( String varName, Expression varValue, boolean setVarValue, Apfloat number, Memory memory ) {
         this.value = number;
         this.varName = varName;
         this.memory = memory;
 
-        if( this.isVariable() && setVarValue )
-            // If the operand refers to a read-only variable that is already assigned it's ok: I will not overwrite the variable and continue
+        if( this.isVariable() && setVarValue ) {
+            // If the operand refers to a read-only variable that is already assigned it's ok: I will not overwrite the
+            // variable and continue
             try {
                 this.memory.setValue( this.varName, varValue );
             }
             catch( ExpressionException e ) {
             }
+        }
     }
 
     /**
      * Checks if the given object is the same as the current one
-     * 
      * <p>
      * Equality is implemented checking interal field values
      * </p>
@@ -149,24 +150,24 @@ public class Operand extends ExpressionEntry {
      * </p>
      * 
      * @param obj An Object object to be compared against the current instance.
-     * @return The value <b>zero</b> if the given object is equal to the current one
+     * @return <code>true</code> if the given object is equal to the current one, <code>false</code> otherwise
      */
     @Override
     public boolean equals( Object obj ) {
-        if( !this.getClass().equals( obj.getClass() ) )
-            return false;
+        if( obj instanceof Operand ) {
+            return this.equals( (Operand)obj );
+        }
 
-        return this.equals( (Operand)obj );
+        return false;
     }
 
     /**
      * Checks if the given object is the same as the current one
-     * 
      * <p>
-     * Equality is implemented checking interal field values<br/>
+     * Equality is implemented checking internal field values<br/>
      * 
      * @param obj An Object object to be compared against the current instance.
-     * @return The value <b>zero</b> if the given object is equal to the current one
+     * @return <code>true</code> if the given object is equal to the current one, <code>false</code> otherwise
      */
     public boolean equals( Operand obj ) {
         return this.memory == obj.memory &&
@@ -182,31 +183,6 @@ public class Operand extends ExpressionEntry {
     @Override
     public int getEntryType() {
         return Operand.OPERAND_CODE;
-    }
-
-    /**
-     * Gets the numeric value that this object containts
-     * 
-     * <p>
-     * If the object contains a variable, this will be resolved and its content returned. If the objects contains a
-     * number, this will be returned. If the referenced variable is empty, the function will return <code>null</code><br/>
-     * A referenced memory address can contain another Operand, which means that the value will be dereferenced again
-     * until a numeric value is encountered
-     * </p>
-     * 
-     * @return The number stored or <code>null</code>
-     * @throws ExpressionException When there is a mismatch between the variable, the memory or between internal fields
-     */
-    public Apfloat getNumericValue() throws ExpressionException {
-        if( this.isVariable() ) {
-            ExpressionEntry memoryValue = this.memory.getValue( this.varName );
-            return Operand.extractNumber( memoryValue );
-        }
-
-        if( this.value != null )
-            return this.value;
-
-        throw new ExpressionException( "Cannot convert this entry in a number" );
     }
 
     /**
@@ -232,12 +208,36 @@ public class Operand extends ExpressionEntry {
      * @return <code>true</code> if the object contain a variable and a valid memory reference
      */
     public boolean isVariable() {
-        return (this.memory != null) && (this.varName != null) && (this.value == null);
+        return this.varName != null && this.value == null;
+    }
+
+    /**
+     * Gets the numeric value that this object contains
+     * <p>
+     * If the object contains a variable, this will be resolved and its content returned. If the objects contains a
+     * number, this will be returned. If the referenced variable is empty, the function will return <code>null</code><br/>
+     * A referenced memory address can contain another Operand, which means that the value will be dereferenced again
+     * until a numeric value is encountered
+     * </p>
+     * 
+     * @return The number stored or <code>null</code>
+     * @throws ExpressionException When there is a mismatch between the variable, the memory or between internal fields
+     */
+    public Apfloat toNumber() throws ExpressionException {
+        if( this.isVariable() ) {
+            Expression memoryValue = this.memory.getValue( this.varName );
+            return Operand.extractNumber( memoryValue );
+        }
+
+        if( this.value != null ) {
+            return this.value;
+        }
+
+        throw new ExpressionException( "Cannot convert this entry in a number" );
     }
 
     /**
      * Get a string representation of the entry
-     * 
      * <p>
      * The string representation is commonly used to create output expressions
      * </p>
@@ -246,14 +246,16 @@ public class Operand extends ExpressionEntry {
      */
     @Override
     public String toString() {
-        if( this.isVariable() )
+        if( this.isVariable() ) {
             return this.getVariableName();
+        }
 
         try {
-            return this.getNumericValue().toString();
+            return this.toNumber().toString();
         }
         catch( ExpressionException e ) {
             return "";
         }
     }
+
 }

@@ -3,5 +3,6 @@ com.colofabrix.mathparser.expression
 com.colofabrix.mathparser.lib
 com.colofabrix.mathparser.operators
 com.colofabrix.mathparser.operators.special
-com.colofabrix.mathparser.org
+com.colofabrix.mathparser.struct
+com.colofabrix.mathparser.struct.builders
 com.colofabrix.mathparser.tests

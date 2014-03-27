@@ -21,90 +21,23 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 package com.colofabrix.mathparser.operators;
 
 import java.util.Stack;
-import org.apache.commons.math3.analysis.UnivariateFunction;
 import org.apache.commons.math3.analysis.integration.BaseAbstractUnivariateIntegrator;
 import org.apache.commons.math3.analysis.integration.SimpsonIntegrator;
 import org.apfloat.Apfloat;
 import com.colofabrix.mathparser.MathParser;
-import com.colofabrix.mathparser.Memory;
-import com.colofabrix.mathparser.expression.CmplxExpression;
-import com.colofabrix.mathparser.expression.ExpressionEntry;
+import com.colofabrix.mathparser.expression.Expression;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
+import com.colofabrix.mathparser.lib.Expression2AMLAdapter;
 import com.colofabrix.mathparser.struct.ConfigException;
 import com.colofabrix.mathparser.struct.ExpressionException;
 
 /**
- * 
  * @author Fabrizio Colonna
  */
 public class IntegralOperator extends Operator {
 
-    /**
-     * This class is used to interface with the Apache Math Library
-     * 
-     * @author Fabrizio Colonna
-     */
-    protected class WorkingExpression implements UnivariateFunction {
-
-        private final MathParser mp;
-        private final Memory mem;
-        ExpressionEntry expression;
-        ExpressionEntry oldMemory;
-        Operand variable;
-
-        /**
-         * The constructor saves internally the expression to evaluate
-         * 
-         * @param mp A math parser to execute the expression
-         * @param expression The expression to evaluate
-         * @param variable The integration variable
-         * @throws ExpressionException 
-         */
-        protected WorkingExpression( MathParser mp, ExpressionEntry expression, Operand variable ) throws ExpressionException {
-            this.mp = mp;
-            this.mem = this.mp.getContext().getMemory();
-            this.expression = expression;
-            this.variable = variable;
-
-            // Save the value of a possible old variable
-            // NOTE: Here the main memory is used and not a new one because there may be memory references in the
-            // variables inside the expression to evaluate
-            this.oldMemory = this.mem.getValue( variable.getVariableName() );
-            // Check for read-only
-            this.mem.setValue( this.variable.getVariableName(), this.oldMemory );            
-        }
-
-        @Override
-        public void finalize() {
-            // I checked in the constructor that the variable is not readonly
-            try {
-                // Restore the old variable in memory
-                this.mem.setValue( this.variable.getVariableName(), this.oldMemory );
-            }
-            catch( ExpressionException e ) {}
-        }
-
-        /**
-         * Calculate the value of the function in a point
-         */
-        @Override
-        public double value( double arg0 ) {
-            // I have already checked in the constructor that the variable is not readonly
-            try {
-                this.mem.setValue(
-                        this.variable.getVariableName(),
-                        new Operand( new Apfloat( arg0 ) ) );
-
-                return this.mp.ExecutePostfix( this.expression ).doubleValue();
-            }
-            catch( ExpressionException e ) {
-                throw new IllegalArgumentException();
-            }
-        }
-    }
-
-    private MathParser parser;
+    private MathParser parser = null;
 
     public IntegralOperator() throws ConfigException {
         super();
@@ -115,20 +48,23 @@ public class IntegralOperator extends Operator {
     }
 
     @Override
-    public Operand executeOperation( Stack<ExpressionEntry> operands ) throws ExpressionException {
-        if( operands.size() < this.getCurrentOperands() )	// Start, End, Function, Variable, Precision
+    public Operand executeOperation( Stack<Expression> operands ) throws ExpressionException {
+        if( operands.size() < this.getCurrentOperands() ) {
             throw new ExpressionException( "Wrong number of given parameters" );
+        }
+
+        this.parser = new MathParser( this.getContext() );
 
         // Interval start
-        Apfloat lower = Operand.extractNumber( operands.pop() );
+        Apfloat lower = Operand.extractNumber( this.parser.executePostfix( operands.pop() ) );
         // Interval end
-        Apfloat upper = Operand.extractNumber( operands.pop() );
+        Apfloat upper = Operand.extractNumber( this.parser.executePostfix( operands.pop() ) );
         // Expression to evaluate
-        ExpressionEntry expression = operands.pop();
+        Expression expression = this.parser.minimise( operands.pop() );
         // Integration variable
         Operand variable = (Operand)operands.pop();
 
-        WorkingExpression function = new WorkingExpression( this.parser, expression, variable );
+        Expression2AMLAdapter function = new Expression2AMLAdapter( this.parser, expression, variable );
         BaseAbstractUnivariateIntegrator integrator = new SimpsonIntegrator();
         function.finalize();
 
@@ -146,14 +82,5 @@ public class IntegralOperator extends Operator {
         }
 
         return new Operand( result );
-    }
-
-    /**
-     * Saves some information about from the caller
-     */
-    @Override
-    public Operator executeParsing( CmplxExpression postfix, Stack<Operator> opstack ) throws ExpressionException {
-        this.parser = new MathParser( this.getContext() );
-        return super.executeParsing( postfix, opstack );
     }
 }

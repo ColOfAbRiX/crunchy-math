@@ -25,57 +25,45 @@ import org.junit.Assert;
 import org.junit.Test;
 import com.colofabrix.mathparser.MathParser;
 import com.colofabrix.mathparser.expression.CmplxExpression;
-import com.colofabrix.mathparser.expression.ExpressionEntry;
+import com.colofabrix.mathparser.expression.Expression;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Vector;
+import com.colofabrix.mathparser.lib.ApfConsts;
+import com.colofabrix.mathparser.operators.SinOperator;
+import com.colofabrix.mathparser.operators.SumOperator;
 
 public class VectorTest {
 
+    /**
+     * Test method for {@link Vector#executeParsing(CmplxExpression, java.util.Stack)}
+     */
     @Test
     public void testExecuteOperation() {
         try {
             MathParser mp = new MathParser();
+            mp.getContext().getMemory().setValue( "x", new Operand( ApfConsts.PI ) );
 
-            Apfloat result = mp.ExecutePostfix( mp.ConvertToPostfix( "[1, 1 - 2, Sin x]" ) );
-
-            Assert.assertNull( "Output must be null", result );
-        }
-        catch( Exception e ) {
-            e.printStackTrace();
-            Assert.fail( e.getMessage().getClass().toString() );
-        }
-    }
-
-    @Test
-    public void testExecuteParsing() {
-        try {
-            MathParser mp = new MathParser();
-
-            // Reference
+            // Reference expression
             CmplxExpression reference = new CmplxExpression();
             reference.add( new Operand( new Apfloat( 1 ) ) );
-            reference.add( new Operand( new Apfloat( -1 ) ) );
-            reference.add( CmplxExpression.fromExpression( "x #Sin", mp.getContext() ) );
+            reference.add( new CmplxExpression() );
+            ((CmplxExpression)reference.lastElement()).add( new Operand( new Apfloat( 1 ) ) );
+            ((CmplxExpression)reference.lastElement()).add( new Operand( new Apfloat( 2 ) ) );
+            ((CmplxExpression)reference.lastElement()).add( new SumOperator() );
+            reference.add( new CmplxExpression() );
+            ((CmplxExpression)reference.lastElement()).add( new Operand( "x", mp.getContext().getMemory() ) );
+            ((CmplxExpression)reference.lastElement()).add( new SinOperator() );
 
-            CmplxExpression parsed = mp.ConvertToPostfix( "[1, 1 - 2, Sin x]" );
-            ExpressionEntry result = mp.getContext().getMemory().getValue( Vector.OUTPUT_NAME );
+            // Expression to test
+            Expression result = mp.execute( "[1, 1 + 2, Sin x]" );
 
-            // Check of the output postfix string
-            Assert.assertEquals( "Parsed vector output", parsed.toString(), reference.toString() );
+            // Testing the result
+            Assert.assertEquals( "Parsed output vector", reference, result );
 
-            // Check if the memory output is present
-            Assert.assertNotNull( "Memory output present", result );
-
-            // Check if the memory output is in the correct object
-            if( !(result instanceof CmplxExpression) )
-                Assert.fail( "The result is not of the expected type" );
-
-            // Check the actual content of the memory output
-            CmplxExpression result2 = (CmplxExpression)result;
-
-            for( int i = 0; i < reference.size(); i++ )
-                if( !reference.get( i ).equals( result2.get( i ) ) )
-                    Assert.fail( "One vector element is not of the expected type" );
+            // Testing the memory
+            result = mp.getContext().getMemory().getValue( Vector.OUTPUT_NAME );
+            Assert.assertNotNull( "Memory output presence", result );
+            Assert.assertEquals( "Memory output content", reference, result );
         }
         catch( Exception e ) {
             e.printStackTrace();

@@ -36,7 +36,7 @@ public class OperatorsTest {
 
     /**
      * Test method for
-     * {@link com.colofabrix.mathparser.Operators#executeExpression(com.colofabrix.mathparser.expression.Operator, Stack, com.colofabrix.mathparser.Memory)}
+     * {@link com.colofabrix.mathparser.Operators#executeExpression(com.colofabrix.mathparser.expression.Operator, Stack)}
      * .
      */
     @Test
@@ -54,6 +54,9 @@ public class OperatorsTest {
     @Test
     public void testIsOperator() {}
 
+    /**
+     * Test method for {@link com.colofabrix.mathparser.Operators#getParsingRegex()}.
+     */
     @Test
     public void testRegex() {}
 

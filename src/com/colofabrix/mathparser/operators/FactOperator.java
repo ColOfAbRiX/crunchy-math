@@ -25,10 +25,10 @@ import org.apfloat.Apcomplex;
 import org.apfloat.Apfloat;
 import org.apfloat.ApfloatMath;
 import org.apfloat.ApintMath;
-import com.colofabrix.mathparser.expression.ExpressionEntry;
+import com.colofabrix.mathparser.expression.Expression;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
-import com.colofabrix.mathparser.lib.ApfloatConsts;
+import com.colofabrix.mathparser.lib.ApfConsts;
 import com.colofabrix.mathparser.lib.ApfloatMore;
 import com.colofabrix.mathparser.lib.ApfloatStat;
 import com.colofabrix.mathparser.struct.ConfigException;
@@ -45,7 +45,7 @@ public class FactOperator extends Operator {
     }
 
     @Override
-    public Operand executeOperation( Stack<ExpressionEntry> operands ) throws ExpressionException {
+    public Operand executeOperation( Stack<Expression> operands ) throws ExpressionException {
         if( operands.size() < this.getCurrentOperands() )
             throw new ExpressionException( "Wrong number of given parameters" );
 
@@ -71,17 +71,8 @@ public class FactOperator extends Operator {
     @Deprecated
     protected Apfloat la_gamma( Apfloat x ) {
         // Rounded Lanczos coefficients g=7, n=9
-        Apfloat[] p = {
-                new Apfloat( "0.99999999999980992" ),
-                new Apfloat( "676.5203681218851" ),
-                new Apfloat( "-1259.1392167224029" ),
-                new Apfloat( "771.32342877765312" ),
-                new Apfloat( "-176.6150291621406" ),
-                new Apfloat( "12.507343278686905" ),
-                new Apfloat( "-0.13857109526572012" ),
-                new Apfloat( "9.9843695780195716e-6" ),
-                new Apfloat( "1.5056327351493116e-7" )
-        };
+        Apfloat[] p = { new Apfloat( "0.99999999999980992" ), new Apfloat( "676.5203681218851" ), new Apfloat( "-1259.1392167224029" ), new Apfloat( "771.32342877765312" ), new Apfloat( "-176.6150291621406" ), new Apfloat( "12.507343278686905" ), new Apfloat(
+                "-0.13857109526572012" ), new Apfloat( "9.9843695780195716e-6" ), new Apfloat( "1.5056327351493116e-7" ) };
 
         /*
          * // Lanczos coefficients g=7, n=9
@@ -117,20 +108,39 @@ public class FactOperator extends Operator {
         Apfloat g = new Apfloat( 7 );
 
         if( x.compareTo( new Apfloat( 0.5 ) ) < 0 )
-            return ApfloatConsts.PI.divide( ApfloatMath.sin( ApfloatConsts.PI.multiply( x ) ).multiply(
-                    this.la_gamma( ApfloatConsts.ONE.subtract( x ) ) ) );		// PI / ( sin(PI * x) * la_gamma(1 - x) )
+            return ApfConsts.PI.divide( ApfloatMath.sin( ApfConsts.PI.multiply( x ) ).multiply( this.la_gamma( ApfConsts.ONE.subtract( x ) ) ) );		// PI
+                                                                                                                                                              // /
+                                                                                                                                                              // (
+                                                                                                                                                              // sin(PI
+                                                                                                                                                              // *
+                                                                                                                                                              // x)
+                                                                                                                                                              // *
+                                                                                                                                                              // la_gamma(1
+                                                                                                                                                              // -
+                                                                                                                                                              // x)
+                                                                                                                                                              // )
 
-        x = x.subtract( ApfloatConsts.ONE );									// x -= 1
+        x = x.subtract( ApfConsts.ONE );									// x -= 1
         Apfloat a = p[0];
-        Apfloat t = x.add( g.add( ApfloatConsts.HALF ) );						// t = x + g + 0.5
+        Apfloat t = x.add( g.add( ApfConsts.HALF ) );						// t = x + g + 0.5
 
         for( int i = 1; i < p.length; i++ )
             a = a.add( p[i].divide( x.add( new Apfloat( i ) ) ) );	             // a += p[i] / (x + i)
 
-        Apfloat result = ApfloatMath.sqrt( ApfloatConsts.TWO.multiply( ApfloatConsts.PI ) )
-                .multiply( ApfloatMore.safePow( t, x.add( ApfloatConsts.HALF ) ) )
-                .multiply( ApfloatMore.safeExp( t.negate() ) )
-                .multiply( a );									                // sqrt( 2 * PI ) * pow(t, x + 0.5) * exp(-t) * a;
+        Apfloat result = ApfloatMath.sqrt( ApfConsts.TWO.multiply( ApfConsts.PI ) ).multiply( ApfloatMore.safePow( t, x.add( ApfConsts.HALF ) ) ).multiply( ApfloatMore.safeExp( t.negate() ) ).multiply( a );									                // sqrt(
+                                                                                                                                                                                                                           // 2
+                                                                                                                                                                                                                           // *
+                                                                                                                                                                                                                           // PI
+                                                                                                                                                                                                                           // )
+                                                                                                                                                                                                                           // *
+                                                                                                                                                                                                                           // pow(t,
+                                                                                                                                                                                                                           // x
+                                                                                                                                                                                                                           // +
+                                                                                                                                                                                                                           // 0.5)
+                                                                                                                                                                                                                           // *
+                                                                                                                                                                                                                           // exp(-t)
+                                                                                                                                                                                                                           // *
+                                                                                                                                                                                                                           // a;
 
         return result.precision( Apcomplex.INFINITE );
     }

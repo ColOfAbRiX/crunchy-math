@@ -23,7 +23,7 @@ package com.colofabrix.mathparser.operators;
 import java.util.Stack;
 import org.apfloat.Apfloat;
 import org.apfloat.ApfloatMath;
-import com.colofabrix.mathparser.expression.ExpressionEntry;
+import com.colofabrix.mathparser.expression.Expression;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
 import com.colofabrix.mathparser.struct.ConfigException;
@@ -40,7 +40,7 @@ public class FloorOperator extends Operator {
     }
 
     @Override
-    public Operand executeOperation( Stack<ExpressionEntry> operands ) throws ExpressionException {
+    public Operand executeOperation( Stack<Expression> operands ) throws ExpressionException {
         if( operands.size() < this.getCurrentOperands() )
             throw new ExpressionException( "Wrong number of given parameters" );
 

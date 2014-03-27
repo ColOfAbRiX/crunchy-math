@@ -24,7 +24,7 @@ import org.apfloat.Apcomplex;
 import org.apfloat.Apfloat;
 import org.apfloat.ApfloatMath;
 
-public final class ApfloatConsts {
+public final class ApfConsts {
     public static final class Angular {
         public static final Apfloat DEG_180 = new Apfloat( 180 );
         public static final Apfloat DEG_30 = new Apfloat( 30 );
@@ -35,24 +35,18 @@ public final class ApfloatConsts {
 
         public static final Apfloat GRAD_100 = new Apfloat( 100 );
         public static final Apfloat GRAD_200 = new Apfloat( 200 );
-        public static final Apfloat GRAD_33 = new Apfloat( 100 ).divide( new Apfloat( 3 )
-                .precision( ApfloatConsts.DIVIDE_PRECISION ) );
+        public static final Apfloat GRAD_33 = new Apfloat( 100 ).divide( new Apfloat( 3 ).precision( ApfConsts.DIVIDE_PRECISION ) );
         public static final Apfloat GRAD_400 = new Apfloat( 400 );
         public static final Apfloat GRAD_50 = new Apfloat( 50 );
-        public static final Apfloat GRAD_66 = new Apfloat( 200 ).divide( new Apfloat( 3 )
-                .precision( ApfloatConsts.DIVIDE_PRECISION ) );
+        public static final Apfloat GRAD_66 = new Apfloat( 200 ).divide( new Apfloat( 3 ).precision( ApfConsts.DIVIDE_PRECISION ) );
 
         // Angular constants
-        public static final Apfloat RAD_2PI = ApfloatConsts.TWO.multiply( ApfloatConsts.PI );
-        public static final Apfloat RAD_PI = ApfloatConsts.PI;
-        public static final Apfloat RAD_PI2 = ApfloatConsts.PI.divide( ApfloatConsts.TWO
-                .precision( ApfloatConsts.DIVIDE_PRECISION ) );
-        public static final Apfloat RAD_PI3 = ApfloatConsts.PI.divide( new Apfloat( 3 )
-                .precision( ApfloatConsts.DIVIDE_PRECISION ) );
-        public static final Apfloat RAD_PI4 = ApfloatConsts.PI.divide( new Apfloat( 4 )
-                .precision( ApfloatConsts.DIVIDE_PRECISION ) );
-        public static final Apfloat RAD_PI6 = ApfloatConsts.PI.divide( new Apfloat( 6 )
-                .precision( ApfloatConsts.DIVIDE_PRECISION ) );
+        public static final Apfloat RAD_2PI = ApfConsts.TWO.multiply( ApfConsts.PI );
+        public static final Apfloat RAD_PI = ApfConsts.PI;
+        public static final Apfloat RAD_PI2 = ApfConsts.PI.divide( ApfConsts.TWO.precision( ApfConsts.DIVIDE_PRECISION ) );
+        public static final Apfloat RAD_PI3 = ApfConsts.PI.divide( new Apfloat( 3 ).precision( ApfConsts.DIVIDE_PRECISION ) );
+        public static final Apfloat RAD_PI4 = ApfConsts.PI.divide( new Apfloat( 4 ).precision( ApfConsts.DIVIDE_PRECISION ) );
+        public static final Apfloat RAD_PI6 = ApfConsts.PI.divide( new Apfloat( 6 ).precision( ApfConsts.DIVIDE_PRECISION ) );
     }
 
     // Precision settings
@@ -70,11 +64,11 @@ public final class ApfloatConsts {
     public static final Apfloat HALF = new Apfloat( "0.5", Apfloat.INFINITE );
     public static final Apfloat ONE = new Apfloat( 1 );
     public static final Apfloat TWO = new Apfloat( 2 );
-    public static final Apcomplex I = new Apcomplex( ApfloatConsts.ZERO, ApfloatConsts.ONE );
+    public static final Apcomplex I = new Apcomplex( ApfConsts.ZERO, ApfConsts.ONE );
 
     // Irrational constants
-    public static final Apfloat E = ApfloatMath.exp( ApfloatConsts.ONE.precision( ApfloatConsts.EXP_PRECISION ) );
+    public static final Apfloat E = ApfloatMath.exp( ApfConsts.ONE.precision( ApfConsts.EXP_PRECISION ) );
     public static final int ERF_INVERSE_TAYLOR_MEMBER = 40;
     public static final int ERF_TAYLOR_MEMBER = 200;
-    public static final Apfloat PI = ApfloatMath.pi( ApfloatConsts.PI_PRECISION );
+    public static final Apfloat PI = ApfloatMath.pi( ApfConsts.PI_PRECISION );
 }

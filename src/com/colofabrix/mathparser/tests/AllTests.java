@@ -25,15 +25,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith( Suite.class )
-@SuiteClasses( {
-        MathParserTest.class,
-        MemoryTest.class,
-        OperatorsTest.class,
-        TrigonometricOperatorTest.class,
-        CmplxExpressionTest.class,
-        OperandTest.class,
-        OperatorTest.class,
-        VectorTest.class } )
+@SuiteClasses( { CmplxExpressionTest.class, ExpressionTest.class, MathParserTest.class, MemoryTest.class, OperandTest.class, OperatorsTest.class, OperatorTest.class, TrigonometricOperatorTest.class, VectorTest.class } )
 public class AllTests {
     public static long PRECISION_DIGITS = 6;
     public static double PRECISION_ERROR_ALLOWED = Math.pow( 10, -AllTests.PRECISION_DIGITS );

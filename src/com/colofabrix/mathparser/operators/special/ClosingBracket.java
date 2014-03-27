@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package com.colofabrix.mathparser.operators.special;
 
-import com.colofabrix.mathparser.expression.GroupingOperator;
+import com.colofabrix.mathparser.expression.Grouping;
 import com.colofabrix.mathparser.struct.ConfigException;
 
 /**
@@ -29,13 +29,13 @@ import com.colofabrix.mathparser.struct.ConfigException;
  * <p>
  * Brackets are used to give priority to some section of expressions.<br/>
  * A closing bracket serves to say that a subexpression is finished and to push all the operands and operators to the
- * correct stack. The push is performed by the parent class {@link GroupingOperator}, this class is only used to define
+ * correct stack. The push is performed by the parent class {@link Grouping}, this class is only used to define
  * a name and a priority
  * </p>
  * 
  * @author Fabrizio Colonna
  */
-public class ClosingBracket extends GroupingOperator {
+public class ClosingBracket extends Grouping {
     public ClosingBracket() throws ConfigException {
         super();
         this.setBaseName( ")" );

@@ -20,14 +20,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package com.colofabrix.mathparser.struct.builders;
 
-import com.colofabrix.mathparser.Memory;
-import com.colofabrix.mathparser.Operators;
 import com.colofabrix.mathparser.expression.Operator;
 import com.colofabrix.mathparser.struct.Context;
 
 /**
  * Creates operators
- * 
  * <p>
  * This class offer an easy and standard way to create context-operators. A context-operator is an operator with a
  * reference to an operator manager and a memory
@@ -36,21 +33,26 @@ import com.colofabrix.mathparser.struct.Context;
  * @author Fabrizio Colonna
  */
 public final class OpBuilder {
-    private Context context;
+    private Context context = null;
 
+    /**
+     * Constructor
+     */
+    public OpBuilder() {}
+
+    /**
+     * Constructor
+     * 
+     * @param context The context to set when a new operator is created
+     */
     public OpBuilder( Context context ) {
         this.context = context;
     }
-    
-    public OpBuilder() { }
-    
+
     /**
      * Creates a new operator with a context
-     * 
      * <p>
-     * The methd first instantiate a new Operator and the it sets its context<br/>
-     * Please note that a call to {@link #newContext()} or to {@link #setMemory(Memory)}/
-     * {@link #setOperators(Operators)} must be done to ensure the presence of a context.
+     * The method first instantiate a new Operator and the it sets its context
      * </p>
      * 
      * @param operator The operator to be created

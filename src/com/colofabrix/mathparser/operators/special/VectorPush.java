@@ -22,6 +22,8 @@ package com.colofabrix.mathparser.operators.special;
 
 import java.util.Stack;
 import com.colofabrix.mathparser.expression.CmplxExpression;
+import com.colofabrix.mathparser.expression.Expression;
+import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
 import com.colofabrix.mathparser.expression.Vector;
 import com.colofabrix.mathparser.struct.ConfigException;
@@ -45,6 +47,11 @@ public class VectorPush extends Vector {
         this.setPriority( (short)2 );
     }
 
+    @Override
+    public Operand executeOperation( Stack<Expression> operands ) throws ExpressionException {
+        return super.executeOperation( operands );
+    }
+
     /**
      * It moves the last operands and operators
      * 
@@ -56,11 +63,13 @@ public class VectorPush extends Vector {
     public Operator executeParsing( CmplxExpression postfix, Stack<Operator> opstack ) throws ExpressionException {
         CmplxExpression stack = (CmplxExpression)this.getContext().getMemory().getValue( Vector.STACK_NAME );
 
-        if( stack == null )
+        if( stack == null ) {
             throw new ExpressionException( "There is no previous vector to push into" );
+        }
 
-        if( postfix.size() < 1 )
+        if( postfix.size() < 1 ) {
             throw new ExpressionException( "Wrong number of given parameters" );
+        }
 
         // Save the operands to the stack
         stack.push( this.prepareOperands( postfix, opstack ) );

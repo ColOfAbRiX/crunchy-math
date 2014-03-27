@@ -20,21 +20,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package com.colofabrix.mathparser;
 
+import java.util.Collections;
 import java.util.Stack;
-import org.apfloat.Apfloat;
 import com.colofabrix.mathparser.expression.CmplxExpression;
-import com.colofabrix.mathparser.expression.ExpressionEntry;
-import com.colofabrix.mathparser.expression.GroupingOperator;
+import com.colofabrix.mathparser.expression.Expression;
+import com.colofabrix.mathparser.expression.Grouping;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
 import com.colofabrix.mathparser.struct.ConfigException;
 import com.colofabrix.mathparser.struct.Context;
+import com.colofabrix.mathparser.struct.ContextBuilder;
 import com.colofabrix.mathparser.struct.ExpressionException;
-import com.colofabrix.mathparser.struct.builders.ContextBuilder;
-import com.colofabrix.mathparser.struct.builders.OpBuilder;
+import com.colofabrix.mathparser.struct.builders.DefaultContextBuilder;
+import com.colofabrix.mathparser.struct.builders.ExpressionWorker;
 
 /**
- * Mathemathical Expression Parser
+ * Mathematical Expression Parser
  * 
  * @author Fabrizio Colonna
  * @version 0.3
@@ -45,153 +46,297 @@ public class MathParser {
     private Context context;
 
     /**
-     * Creates and initialize MathParser
-     * 
-     * <p>It uses {@link OpBuilder} to create a default context</p>
+     * Creates and initialise MathParser
+     * <p>
+     * This constructor initialise the object using {@link DefaultContextBuilder#createDefault()} to create a default
+     * context
+     * </p>
      */
     public MathParser() {
-        this( ContextBuilder.createDefault() );
+        this( DefaultContextBuilder.createDefault() );
     }
 
     /**
-     * Creates and initialize the MathParser
-     * 
+     * Creates and initialise the MathParser
      * <p>
-     * This constructor allow to specify a custom operators manager and memory manager
+     * This constructor allow to specify a custom {@link Context}
      * </p>
      * 
-     * @param manager The choosen Operators Manager, which contains a collection of supported operators.
-     * @param memory The object to use as memory
+     * @param context The context to associate with
      */
     public MathParser( Context context ) {
         this.setContext( context );
     }
 
     /**
+     * Creates and initialise the MathParser
+     * <p>
+     * This constructor requires a builder to create its context
+     * </p>
+     * 
+     * @param contextBuilder The builder to use to create the context
+     */
+    public MathParser( ContextBuilder contextBuilder ) {
+        this( contextBuilder.create() );
+    }
+
+    /**
+     * Executes a mathematical expression in infix notation
+     * <p>
+     * This method uses {@link #toPostfix(Expression)} and {@link #executePostfix(Expression)} to first convert the
+     * string to postfix notation and then execute it
+     * </p>
+     * 
+     * @param infix The input stack containing the expression to execute
+     * @return An object containing the result of the execution of the expression
+     * @throws ExpressionException In case of bad input expression
+     * @throws ConfigException In case of misconfiguration of the parser
+     */
+    public Expression execute( Expression infix ) throws ExpressionException, ConfigException {
+        Expression postfix = this.toPostfix( infix );
+        return this.executePostfix( postfix );
+    }
+
+    /**
+     * Executes a mathematical expression in infix notation
+     * <p>
+     * This method uses {@link #toPostfix(Expression)} and {@link #executePostfix(Expression)} to first convert the
+     * string to postfix notation and then execute it
+     * </p>
+     * 
+     * @param strInfix The input stack containing the expression to execute
+     * @return An object containing the result of the execution of the expression
+     * @throws ExpressionException In case of bad input expression
+     * @throws ConfigException In case of misconfiguration of the parser
+     */
+    public Expression execute( String strInfix ) throws ExpressionException, ConfigException {
+        Expression infix = ExpressionWorker.fromExpression( strInfix, this.getContext() );
+        Expression postfix = this.toPostfix( infix );
+        return this.executePostfix( postfix );
+    }
+
+    /**
+     * Executes a postfix-notation mathematical expression
+     * <p>
+     * The method can also minimise an expression which means execute it but without resolving variables
+     * <p>
+     * 
+     * @param postfix The input stack containing the expression to execute
+     * @return An object containing the result of the execution of the expression
+     * @throws ExpressionException In case of bad input expression
+     */
+    public Expression executePostfix( Expression postfix ) throws ExpressionException {
+        return this.executePostfix( ExpressionWorker.packExpression( postfix ), false );
+    }
+
+    /**
+     * Gets the current working context
+     * 
+     * @return The current working context
+     */
+    public Context getContext() {
+        return this.context;
+    }
+
+    /**
+     * Minimise an expression until only variables and non-minimizable expression are left
+     * 
+     * @param postfix The input expression to be minimised
+     * @return An object containing a mathematically equivalent expression to the input one, but minimised
+     * @throws ExpressionException In case of bad input expression
+     */
+    public Expression minimise( Expression postfix ) throws ExpressionException {
+        return this.minimize( ExpressionWorker.packExpression( postfix ) );
+    }
+
+    /**
      * Infix-to-postfix converter
      * 
-     * @param input The mathematica expression to convert
-     * @return A Stack containing the converted string
+     * @param infix The mathematical expression to convert
+     * @return A stack containing the converted object to postfix notation
      * @throws ExpressionException In case of bad input expression
      * @throws ConfigException In case of misconfiguration of MathParser
      */
-    public CmplxExpression ConvertToPostfix( String input ) throws ExpressionException, ConfigException {
+    public Expression toPostfix( Expression infix ) throws ExpressionException, ConfigException {
+        return this.toPostfix( ExpressionWorker.packExpression( infix ) );
+    }
 
-        CmplxExpression infix = CmplxExpression.fromExpression( input, this.getContext() );
+    /**
+     * Infix-to-postfix converter
+     * 
+     * @param strInfix The mathematical expression to convert
+     * @return A stack containing the converted object to postfix notation
+     * @throws ExpressionException In case of bad input expression
+     * @throws ConfigException In case of misconfiguration of MathParser
+     */
+    public Expression toPostfix( String strInfix ) throws ExpressionException, ConfigException {
+        Expression infix = ExpressionWorker.fromExpression( strInfix, this.getContext() );
+        return this.toPostfix( infix );
+    }
+
+    /**
+     * Sets the current working context
+     * 
+     * @param context The context to set
+     */
+    private void setContext( Context context ) {
+        this.context = context;
+    }
+
+    /**
+     * Executes a postfix-notation mathematical expression
+     * <p>
+     * The method can also minimise an expression which means execute it but without resolving variables
+     * <p>
+     * 
+     * @param postfix The input stack containing the expression to execute
+     * @param minimize Indicates if the expression should only be minimised.
+     * @return An object containing the result of the execution of the expression
+     * @throws ExpressionException In case of bad input expression
+     */
+    protected Expression executePostfix( CmplxExpression postfix, boolean minimize ) throws ExpressionException {
+        CmplxExpression localStack = new CmplxExpression();
+
+        for( Expression entry: postfix ) {
+            if( entry.getEntryType() == Operator.OPERATOR_CODE ) {
+                Operator currentOp = (Operator)entry;
+                Stack<Expression> localOperands = new Stack<>();
+
+                // Counting the number of operands needed
+                int o = currentOp.getCurrentOperands();
+
+                // Check the operand count for the operator
+                if( localStack.size() < o ) {
+                    throw new ExpressionException( "Wrong number of operand specified" );
+                }
+
+                // Operand fetching
+                for( ; o > 0; o-- ) {
+                    localOperands.push( localStack.pop() );
+                }
+
+                // Minimisation-only section
+                if( minimize ) {
+                    boolean minimizable = true;
+
+                    // Check if the expression is minimizable
+                    for( Expression op: localOperands ) {
+                        minimizable = minimizable && op.isMinimizable();
+                    }
+
+                    // If it is not minimizable I add it as a nested
+                    // CmplxExpression
+                    if( !minimizable ) {
+                        Collections.reverse( localOperands );
+                        localStack.addAll( localOperands );
+                        localStack.add( currentOp );
+                        continue;
+                    }
+                }
+
+                // Operator execution
+                Operand result = this.getContext().getOperators().executeExpression( currentOp, localOperands );
+                if( result != null ) {
+                    localStack.push( result );
+                }
+            }
+            else {
+                localStack.push( entry );
+            }
+        }
+
+        // Return only the first element or all the CmplxExpression
+        if( localStack.size() == 1 ) {
+            return localStack.firstElement();
+        }
+
+        return ExpressionWorker.unpackExpression( localStack );
+    }
+
+    /**
+     * Minimise an expression until only variables and non-minimizable expression are left
+     * 
+     * @param postfix The input expression to be minimised
+     * @return An object containing a mathematically equivalent expression to the input one, but minimised
+     * @throws ExpressionException In case of bad input expression
+     */
+    protected Expression minimize( CmplxExpression postfix ) throws ExpressionException {
+        CmplxExpression output = new CmplxExpression();
+
+        // Minimise every single components of the expression
+        for( Expression entry: postfix ) {
+            if( entry.getEntryType() == CmplxExpression.COMPOSITE_CODE ) {
+                output.add( this.minimise( entry ) );
+            }
+            else {
+                output.add( entry );
+            }
+        }
+
+        // Minimise the whole expression
+        if( output.isMinimizable() ) {
+            return this.executePostfix( output, true );
+        }
+
+        return ExpressionWorker.unpackExpression( output );
+    }
+
+    /**
+     * Infix-to-postfix converter
+     * 
+     * @param infix The mathematical expression to convert
+     * @return A stack containing the converted object to postfix notation
+     * @throws ExpressionException In case of bad input expression
+     * @throws ConfigException In case of misconfiguration of MathParser
+     */
+    protected Expression toPostfix( CmplxExpression infix ) throws ExpressionException, ConfigException {
         CmplxExpression postfix = new CmplxExpression();
         Stack<Operator> opstack = new Stack<>();
-        ExpressionEntry lastEntry = null;
+        Expression lastEntry = null;
 
-        for( ExpressionEntry entry: infix ) {
+        for( Expression entry: infix ) {
 
             // Add an operator
             if( entry.getEntryType() == Operator.OPERATOR_CODE ) {
                 Operator currentOp = (Operator)entry;
 
-                // At the beginning of the expression are unary only the operators with getOperandMin == 1
-                if( (lastEntry == null && currentOp.getOperandsMin() == 1) )
+                // At the beginning of the expression are unary only the
+                // operators with getOperandMin == 1
+                if( lastEntry == null && currentOp.getOperandsMin() == 1 ) {
                     currentOp.setCurrentOperands( 1 );
+                }
 
-                // Two consecutive operators means the the latter is unary, except in case of the first one is a closing
+                // Two consecutive operators means the the latter is unary,
+                // except in case of the first one is a closing
                 // grouping
                 if( lastEntry != null && lastEntry.getEntryType() == Operator.OPERATOR_CODE
-                        && !(((Operator)lastEntry).isGrouping() && !((GroupingOperator)lastEntry).isOpening()) )
-                    if( currentOp.getOperandsMin() <= 2 )
+                        && !(((Operator)lastEntry).isGrouping() && !((Grouping)lastEntry).isOpening()) ) {
+                    if( currentOp.getOperandsMin() <= 2 ) {
                         currentOp.setCurrentOperands( 1 );
+                    }
+                }
 
-                // Execution of the custom parsing performed by the operators themselves
+                // Execution of the custom parsing performed by the operators
+                // themselves
                 currentOp = currentOp.executeParsing( postfix, opstack );
-                if( currentOp != null )
+                if( currentOp != null ) {
                     opstack.push( currentOp );
+                }
             }
             // Add anything else
-            else
+            else {
                 postfix.add( entry );
+            }
 
             // Remember the last entry
             lastEntry = entry;
         }
 
         // Transfer the remaining operators
-        while( opstack.size() > 0 )
+        while( opstack.size() > 0 ) {
             postfix.add( opstack.pop() );
-
-        return CmplxExpression.fromExpression( postfix, this.getContext() );
-    }
-
-    /**
-     * Executes an postfix-notation mathematical expression
-     * 
-     * @param input The input stack containing the expression
-     * @return A number indicating the result of the expression
-     * @throws ExpressionException In case of bad input expression
-     */
-    public Apfloat ExecutePostfix( CmplxExpression input ) throws ExpressionException {
-        Stack<ExpressionEntry> localStack = new Stack<>();
-
-        for( ExpressionEntry entry: input ) {
-            if( entry.getEntryType() == Operator.OPERATOR_CODE ) {
-                Operator currentOp = (Operator)entry;
-                Stack<ExpressionEntry> localOperands = new Stack<>();
-
-                // Counting the number of operands needed
-                int o = currentOp.getCurrentOperands();
-
-                // Check the operand count for the operator
-                if( localStack.size() < o )
-                    throw new ExpressionException( "Wrong number of operand specified" );
-
-                // Operand feching
-                for( ; o > 0; o-- )
-                    localOperands.push( localStack.pop() );
-
-                // Operator execution
-                Operand result = this.getContext().getOperators()
-                        .executeExpression( currentOp, localOperands, this.getContext().getMemory() );
-                if( result != null )
-                    localStack.push( result );
-            }
-            else
-                localStack.push( entry );
         }
 
-        if( localStack.size() != 1 || localStack.lastElement().getEntryType() != Operand.OPERAND_CODE )
-            return null;
-
-        // TODO: Here the code to manage the output precision of the calculations
-        return ((Operand)localStack.pop()).getNumericValue();
-    }
-
-    /**
-     * Executes an postfix-notation mathematical expression
-     * 
-     * @param input The input stack containing the expression
-     * @return A number indicating the result of the expression
-     * @throws ExpressionException In case of bad input expression
-     */
-    public Apfloat ExecutePostfix( ExpressionEntry input ) throws ExpressionException {
-
-        if( input.getEntryType() == Operand.OPERAND_CODE )
-            // TODO: Here the code to manage the output precision of the calculations
-            return ((Operand)input).getNumericValue();
-
-        else if( input.getEntryType() == CmplxExpression.COMPOSITE_CODE )
-            return this.ExecutePostfix( (CmplxExpression)input );
-
-        return null;
-    }
-
-    /**
-     * @return the context
-     */
-    public Context getContext() {
-        return context;
-    }
-
-    /**
-     * @param context the context to set
-     */
-    private void setContext( Context context ) {
-        this.context = context;
+        return ExpressionWorker.unpackExpression( postfix );
     }
 }

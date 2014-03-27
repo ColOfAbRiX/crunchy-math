@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package com.colofabrix.mathparser.operators.special;
 
-import com.colofabrix.mathparser.expression.GroupingOperator;
+import com.colofabrix.mathparser.expression.Grouping;
 import com.colofabrix.mathparser.struct.ConfigException;
 
 /**
@@ -29,12 +29,12 @@ import com.colofabrix.mathparser.struct.ConfigException;
  * <p>
  * Brackets are used to give priority to some section of expressions.<br/>
  * A opening bracket serves to mark the beginning of a subexpression that will be later processed as a differen entity.
- * The push is performed by the parent class {@link GroupingOperator}, this class is only used to define a name and a
+ * The push is performed by the parent class {@link Grouping}, this class is only used to define a name and a
  * priorit
  * 
  * @author Fabrizio Colonna
  */
-public class OpeningBracket extends GroupingOperator {
+public class OpeningBracket extends Grouping {
 
     public OpeningBracket() throws ConfigException {
         super();

@@ -23,18 +23,13 @@ package com.colofabrix.mathparser.struct;
 /**
  * Represents an Operator Worker
  * 
- * <p>Its purpose is to add the default operators</p>
+ * <p>
+ * Its purpose is to add the default operators
+ * </p>
  * 
  * @author Fabrizio Colonna
  */
 public interface OperatorsSetter {
-    
-    /**
-     * Initialize the Operators manager with a default set of operators
-     * 
-     * @param context
-     */
-    public abstract void initOperators( Context context );
 
     /**
      * Disposes the operators set during initialization from the Operators manager
@@ -42,4 +37,11 @@ public interface OperatorsSetter {
      * @param context
      */
     public abstract void disposeOperators( Context context );
+
+    /**
+     * Initialize the Operators manager with a default set of operators
+     * 
+     * @param context
+     */
+    public abstract void initOperators( Context context );
 }

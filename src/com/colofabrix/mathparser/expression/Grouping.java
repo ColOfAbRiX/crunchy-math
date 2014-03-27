@@ -26,31 +26,30 @@ import com.colofabrix.mathparser.struct.ExpressionException;
 
 /**
  * Represent a grouping operators
- * 
  * <p>
  * A grouping operator is an operator with a beginning and an end, within the infix expression, wich encloses an
- * expression. Usually the eclosed expression has priority over the outer expression<br/>
+ * expression. Usually the enclosed expression has priority over the outer expression<br/>
  * This is a default implementation that models the behaviour of the common brackets
  * </p>
  * 
- * @author fcolonna
+ * @author Fabrizio Colonna
  */
-public abstract class GroupingOperator extends Operator {
+public abstract class Grouping extends Operator {
 
     /**
-     * The constructor initialize the object setting the number of operands to 1 and the variable
+     * The constructor initialise the object setting the number of operands to 1 and the variable
      * grouping to true
      */
-    public GroupingOperator() {
+    public Grouping() {
         super();
         this.init();
     }
 
     /**
-     * The constructor initialize the object setting the number of operands to 1 and the variable
+     * The constructor initialise the object setting the number of operands to 1 and the variable
      * grouping to true
      */
-    public GroupingOperator( Context context ) {
+    public Grouping( Context context ) {
         super( context );
         this.init();
     }
@@ -59,13 +58,12 @@ public abstract class GroupingOperator extends Operator {
      * A grouping operator executes no mathematical operations
      */
     @Override
-    public Operand executeOperation( Stack<ExpressionEntry> operands ) throws ExpressionException {
+    public Operand executeOperation( Stack<Expression> operands ) throws ExpressionException {
         return null;
     }
 
     /**
      * Execute the parsing operation that the operator may require
-     * 
      * <p>
      * The parsing operation is an operation that is performed when the operator is fetched from the input string</br>
      * The default implementation for a grouping operator divides the operation for the opening groping and the closing
@@ -74,7 +72,7 @@ public abstract class GroupingOperator extends Operator {
      * 
      * @see Operator#executeParsing
      * @param postfix The full postfix stack, as it is build before the call to this method
-     * @param opstack The full operator stack, as it is constructed befor the call to this method
+     * @param opstack The full operator stack, as it is constructed before the call to this method
      * @return An instance of the operator to be pushed at the end of the operators stack,
      * @throws ExpressionException The exception is thrown when there is an evaluation problem
      */
@@ -83,18 +81,18 @@ public abstract class GroupingOperator extends Operator {
         Operator result;
 
         // Executes different parsing between opening and closing grouping
-        if( this.isOpening() )
+        if( this.isOpening() ) {
             result = this.executeParsingOpening( postfix, opstack, this.getContext() );
-
-        else
+        }
+        else {
             result = this.executeParsingClosing( postfix, opstack, this.getContext() );
+        }
 
         return result;
     }
 
     /**
      * Gets the absolute priority of the operand
-     * 
      * <p>
      * The priority of an operator is expressed using an Integer, while a priority can only be set using a Short because
      * priorities use levels. For more information see {@link Operator#getPriority()}
@@ -115,7 +113,6 @@ public abstract class GroupingOperator extends Operator {
 
     /**
      * Sets the number of operands currently used
-     * 
      * <p>
      * A grouping operator is always a unary operator, so whatever value is given this function will set the
      * currentOperands always to 1.
@@ -131,7 +128,6 @@ public abstract class GroupingOperator extends Operator {
 
     /**
      * Sets the limits of the number of operands allowed for the operator
-     * 
      * <p>
      * A grouping operator is always a unary operator, so whatever value is given this function will set the maximum and
      * minimum are always 1.
@@ -153,16 +149,14 @@ public abstract class GroupingOperator extends Operator {
 
     /**
      * Execute the parsing operation that the operator may require
-     * 
      * <p>
      * This function is called when an closing grouping is fetched from the input string
      * </p>
      * 
      * @see Operator#executeParsing
      * @param postfix The full postfix stack, as it is build before the call to this method
-     * @param opstack The full operator stack, as it is constructed befor the call to this method
-     * @param operators A reference to the operators manager
-     * @param memory A reference to the main math memory
+     * @param opstack The full operator stack, as it is constructed before the call to this method
+     * @param context A reference to the context in use
      * @return An instance of the operator to be pushed at the end of the operators stack,
      * @throws ExpressionException The exception is thrown when there is an evaluation problem
      */
@@ -172,8 +166,9 @@ public abstract class GroupingOperator extends Operator {
         while( opstack.size() > 0 ) {
             Operator tmp = opstack.pop();
 
-            if( tmp.isGrouping() && ((GroupingOperator)tmp).isOpening() )
+            if( tmp.isGrouping() && ((Grouping)tmp).isOpening() ) {
                 break;
+            }
 
             /*
              * NOTE: For normal brackets this is important, but for generic operators this could not
@@ -190,20 +185,18 @@ public abstract class GroupingOperator extends Operator {
 
     /**
      * Execute the parsing operation that the operator may require
-     * 
      * <p>
-     * This function is called when an openining grouping is fetched from the input string
+     * This function is called when an opening grouping is fetched from the input string
      * </p>
      * 
      * @see Operator#executeParsing
      * @param postfix The full postfix stack, as it is build before the call to this method
      * @param opstack The full operator stack, as it is constructed befor the call to this method
-     * @param operators A reference to the operators manager
-     * @param memory A reference to the main math memory
+     * @param context A reference to the context in use
      * @return An instance of the operator to be pushed at the end of the operators stack,
      * @throws ExpressionException The exception is thrown when there is an evaluation problem
      */
-    protected Operator executeParsingOpening( ExpressionEntry postfix, Stack<Operator> opstack, Context context ) throws ExpressionException {
+    protected Operator executeParsingOpening( Expression postfix, Stack<Operator> opstack, Context context ) throws ExpressionException {
         return this;
     }
 }

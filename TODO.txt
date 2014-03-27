@@ -2,14 +2,16 @@ TODO LIST
 -------------
 Features:
  - Add list of all the options available
- - Add selection of integration algorithms
- - Add options to control precision
+ - Add options to control:
+   - Number precision
+   - Integration algorithms
  - Permit a variable number of operands for operators (using vectors)
    - Now vector-parameters are passed like normal parameters. Allow true-vector parameters
  
 Changes
  - Complete the Unit Testings
- - Refactor the test MathParserTest.testConvertToPostfix to make use of parametrized tests
+ - Refactor the structure of Expression trying to apply the decorator pattern
+ - Check to use interfaces/base classes where possible
  
 Bugs:
 
@@ -21,6 +23,12 @@ Done
  - Add arbitrary rounding of results
    - This might imply the use of arbitrary precision math libraries
  - Change the methods executeOperation and executeParsing and remove the arguments operators and memory
+ - Refactor the test MathParserTest.testConvertToPostfix to make use of parametrised tests
+ - Added minimisation capabilities to MathParser and minimisation options to the Vector operators
+ - Split Memory and Operands initialisation on external methods
+ - Added many workers and grouped generic function in them to make default settings easier
+ - Massive general refactoring: working with Context instead of single objects, package reorganisation, cleaned public members o MathParser
+ - Added many more unit testings and refined the existing ones
 
 Fixed
  - Two consecutive unary operators don't work (try "Round !5" or "Round 5!")

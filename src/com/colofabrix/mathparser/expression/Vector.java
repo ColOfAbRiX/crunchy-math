@@ -23,19 +23,24 @@ package com.colofabrix.mathparser.expression;
 import java.util.Stack;
 import com.colofabrix.mathparser.MathParser;
 import com.colofabrix.mathparser.struct.ExpressionException;
+import com.colofabrix.mathparser.struct.builders.ExpressionWorker;
 
 /**
  * Represent the basic type to implement the operators to work with Vectors
- * 
  * <p>
  * A vector type will create a vector in memory named {@link Vector#OUTPUT_NAME} which will contain all the operands
- * specified in the vector. The vector type will also refer all the included indexes to the preceding opreator.<br/>
- * What's inside a vector will be minimized if possible, otherwise it will be kept as a {@link CmplxExpression}
+ * specified in the vector. The vector type will also refer all the included indexes to the preceding operator.<br/>
+ * What's inside a vector will be minimised if possible, otherwise it will be kept as a {@link CmplxExpression}
  * </p>
  * 
  * @author Fabrizio Colonna
  */
-public abstract class Vector extends GroupingOperator {
+public abstract class Vector extends Grouping {
+
+    /**
+     * Option to allow minimisation of the vector while parsing it
+     */
+    public static final Option MINIMIZE = new Option( "$vector_minimise" );
 
     /**
      * Name of the created variable in memory
@@ -49,21 +54,19 @@ public abstract class Vector extends GroupingOperator {
 
     /**
      * Moves the operands and the operators between stacks
-     * 
      * <p>
-     * The vector type uses an internal representation of a vector (a Stack<ExpressionEntry> stored in memory) which is
+     * The vector type uses an internal representation of a vector (a Stack<Expression> stored in memory) which is
      * different than the usual postfix/opstack stacks. This function will fetch the operands from postfix and the
      * operators from opstack and it will put everything in the local stack.<br/>
      * The method will fetch everything was put in the stack until a previous OpenVector or PushVector is found.
      * <p>
      * 
      * @param postfix The full postfix stack, as it is build before the call to this method
-     * @param opstack The full operator stack, as it is constructed befor the call to this method
-     * @return An ExpressionEntry found since the last OpeningVector or PushVector
+     * @param opstack The full operator stack, as it is constructed before the call to this method
+     * @return An Expression found since the last OpeningVector or PushVector
      * @throws ExpressionException If no parameters are given to the function
      */
-    protected ExpressionEntry prepareOperands( CmplxExpression postfix, Stack<Operator> opstack ) throws ExpressionException {
-        MathParser mp = new MathParser( this.getContext() );
+    protected Expression prepareOperands( CmplxExpression postfix, Stack<Operator> opstack ) throws ExpressionException {
         CmplxExpression local = new CmplxExpression();
 
         // Call basic constructor. It ensures that the postfix stack is filled with all the operands and operators
@@ -73,26 +76,15 @@ public abstract class Vector extends GroupingOperator {
 
         // First I fetch the values from the last to the one before the opening vector and I put them in a new
         // CmplxExpression
-        while( postfix.size() > 0
-                && !(postfix.lastElement() instanceof Vector && ((Vector)postfix.lastElement()).isOpening()) )
+        while( postfix.size() > 0 && !(postfix.lastElement() instanceof Vector && ((Vector)postfix.lastElement()).isOpening()) ) {
             local.add( 0, postfix.pop() );
+        }
 
-        // If the local expression contains only one element I return it raw
-        if( local.size() == 1 )
-            return local.firstElement();
+        // Minimisation of the vector
+        if( this.getOption( Vector.MINIMIZE, 0 ) != 0 ) {
+            local = ExpressionWorker.packExpression( new MathParser( this.getContext() ).minimise( local ) );
+        }
 
-        // If there are more than one operands I return...
-        else if( local.size() > 1 )
-            // ... the CmplxExpression if it not minimizable....
-            if( !local.isMinimizable() )
-                return local;
-
-            // ... or a minimized expression
-            else
-                return new Operand( mp.ExecutePostfix( local ) );
-
-        // Size of zero means an that no operands are specified and this is not allowed
-        else
-            throw new ExpressionException( "There must be at least one parameter" );
+        return ExpressionWorker.unpackExpression( local );
     }
 }

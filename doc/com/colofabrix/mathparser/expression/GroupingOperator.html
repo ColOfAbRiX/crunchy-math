@@ -87,13 +87,13 @@
 <li>java.lang.Object</li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../com/colofabrix/mathparser/expression/ExpressionEntry.html" title="class in com.colofabrix.mathparser.expression">com.colofabrix.mathparser.expression.ExpressionEntry</a></li>
+<li><a href="../../../../com/colofabrix/mathparser/expression/ExpressionEntry.html" title="class in com.colofabrix.mathparser.expression">com.colofabrix.mathparser.expression.Expression</a></li>
 <li>
 <ul class="inheritance">
 <li><a href="../../../../com/colofabrix/mathparser/expression/Operator.html" title="class in com.colofabrix.mathparser.expression">com.colofabrix.mathparser.expression.Operator</a></li>
 <li>
 <ul class="inheritance">
-<li>com.colofabrix.mathparser.expression.GroupingOperator</li>
+<li>com.colofabrix.mathparser.expression.Grouping</li>
 </ul>
 </li>
 </ul>
@@ -209,7 +209,7 @@ extends <a href="../../../../com/colofabrix/mathparser/expression/Operator.html"
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../com/colofabrix/mathparser/expression/Operator.html" title="class in com.colofabrix.mathparser.expression">Operator</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../com/colofabrix/mathparser/expression/GroupingOperator.html#executeParsingOpening(com.colofabrix.mathparser.expression.ExpressionEntry, java.util.Stack, com.colofabrix.mathparser.Operators, com.colofabrix.mathparser.Memory)">executeParsingOpening</a></strong>(<a href="../../../../com/colofabrix/mathparser/expression/ExpressionEntry.html" title="class in com.colofabrix.mathparser.expression">ExpressionEntry</a>&nbsp;postfix,
+<td class="colLast"><code><strong><a href="../../../../com/colofabrix/mathparser/expression/GroupingOperator.html#executeParsingOpening(com.colofabrix.mathparser.expression.Expression, java.util.Stack, com.colofabrix.mathparser.Operators, com.colofabrix.mathparser.Memory)">executeParsingOpening</a></strong>(<a href="../../../../com/colofabrix/mathparser/expression/ExpressionEntry.html" title="class in com.colofabrix.mathparser.expression">ExpressionEntry</a>&nbsp;postfix,
                      java.util.Stack&lt;<a href="../../../../com/colofabrix/mathparser/expression/Operator.html" title="class in com.colofabrix.mathparser.expression">Operator</a>&gt;&nbsp;opstack,
                      <a href="../../../../com/colofabrix/mathparser/Operators.html" title="class in com.colofabrix.mathparser">Operators</a>&nbsp;operators,
                      <a href="../../../../com/colofabrix/mathparser/Memory.html" title="class in com.colofabrix.mathparser">Memory</a>&nbsp;memory)</code>
@@ -444,7 +444,7 @@ extends <a href="../../../../com/colofabrix/mathparser/expression/Operator.html"
 <dd><code><a href="../../../../com/colofabrix/mathparser/org/ExpressionException.html" title="class in com.colofabrix.mathparser.org">ExpressionException</a></code> - The exception is thrown when there is an evaluation problem</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../com/colofabrix/mathparser/expression/Operator.html#executeParsing(com.colofabrix.mathparser.expression.CmplxExpression, java.util.Stack)"><code>Operator.executeParsing(com.colofabrix.mathparser.expression.CmplxExpression, java.util.Stack&lt;com.colofabrix.mathparser.expression.Operator&gt;)</code></a></dd></dl>
 </li>
 </ul>
-<a name="executeParsingOpening(com.colofabrix.mathparser.expression.ExpressionEntry, java.util.Stack, com.colofabrix.mathparser.Operators, com.colofabrix.mathparser.Memory)">
+<a name="executeParsingOpening(com.colofabrix.mathparser.expression.Expression, java.util.Stack, com.colofabrix.mathparser.Operators, com.colofabrix.mathparser.Memory)">
 <!--   -->
 </a>
 <ul class="blockListLast">

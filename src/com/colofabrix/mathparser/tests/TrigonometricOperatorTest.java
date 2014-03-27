@@ -25,57 +25,55 @@ import org.apfloat.Apfloat;
 import org.junit.Assert;
 import org.junit.Test;
 import com.colofabrix.mathparser.expression.CmplxExpression;
-import com.colofabrix.mathparser.expression.ExpressionEntry;
+import com.colofabrix.mathparser.expression.Expression;
 import com.colofabrix.mathparser.expression.Operand;
 import com.colofabrix.mathparser.expression.Operator;
-import com.colofabrix.mathparser.lib.ApfloatConsts;
+import com.colofabrix.mathparser.lib.ApfConsts;
 import com.colofabrix.mathparser.operators.ArsinOperator;
 import com.colofabrix.mathparser.operators.SinOperator;
 import com.colofabrix.mathparser.operators.special.AngleUnit;
 import com.colofabrix.mathparser.operators.special.TrigonometricOperator;
 import com.colofabrix.mathparser.struct.ExpressionException;
-import com.colofabrix.mathparser.struct.builders.ContextBuilder;
+import com.colofabrix.mathparser.struct.builders.DefaultContextBuilder;
 import com.colofabrix.mathparser.struct.builders.OpBuilder;
 
 public class TrigonometricOperatorTest {
 
+    /**
+     * Test method for {@link TrigonometricOperator#toCurrentUnit(Apfloat)} .
+     */
     @Test
     public void testGetCurrent() {
-        Stack<ExpressionEntry> operand = new Stack<ExpressionEntry>();
+        Stack<Expression> operand = new Stack<Expression>();
         Apfloat result;
 
         try {
-            OpBuilder builder = new OpBuilder( ContextBuilder.createDefault() );
+            OpBuilder builder = new OpBuilder( DefaultContextBuilder.createDefault() );
             TrigonometricOperator test = (TrigonometricOperator)builder.create( ArsinOperator.class );
             test.executeParsing( new CmplxExpression(), new Stack<Operator>() );
 
-            // Radians test
-            test.setSelectedUnit( AngleUnit.RADIANS );
+            // Default (radians) test
             operand.push( new Operand( new Apfloat( 0.5 ) ) );
-            result = test.executeOperation( operand ).getNumericValue();
-            Assert.assertEquals( "Using radians",
-                    ApfloatConsts.Angular.RAD_PI6.doubleValue(),
-                    result.doubleValue(),
-                    AllTests.PRECISION_ERROR_ALLOWED
-                    );
+            result = test.executeOperation( operand ).toNumber();
+            Assert.assertEquals( "Using radians", ApfConsts.Angular.RAD_PI6.doubleValue(), result.doubleValue(), AllTests.PRECISION_ERROR_ALLOWED );
 
             // Degrees test
             test.setSelectedUnit( AngleUnit.DEGREES );
             operand.push( new Operand( new Apfloat( 0.5 ) ) );
-            result = test.executeOperation( operand ).getNumericValue();
-            Assert.assertEquals( "Using degrees",
-                    ApfloatConsts.Angular.DEG_30.doubleValue(),
-                    result.doubleValue(),
-                    AllTests.PRECISION_ERROR_ALLOWED );
+            result = test.executeOperation( operand ).toNumber();
+            Assert.assertEquals( "Using degrees", ApfConsts.Angular.DEG_30.doubleValue(), result.doubleValue(), AllTests.PRECISION_ERROR_ALLOWED );
+
+            // Radians test
+            test.setSelectedUnit( AngleUnit.RADIANS );
+            operand.push( new Operand( new Apfloat( 0.5 ) ) );
+            result = test.executeOperation( operand ).toNumber();
+            Assert.assertEquals( "Using radians", ApfConsts.Angular.RAD_PI6.doubleValue(), result.doubleValue(), AllTests.PRECISION_ERROR_ALLOWED );
 
             // Gradians test
             test.setSelectedUnit( AngleUnit.GRADIANS );
             operand.push( new Operand( new Apfloat( 0.5 ) ) );
-            result = test.executeOperation( operand ).getNumericValue();
-            Assert.assertEquals( "Using gradians",
-                    ApfloatConsts.Angular.GRAD_33.doubleValue(),
-                    result.doubleValue(),
-                    AllTests.PRECISION_ERROR_ALLOWED );
+            result = test.executeOperation( operand ).toNumber();
+            Assert.assertEquals( "Using gradians", ApfConsts.Angular.GRAD_33.doubleValue(), result.doubleValue(), AllTests.PRECISION_ERROR_ALLOWED );
         }
         catch( ExpressionException e ) {
             e.printStackTrace();
@@ -83,42 +81,41 @@ public class TrigonometricOperatorTest {
         }
     }
 
+    /**
+     * Test method for {@link TrigonometricOperator#toRadians(Apfloat)} .
+     */
     @Test
     public void testGetRadians() {
-        Stack<ExpressionEntry> operand = new Stack<ExpressionEntry>();
+        Stack<Expression> operand = new Stack<Expression>();
         Operand result;
 
         try {
-            OpBuilder builder = new OpBuilder( ContextBuilder.createDefault() );
+            OpBuilder builder = new OpBuilder( DefaultContextBuilder.createDefault() );
             TrigonometricOperator test = (TrigonometricOperator)builder.create( SinOperator.class );
             test.executeParsing( new CmplxExpression(), new Stack<Operator>() );
 
-            // Radians test
-            test.setSelectedUnit( AngleUnit.RADIANS );
-            operand.push( new Operand( ApfloatConsts.Angular.RAD_PI6 ) );
+            // Default (radians) test
+            operand.push( new Operand( ApfConsts.Angular.RAD_PI6 ) );
             result = test.executeOperation( operand );
-            Assert.assertEquals( "Using radians",
-                    0.5,
-                    result.getNumericValue().doubleValue(),
-                    AllTests.PRECISION_ERROR_ALLOWED );
+            Assert.assertEquals( "Using radians", 0.5, result.toNumber().doubleValue(), AllTests.PRECISION_ERROR_ALLOWED );
 
             // Degrees test
             test.setSelectedUnit( AngleUnit.DEGREES );
-            operand.push( new Operand( ApfloatConsts.Angular.DEG_30 ) );
+            operand.push( new Operand( ApfConsts.Angular.DEG_30 ) );
             result = test.executeOperation( operand );
-            Assert.assertEquals( "Using degrees",
-                    0.5,
-                    result.getNumericValue().doubleValue(),
-                    AllTests.PRECISION_ERROR_ALLOWED );
+            Assert.assertEquals( "Using degrees", 0.5, result.toNumber().doubleValue(), AllTests.PRECISION_ERROR_ALLOWED );
+
+            // Radians test
+            test.setSelectedUnit( AngleUnit.RADIANS );
+            operand.push( new Operand( ApfConsts.Angular.RAD_PI6 ) );
+            result = test.executeOperation( operand );
+            Assert.assertEquals( "Using radians", 0.5, result.toNumber().doubleValue(), AllTests.PRECISION_ERROR_ALLOWED );
 
             // Gradians test
             test.setSelectedUnit( AngleUnit.GRADIANS );
-            operand.push( new Operand( ApfloatConsts.Angular.GRAD_33 ) );
+            operand.push( new Operand( ApfConsts.Angular.GRAD_33 ) );
             result = test.executeOperation( operand );
-            Assert.assertEquals( "Using gradians",
-                    0.5,
-                    result.getNumericValue().doubleValue(),
-                    AllTests.PRECISION_ERROR_ALLOWED );
+            Assert.assertEquals( "Using gradians", 0.5, result.toNumber().doubleValue(), AllTests.PRECISION_ERROR_ALLOWED );
         }
         catch( ExpressionException e ) {
             e.printStackTrace();
