@@ -35,6 +35,7 @@ The primary objective of this project is for me to learn or to become more exper
  - Deepen the knowledge of the Java Language as before this I did only few small programs
  - Learn some math libraries from Apache Common and Apfloat
  - Getting exposed to numerical analysis to solve some problems
+ - Learn a bit about Open Source Licenses
 
 Sample code
 ---
@@ -88,5 +89,39 @@ public class Main {
     }
 }
 ```
+### Sample Output
+
+Some sample output of the above code
+
+```
+Type the expression you want to evaluate: 2 + 2
+    Convertex expression: 2 2 +
+    The result is: 4
+
+Type the expression you want to evaluate: 2 * Cos(0)
+    Convertex expression: 2 0 #Cos *
+    The result is: 2
+
+Type the expression you want to evaluate: (2.123 * 7.321) - Cos(PI)
+    Convertex expression: 2.123 7.321 * PI #Cos -
+    The result is: 1.6542483e1
+
+Type the expression you want to evaluate: Floor(2.123 * 7.321) - Cos(PI)
+    Convertex expression: 2.123 7.321 * #Floor PI #Cos -
+    The result is: 1.6e1
+    
+Type the expression you want to evaluate: 2 * Sin(Cos(3))
+    Convertex expression: 2 3 #Cos #Sin *
+    The result is: -1.6720437230754610681543568610754408326405545925851557145289769825...
+    
+Type the expression you want to evaluate: e
+    Convertex expression: e
+    The result is: 1.60217656e10
+```
+
+### Notes & Warnings
+
+As the main purpose of this code was to learn, it still contains bugs and undelivered features and work in progress. Please, don't take this as a commercial product available for inclusion in other projects. Nonetheless if it is appreciated I will continue my work.
+
 ### Credits
 Fabrizio Colonna - <colofabrix@tin.it>
